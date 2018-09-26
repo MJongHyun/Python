@@ -1,0 +1,242 @@
+# 예외사항 처리 : 실행 중에 발생한 오류 
+
+def divide(x,y):
+	return x/y
+
+divide(10,2)
+divide(10,0) # 오류
+divide(10,'둘') # 오류
+
+# 처리시 반드시 try와 except 절이 필요하다.
+
+try: 
+	z=divide(10,0)
+	print(z)
+
+except:
+	print('오류가 발생하였습니다.')
+
+# 에러의 종류가 있기 때문에 type 별로 예외사항 처리가 가능하다.
+
+try: 
+	z=divide(10,0)
+	print(z)
+
+except TypeError:
+	print('인수값을 숫자로 입력하세요')
+
+except ZeroDivisionError:
+	print('0값으로 나눌 수 없습니다.')
+except: # 위에 걸리는 거 없이 다른 모든 에러들을 지칭한다.
+	print('오류가 발생하였습니다.')
+
+else: # try 부분에서 except가 발생하지 않은 경우 else구문이 실행된다.
+	print('결과 : {}' .format(z))
+finally: # except 에 해당하는 경우 except 처리후 finally 구문으로 종료된다.
+	print('프로그램종료')
+
+
+
+def func(arg):
+    try:
+        if arg<1 or arg>10:
+            raise Exception("유효하지 않은 숫자입니다.:{}".format(arg)) # raise : 사용자가 exception을 일으키고 싶을 때 사용.
+        else:
+            print('입력한 수는 {} 입니다.' .format(arg))
+    except Exception as error:
+       print("오류가 발생했습니다.{}." .format(error))
+
+func(100)    
+
+lst = [1,2,3]
+
+try : 
+	print(lst[3])
+except:
+	print('오류가 발생했습니다.') # 어떤 오류가 나왔는지 알 수가 없다.
+
+# 해결 : 실제 오류를 해결하는 방법
+
+lst = [1,2,3]
+
+try : 
+	print(lst[3])
+except Exception as error: # 어떤에러가 낫는지를 확인할 수 있다.
+	print(error)
+	print('오류가 발생했습니다.') # 어떤 오류가 나왔는지 알 수가 없다.
+
+# 날짜 
+
+datetime 패키지에서는 날짜 시간을 제공하는 datetime class, 
+날짜만 제공하는 date class, 시간만 제공하는 time class, 
+일수, 시간, 분, 초 구간제공하는 timedelta class를 제공한다.
+
+import datetime
+
+datetime.date.today()
+Out[131]: datetime.date(2018, 9, 11)
+
+datetime.datetime.now()
+Out[132]: datetime.datetime(2018, 9, 11, 13, 54, 57, 993253) # 시, 분, 초도 나온다.
+
+
+datetime.date.today().year
+Out[133]: 2018
+
+
+datetime.date.today().month
+Out[133]: 9
+
+
+datetime.date.today().day
+Out[133]: 11
+
+# 변수로 지정해서 사용해도 나온다.
+
+d=date.date.today()
+d.year
+
+datetime.datetime.now().year
+datetime.datetime.now().month
+datetime.datetime.now().day
+datetime.datetime.now().hour
+datetime.datetime.now().minute
+datetime.datetime.now().second
+
+n=datetime.datetime.now()
+n.year
+n.microsecond # 백만분의 1초  
+n.date()
+n.time()
+
+
+n.weekday() : 0-월요일 ~ 6-일요일
+Out[137]: 1
+
+d=datetime.datetime.now()
+
+type(d.year)
+Out[154]: int
+
+d.strftime('%Y') # 문자형으로 년도가 출력된다.
+Out[156]: '2018'
+
+type(d.strftime('%Y')) # 문자형 type 확인
+
+- %Y : 년도 4자리
+- %m : 달
+- %d : 일
+- %B : 영어 달 이름
+- %H : 시간 24
+- %I : 시간 12
+- %M : 분
+- %s : 초
+- %x : 현재날짜정보 - 월/일/연도 
+- %X : 현재 시간 시:분:초
+- %A : 요일 
+- %a : 요일 (축약)
+- %c : 날짜 시간
+- %p : AM,PM
+- %j : 누적 날짜
+- %U : 누적주(일요일 시작)
+- %W : 누적주(월요일 시작)
+- %w : 요일(0~6)
+- %z : 시간대
+
+d.strftime('%Y %m %d %B')
+Out[158]: '2018 09 11 September'
+
+d.strftime('%x')
+Out[159]: '09/11/18'
+
+# strftime : date -> char
+# strptime : char -> date
+
+datetime.datetime.strptime('2018-09-11 14:50:00','%Y-%m-%d %H:%M:%S')
+
+d=datetime.date(2018,9,11) # 날짜
+t=datetime.time(14,52,00) # 시간
+
+datetime.datetime.combine(d,t)
+Out[175]: datetime.datetime(2018, 9, 11, 14, 52)
+
+datetime.datetime(2018,5,24)-datetime.datetime(2018,11,22)
+Out[176]: datetime.timedelta(-182)
+
+datetime.datetime(2018,9,11) + datetime.timedelta(days=72,seconds=3600)
+Out[181]: datetime.datetime(2018, 11, 22, 1, 0)
+
+datetime.timedelta(hours=1) # 초로 3600 을 의미한다.
+Out[179]: datetime.timedelta(0, 3600) 
+
+datetime.timedelta(minutes=1)
+Out[180]: datetime.timedelta(0, 60)
+
+datetime.date.today() # 현재 날짜 정보
+Out[182]: datetime.date(2018, 9, 11)
+
+# 구간의 시간을 파악하는 방법
+
+start = datetime.datetime.now()
+end = datetime.datetime.now()
+
+delta = end-start
+delta.total_seconds() # 초단위로 환산하는 방법
+Out[193]: 5.144013
+
+# import time
+
+1970년 1월 1일 0시 0분 0초 를 기준으로 지난 시간을 초단위로 리턴해주는 함수
+UTC(Universal Time Coordinated 세계협정표준시)를 이용해서 실수 형태로 반환
+time.time()
+Out[219]: 1536648718.8808148 
+
+time.localtime() # 년/월/일 시간이 나눠져 있는 것을 확인할 수 있다.
+Out[220]: time.struct_time(tm_year=2018, tm_mon=9, tm_mday=11, tm_hour=15, tm_min=54, tm_sec=27, tm_wday=1, tm_yday=254, tm_isdst=0)
+
+time.localtime().tm_year
+time.localtime().tm_mon
+time.localtime().tm_wday # 현재요일(0~6)
+time.localtime().tm_yday # 누적일수(1~365(366))
+time.localtime().tm_isdst # 서머타임일 경우 1, 아니면 0 , 모르면 -1
+
+time.gmtime() # UTC 기준의 현재시간
+Out[223]: time.struct_time(tm_year=2018, tm_mon=9, tm_mday=11, tm_hour=6, tm_min=58, tm_sec=52, tm_wday=1, tm_yday=254, tm_isdst=0)
+
+time.asctime()
+Out[224]: 'Tue Sep 11 15:59:39 2018'
+time.ctime()
+Out[224]: 'Tue Sep 11 15:59:39 2018'
+
+# 시간을 내가 원하는 형식으로 뽑아내는 방법 : time->char
+time.strftime('%Y',time.localtime())
+time.strftime('%z',time.localtime()) # timezone
+Out[227]: '+0900'
+
+for i in range(10):
+	print(i)
+	time.sleep(2) # 시간을 멈춰준
+
+# 달력 calendar
+
+import calendar
+print(calendar.calendar(2018))
+
+calendar.prcal(2019) # 내년 달력
+calendar.prmonth(2018,9) # 이번달 달력
+calendar.weekday(2018,9,11)
+calendar.monthrange(2018,9) # 그 달의 첫째날짜의 요일, 마지막일
+
+
+
+
+
+
+
+
+
+
+
+
+
+

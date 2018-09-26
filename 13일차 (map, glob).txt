@@ -1,0 +1,66 @@
+def f(arg):
+    result=[]
+    for i in arg:
+        result.append(i*2)
+    return result
+
+
+f([1,2,3,4,5])
+
+def f1(arg):
+    return arg*2
+
+f1([1,2,3,4,5]) # 값이 2배로 나오는 것이 아니라 각각 중복되서 나온다.
+
+# map : 입력받은 자료형의 각 요소가 함수에 수행된 결과를 묶어서 리턴하는 함수 
+
+list(map(f1,[1,2,3,4,5])) 
+list(map(lambda x:x*2,[1,2,3,4,5]))
+
+x=Series([1,2,3],index=['one','two','three'])
+y=Series(['하나','둘','셋'],index=[1,2,3])
+# Series 상태에선 merge가 불가능 하므로 DataFrame으로 바꾼다.
+x1=DataFrame(x)
+y1=DataFrame(y)
+
+pd.merge(x1,y1,left_on=0,right_index=True) # 이렇게 할경우 123이 계속나온다.
+
+# 문제점 해결
+
+x.map(y) # 한쪽의 값과 인덱스를 묶을 떄 map을 사용한다.
+# 무조건 한쪽은 값, 한쪽은 인덱스로 있다면 값.map(인덱스)
+
+[문제168] emp_new.csv는 pandas로 읽고  dept_new.csv는 일반 csv로 읽어 들인 후 조인을 수행하세요.
+
+import csv
+import pandas as pd
+
+emp=pd.read_csv('c:/data/emp_new.csv',names=['empno','ename','job','mgr','hiredate','sal','com','deptno'])
+    
+file=open('c:/data/dept_new.csv','r')
+dept_new=csv.reader(file)
+dept={}
+
+for i in dept_new:
+    if i[0] != dept:
+        dept[int(i[0])]=i[1]
+
+emp['dname']=emp['deptno'].map(dept) # dict형은 map에서 가능하다. Series.map(dict) / dict key가 index로 인식
+
+emp[['empno','deptno','dname']]
+
+# 해당하는 값 추출하기
+
+import glob # 해당하는 값을 모두 추출하는 방법
+import pandas as pd
+
+file='c:/data/emp*.csv' # emp로 시작되는 모든 값을 추출, 파일 디렉토리를 잘 설정해서 emp*에 해당하는 값만 가져오도록 
+file_list=glob.glob(file)
+print(file_list)
+emp=pd.DataFrame()
+for i in file_list:
+    temp=pd.read_csv(i,names=['empid','name','hire_date','sal','deptno'])
+    emp=emp.append(temp)
+    
+emp['sal'].groupby(emp['deptno']).sum()
+

@@ -1,0 +1,566 @@
+# 1부터 n까지 더하기
+
+1~100
+sum=0
+for i in range(1,101):
+	sum=sum+i
+print(sum)
+
+def gauss(x):
+	return x*(x+1)//2
+
+# 문제
+
+1. 1부터 N까지 연속한 숫자의 제곱의 합을 구하는 프로그램을 for 반복문으로 만드시오.
+
+N=int(input('숫자를 입력하시오: '))
+S=0
+for i in range(1,N+1):
+	S+=i**2
+
+print(S)
+
+1번의 계산복잡도 : O(n)
+
+# 다른식 가우스 식으로 계산
+
+def gauss1(x):
+	return x*(x*1)*(2*x+1)//6
+	
+
+O(1)	
+
+# 숫자 n개를 리스트로 입력 받아 최솟 값을 구하는 프로그램을 만드시오.
+
+def min_find(x):
+	min=x[0]
+	for i in range(1,len(x)):
+		if min>x[i]:
+			min=x[i]
+	print(min)
+
+# n 명중 2명을 뽑아 짝을 지을 수 잇는 모든 조합을 출력하는 알고리즘을 만드시오.
+
+def couple(x):
+    for i in range(0,len(x)-1):
+        for j in range(i+1,len(x)):
+                print(x[i],'-',x[j])
+
+# 1부터 n까지의 합 재귀함수로 풀기
+
+def all_sum(x):
+    if x==1:
+        return 1
+    return x+all_sum(x-1)
+
+# 최댓값 구하기 재귀 호출
+
+def find_max(x):
+    if len(x)==1:
+        return x    
+    m=x[-1]
+    n=x[0]
+    if m>n:
+        del x[0]
+        return find_max(x)
+    else: 
+        del x[-1]
+        return find_max(x)  
+
+# 피보나치 수열
+
+def pibo(x):
+    
+    if x==0:
+        return 0
+    elif x==1:
+        return 1
+    else:
+        return pibo(x-1)+pibo(x-2)
+
+# 하나이상의 찾는 값이 존재 할 때 전체 출력 (순차정렬)
+
+# a: 배열   
+# x: 찾을 값    
+def search(a,x):
+    y=len(a)
+    b=[]
+    for i in range(0,len(a)):
+        if x==a[i]:
+            b.append(i)
+            continue
+    if len(b)==0:
+        return b
+    else:
+        return b 
+
+# 번호에 해당하는 값이 있으면 출력
+
+def sc_st(stu_no,stu_name,num):
+    for i in range(0,len(stu_no)):
+        if num==stu_no[i]:
+            return stu_name[i]
+    return '?'
+
+
+# 선택정렬 : 1번부터 크기 비교를 하여 비교한 값이 더 작다면 맨앞으로 이동 후 다시 비교, 비교가 끝나면 다음 값 선택
+	     해서 비교를 한다.
+
+# 오름차순 방법
+
+def in_sort(x):
+    for i in range(0,len(x)-1):
+        tmp=0
+        min=x[i]
+        for j in range(i+1,len(x)):
+            if min>x[j]:
+                min=x[j]
+                tmp=x[i]
+                x[i]=x[j]
+                x[j]=tmp
+    return x
+
+x=[2,5,1,4,3]
+in_sort(x)
+
+# 내림차순 방법
+
+def in_sort1(x):
+    for i in range(0,len(x)-1):
+        tmp=0
+        max=x[i]
+        for j in range(i+1,len(x)):
+            if max<x[j]:
+                max=x[j]
+                tmp=x[i]
+                x[i]=x[j]
+                x[j]=tmp
+    return x
+
+x=[2,5,1,4,3]
+in_sort1(x)
+
+# 삽입정렬 : 첫번째 인수 값을 빼고 정렬해야할 곳에 넣어놓고 그다음 값을 빼서 정렬할 곳에 넣었을 때 정렬 위치를 
+	     정해주는 방법
+
+def sort_2(x):
+    for i in range(1,len(x)):
+        key=x[i] # Key 값을 뽑아서 앞의 값과 비교
+        j=i-1 # 그 전 값을 비교
+        while j>=0 and x[j]>key: # 오름차순
+            x[j+1]=x[j]
+            j=j-1
+        x[j+1]=key
+    return x
+x=[4,2,5,1,3]        
+sort_2(x)            
+
+def sort1_2(x):
+    for i in range(1,len(x)):
+        key=x[i] # Key 값을 뽑아서 앞의 값과 비교
+        j=i-1 # 그 전 값을 비교
+        while j>=0 and x[j]<key: # 내림차순
+            x[j+1]=x[j]
+            j=j-1
+        x[j+1]=key
+    return x
+x=[4,2,5,1,3]  
+sort1_2(x)   
+
+# 병합정렬 : 반으로 나눈 후 각각 비교해서 값을 정렬
+
+# 내림차순
+
+def merge_sort(x):
+    
+    if len(x)<=1:
+        return x
+    num=len(x)//2
+    
+    g1=merge_sort(x[:num])
+    g2=merge_sort(x[num:])
+
+    result=[]
+    
+
+    while g1 and g2:
+        if g1[0]>g2[0]:
+            result.append(g2.pop(0))
+        elif g1[0]<g2[0]:
+            result.append(g1.pop(0))
+            
+                
+    while g1:
+        result.append(g1.pop(0))
+    while g2:
+        result.append(g2.pop(0))
+            
+    return result
+
+# 오름차순
+
+def merge_sort1(x):
+    
+    if len(x)<=1:
+        return x
+    num=len(x)//2
+    
+    g1=merge_sort(x[:num])
+    g2=merge_sort(x[num:])
+
+    result=[]
+    
+
+    while g1 and g2:
+        if g1[0]>g2[0]:
+            result.append(g1.pop(0))
+        elif g1[0]<g2[0]:
+            result.append(g2.pop(0))
+            
+                
+    while g1:
+        result.append(g1.pop(0))
+    while g2:
+        result.append(g2.pop(0))
+            
+    return result
+
+# 또다른 방법
+
+def merge(left, right):
+
+    result = []
+
+    while len(left) > 0 or len(right) > 0:
+
+        if len(left) > 0 and len(right) > 0:
+
+            if left[0] >= right[0]:
+
+                result.append(left[0])
+
+                left = left[1:]
+
+            else:
+
+                result.append(right[0])
+
+                right = right[1:]
+
+        elif len(left) > 0:
+
+            result.append(left[0])
+
+            left = left[1:]
+
+        elif len(right) > 0:
+
+            result.append(right[0])
+
+            right = right[1:]
+
+    
+
+    return result
+
+def merge_sort(list):
+
+    if len(list) <= 1:
+
+        return list
+
+    
+
+    mid = len(list) // 2
+
+    
+
+    leftList = list[:mid]
+
+    rightList = list[mid:]
+
+    
+
+    leftList = merge_sort(leftList)
+
+    rightList = merge_sort(rightList)
+
+    
+
+    return merge(leftList, rightList)
+
+# 퀵 정렬: pivot 하나를 정해서 미리 기준을 나눈 후 다시 pivot을 정해 계속 정렬하는 방식 
+
+# 내림차순
+
+def quick_sort(x):
+
+    if len(x)<=1:
+        return x
+
+    pivot=x[-1]
+    total1=[]
+    total2=[]
+    
+    for i in range(0,len(x)-1):
+        if pivot<x[i]:
+            total1.append(x[i])
+            print(total1)
+            print()
+        else:
+            total2.append(x[i])
+            print(total2)
+            print()
+    return quick_sort(total1)+[pivot]+quick_sort(total2)
+    
+x=[6,8,3,9,10,1,2,4,7,5]    
+quick_sort(x)    
+    
+#오름차순
+
+def quick_sort1(x):
+
+    if len(x)<=1:
+        return x
+
+    pivot=x[-1]
+    total1=[]
+    total2=[]
+    
+    for i in range(0,len(x)-1):
+        if pivot<x[i]:
+            total2.append(x[i])
+        else:
+            total1.append(x[i])
+       
+    return quick_sort1(total1)+[pivot]+quick_sort1(total2)
+
+# 퀵정렬: start, end, pivot을 정해서 pivot 과 비교하여 값을 구한 후 나눠서 다시 값을 구하는 재귀 형식의 정렬
+
+def quick_sort_sub(a,start,end):
+    if end-start<=0:
+        return
+    pivot=a[end]
+    i=start
+    for j in range(start,end):
+        if a[j]<=pivot:
+            a[i],a[j]=a[j],a[i]
+            i=i+1
+    a[i],a[end]=a[end],a[i]
+    
+    quick_sort_sub(a,start,i-1) # i는 정렬완료 
+    quick_sort_sub(a,i+1,end)
+    
+def quick_sort(x):
+    return quick_sort_sub(x,0,len(x)-1) # 마지막 값
+
+x=[6,8,3,9,10,1,2,4,7,5]
+quick_sort(x)
+
+
+def binary_search(x,a):
+    # start와 end를 계속 바꿔주면서 해야한다.
+    start=0
+    end=len(x)-1
+    
+    while start<=end:
+        mid = (start+end)//2
+        if a==x[mid]:
+            return mid
+        elif a>x[mid]:
+            start=mid+1
+        else:
+            end=mid-1
+            
+    return -1
+        
+x=[1,4,9,16,25,36,49,64,81]        
+binary_search(x,49)       
+    
+# 큐, 스택으로 회문 찾기
+
+def bet(x):
+    st=[]
+    qu=[]
+    
+    for i in range(0,len(x)):
+        if x[i].isalpha():
+            st.append(x[i].lower())
+            qu.append(x[i].lower())
+            
+    while qu:
+        if st.pop()!=qu.pop(0):
+            return False
+    return True
+
+# 큐 스택 상관없이 회문 만들기
+    
+def uin(x):
+    
+    i=0
+    j=len(x)-1
+    
+    while i<j:
+        
+        if x[i].isalpha()==False:
+            i=i+1
+        
+        elif x[j].isalpha()==False:
+            j=j-1
+            
+        elif x[i].lower!=x[j].lower:
+            return False
+        
+        else:
+            i=i+1
+            j=j-1
+
+        
+    return True
+
+# dictionary 로 중복이름 찾기
+
+def find_name(x):
+    
+    name={}
+    
+    for i in x:
+        if i in name:
+            name[i]=name[i]+1
+        else:
+            name[i]=1
+            
+    result=set()
+    for i in name:
+        if name[i]>=2:
+            result.add(i)
+
+    return result            
+    
+x=['Tom','Jerry','Mike','Tom']        
+print(find_name(x))
+
+# 연습문제
+
+def find_num(stu_num,stu_name,num):
+    dic={}
+    for i in range(0,len(stu_num)):
+        dic[stu_num[i]]=stu_name[i]
+    
+    try:    
+        print(num,':',dic[num])
+    except:
+        print('?')
+
+x=[39,14,67,105]
+y=['Justin','John','Mike','Summer']    
+
+find_num(x,y,123)
+
+# 그래프 : 연결된 값 찾기
+
+fr_if={'Summer':['John','Justin','Mike'],'John':['Summer','Justin'],'Justin':['John','Summer','Mike','May'],
+       'Mike':['Summer','Justin'],'May':['Justin','Kim'],'Kim':['May'],'Tom':['Jerry'],'Jerry':['Tom']}
+
+fr_if
+
+def paf(g,start):
+    
+    qu=[]
+    done=set()
+    
+    qu.append(start)
+    done.add(start)
+    
+    while qu:
+        p=qu.pop(0)
+        print(p)
+        for x in g[p]:
+            if x not in done:
+                qu.append(x)
+                done.add(x)
+                
+start='Summer'
+                
+paf(fr_if,start)
+print()
+paf(fr_if,'Jerry')
+
+
+def pafd(g,start):
+    
+    qu=[]
+    done=set()
+    d=0
+    qu.append(start,d)
+    done.add(start)
+    
+    while qu:
+        (p,d)=qu.pop(0)
+        print(p)
+        for x in g[p]:
+            if x not in done:
+                d=d+1
+                qu.append((x,d))
+                done.add(x)
+    
+
+pafd(fr_if,start)
+print()
+pafd(fr_if,'Jerry')
+
+def binary(x,start):
+    
+    qu=[]
+    done=set()
+    
+    qu.append(start)
+    done.add(start)    
+    
+    while qu:
+        p=qu.pop(0)
+        print(p)
+        for i in x[p]:
+            if i not in done:
+                qu.append(i)
+                done.add(i)
+        
+x={1:[2,3],2:[1,4,5],3:[1],4:[2],5:[2]}
+binary(x,1)
+
+# 미로찾기
+
+def maze_solve(start,end,x):# 시작점, 끝점, 미로값
+    
+    qu=[] # 이동경로 저장
+    done=set() # 이미 다녀난 값 비교
+    qu.append(start) # 시작 경로 
+    done.add(start) # 비교 시작값 
+
+    while qu: True로 하면 안된다. 왜냐하면 qu값이 다 없어졌다는 것은 경로가 없다라는 것을 의미하기 때문이다.
+        p=qu.pop(0) # 계속 최근 값을 뽑아내는 것
+     
+        v=p[-1] # 무조건 마지막 값? , 마지막에 나오는 값이 end라는 것은 그곳으로 갔다라는 거니까!
+        if v==end:
+            return p
+        for i in x[v]: # 안에 있는 값을 비교하여 가는 길을 선택한다. 하나만 비교하는것이 아니라 처음부터 끝값부터 비교하는것 ★★ list형이기 때문
+            if i not in done: # 없는 값이면 그곳으로 갈수 있다.
+                qu.append(p+i) # 새로운 경로 저장 , 문자끼리 + 는 값을 붙여준다.
+                done.add(i) # 이미 있는 값은 가지 않게 하기 위한 비교값
+    
+            
+    return '?' # ?가 나온 경우, 나갈 수 없는 미로를 의미한다.
+
+# 길이 3개 이상인 경우 계속 앞에 차기 때문에 앞의 값이 틀린 값이더라도 추가가 되서 가능하다.
+
+# 이미 비교한 값이라는 것은 길을 지나갔다라는 의미이다. 값을 맨끝만 계속 줄이는 것은 이미 간길은 없어지고 
+# 새로운 길이 남아있거나 비교하지 않은 값만 남은 것이기 때문에 계속 비교를 하면 된다. 만약 값을 다 없앴는데
+# return 되지 않은것은 빠져나올 곳이 없다라는것을 의미한다.
+
+maze={'a':['e'],'b':['c','f'],'c':['b','d'],'d':['c'],'e':['a','i'],'f':['b','g','j'],'g':['f','h'],
+      'h':['g','l'],'i':['e','m'],'j':['f','k','n'],'k':['j','o'],'l':['h','p'],'m':['i','n'],'n':['m','j'],
+      'o':['k'],'p':['l']}
+
+
+maze_solve('a','p',maze)        
+

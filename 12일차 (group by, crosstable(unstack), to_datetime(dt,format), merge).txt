@@ -1,0 +1,144 @@
+emp = pd.read_csv("c:\data\emp_new.csv", names=['empid','name','job','mgr','hire_date','sal','comm','deptno'])
+
+select deptno,sum(sal)
+from emp
+group by deptno
+
+emp['sal'].groupby(emp['deptno']).sum() # 구할값.groupby(그룹화할 값).통계함수
+emp['sal'].groupby(emp['deptno']).mean()
+emp['sal'].groupby(emp['deptno']).var()
+emp['sal'].groupby(emp['deptno']).std()
+emp['sal'].groupby(emp['deptno']).count()
+emp['sal'].groupby(emp['deptno']).max()
+emp['sal'].groupby(emp['deptno']).min()
+
+deptno_group=emp['sal'].groupby(emp['deptno'])
+deptno_group.sum()
+
+# 2개 이상 정렬
+
+select deptno,job,sum(sal)
+from emp
+group by deptno,job 
+
+emp['sal'].groupby([emp['deptno'],emp['job']]).sum() # 리스트 활용
+dept_group=emp['sal'].groupby([emp['deptno'],emp['job']])
+dept_group.sum()
+dept_mean=dept_group.mean()
+dept_mean
+
+# cross_table 형식으로 분석하고 싶을때 사용하는 방법 : unstack()
+
+dept_mean.unstack()
+
+emp.groupby(['deptno','job'])['sal'].sum()
+emp.groupby(['deptno','job'])['sal'].sum().unstack()
+
+emp.groupby('deptno') # object 정보만 나온다/
+
+for name,group in emp.groupby('deptno'):
+    print(name) # dept_id
+    print(group) # dept_id 에 해당되는 값들 그룹화 해서 나온다.
+
+for (name1,name2),group in emp.groupby(['deptno','job']):
+    print(name1,name2) # dept_id,job_id 2개로 잡았기 때문에 2개를 따로 잡아주고 값을 구해야한다. ★★.
+    print(group) 
+
+# NaN은  groupby 옵션이 따로 없기 때문에 다른 값으로 대체를 해서 grouping을 해야한다. ★★
+
+emp['sal'].groupby(emp['deptno'].fillna(0)).sum() # Null 값을 대체해서 값을 나오게 하는 방법 ★
+
+[문제157] emp.csv 파일에 데이터 중에 년도별로 입사한 인원수 결과를 출력해주세요.
+
+from pandas import Series, DataFrame
+import pandas as pd
+import numpy as np
+
+emp = pd.read_csv("c:\data\emp_new.csv", names = ['empid','name','job','mgr','hire_date','sal','comm','deptno'])
+emp.dtypes
+print(emp.groupby(emp['hire_date'].str.slice(0,4))['empid'].count()) # slice: 값을 잘라내서 사용
+
+# pandas를 통해 문자를 날짜로 바꾸기 : to_datetime ★★ dt 속성 확인을 확인하기.
+
+print(emp.groupby(pd.to_datetime(emp['hire_date']).dt.year)['empid'].count())
+pd.to_datetime(emp['hire_date']).dt # to_datetime(문자값).dt (object생성)
+pd.to_datetime(emp['hire_date']).dt.year
+pd.to_datetime(emp['hire_date']).dt.month
+pd.to_datetime(emp['hire_date']).dt.day
+pd.to_datetime(emp['hire_date']).apply(lambda x: x.year) # dt를 모를경우 lambda 를 이용해서 만든다.
+pd.to_datetime(emp['hire_date']).apply(lambda x: x.month)
+
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.year
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.month
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.day
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.hour
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.minute
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.second
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.quarter
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.dayofweek #(월요일=0, 일요일=6)
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.dayofyear # 365일중 몇일이 왔는지 확인
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.date
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.time
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.week # 현재 1년 중 몇주 인지 확인
+pd.to_datetime(Series('2018-09-19 11:01:30')).dt.days_in_month # 달의 마지막 일
+
+# dt 형에 맞게 파일이 되지 않은 경우 format을 이용해서 형을 바꾼 후 날짜로 바꿔서 값을 뽑아낸다.
+
+pd.to_datetime(Series('09192018 11:01:30'),format='%m%d%Y %H:%M:%S').dt.year
+
+dept=pd.read_csv("c:/data/dept_new.csv",names=['deptno','dname','mgr','loc'])
+emp=pd.read_csv("c:\data\emp_new.csv",names=['empid','name','job','mgr','hire_date','sal','comm','deptno'])
+
+emp.shape # 전체 row, 전체 column 수  
+emp.columns # 컬럼 확인
+emp.dtypes # 컬럼 종류와 type
+
+# merge: pandas 안에 있는 옵션, 조인하는 것을 의미. 동일한 이름의 키컬럼이 많을 경우 첫번째를 기준으로 merge한다.
+
+pd.merge(emp,dept)
+pd.merge(emp,dept,on='deptno')
+
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],on='deptno') # 전체행 말고 일부 행만 가져와서 수행
+
+# 만약 조인하려는 컬럼의 이름이 각각 다를 경우 left_on, right_on 을 사용한다.
+
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],left_on='deptno',right_on='deptno')
+
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],on='deptno',how='inner') # 일반적 equi 조인
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],on='deptno',how='left') # 왼쪽은 다출력하라는 의미
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],on='deptno',how='right') # 오른쪽은 다출력하라는 의미
+pd.merge(emp[['name','deptno']],dept[['deptno','dname']],on='deptno',how='outer') # 전체
+
+from pandas import Series,DataFrame
+
+# 따로 컬럼이 있는 것이 아니라 인덱스로 값을 merge하고 싶다면 right_index/left_index를 사용한다.
+
+dept=DataFrame({'dname':['관리팀','마케팅팀','구매팀','인사팀','경영지원팀','기술지원팀','홍보팀',
+                         '영업팀','기획팀','재무팀','회계팀']},index=[10,20,30,40,50,60,70,80,90,100,110])
+pd.merge(emp[['name','sal','deptno']],dept,left_on='deptno',right_index=True) 
+
+[문제164] 부서이름별 총액 급여를 출력하세요.  
+from pandas import Series, DataFrame
+import pandas as pd
+emp = pd.read_csv("c:\data\emp_new.csv", names = ['empid','name','job','mgr','hire_date','sal','comm','deptno'])
+
+dept = pd.read_csv("c:\data\dept_new.csv", names = ['deptno','dname','mgr','loc'])
+
+dept_sal = emp['sal'].groupby(emp['deptno']).sum()
+dept_sal = DataFrame(dept_sal)
+dept_sal.reindex([10,20,30,40,50,60,70,80,90,100,110])
+pd.merge(dept[['deptno','dname']], dept_sal, left_on = 'deptno', right_index=True)
+
+# 조인의 일량 차이이다. 밑에 경우 조인을 다 하고 값을 구하고 위에 경우 먼저 그룹화 한후 조인을 하는 것이므로
+조인의 양이 더 적다. SQL에서 inline view를 생각하면 된다.
+
+m = pd.merge(emp[['deptno','sal']], dept[['deptno','dname']])
+m
+m['sal'].groupby(m['dname']).sum()
+
+
+dept= DataFrame({'dname':['관리팀','마케팅팀','구매팀','인사팀','경영지원팀','기술지원팀','홍보팀',
+'영업팀','기획팀','재무팀','회계팀']},
+index=[10,20,30,40,50,60,70,80,90,100,110])
+
+pd.merge(dept, dept_sal, left_index = True, right_index=True)

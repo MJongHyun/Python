@@ -1,0 +1,64 @@
+# 최대공약수
+                
+def gcd(x,y):
+    
+    if x>y:
+        temp=y
+        y=x
+        x=temp
+    
+    if y%x==0:
+        return x
+    else:
+        tmp=y%x
+        y=x
+        x=tmp
+        return gcd(x,y) 
+
+# 최소공배수
+
+def lcm(x,y):
+    if x>y:
+        x,y=y,x
+    z=x*y
+    while(x!=0):
+        n=y%x
+        y=x
+        x=n
+    return z/y 
+
+lcm(512,248)
+
+# 공약수 뽑기
+                
+def cd(x,y):
+    global total
+    total=[]
+    if x>y:
+        temp=y
+        y=x
+        x=temp
+    
+    if y%x==0:
+        for i in range(1,x+1):
+            if x%i==0:
+                total.append(i)
+        return total
+    else:
+        tmp=y%x
+        y=x
+        x=tmp
+        return cd(x,y) 
+
+cd(12,18)
+
+# 피보나치 수열
+
+def pibo(x):
+    
+    if x==0:
+        return 0
+    elif x==1:
+        return 1
+    else:
+        return pibo(x-1)+pibo(x-2)

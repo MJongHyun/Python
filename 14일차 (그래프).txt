@@ -1,0 +1,122 @@
+# 그래프 
+
+# matplotlib : 시각화 패키지
+
+import matplotlib as mpl
+import matplotlib.pylab as plt
+
+# 한번에 해야한다.
+
+plt.plot([1,5,10,15,20])
+plt.grid(True) # 격자 그리는 방법
+plt.show # web에서 출력이 되지 않을땐 show를 해야한다.
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='blue')
+plt.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='r')
+plt.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='c') #rgbcmyk
+plt.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='0.75') #0~1 회색 조
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='blue',linestyle='dotted') 
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],color='blue',linestyle='dashed')  # solid, dashed, dashdot
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],'--r') # dashed 와 같다. 색깔도 표현하는 것이 가능하다.
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],'.r') #dotted red
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],'-g') #solid green
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],'-.k') # dashed black
+pit.show
+
+plt.plot([100,200,300,400,500],[1,5,10,15,20],':r') # dotted red
+pit.show
+
+
+# anaconda prompt
+
+jupiter notebook
+
+alt+enter : 전체 엔터
+ctrl+enter : 한줄 엔터
+
+# 100m 달리기 (가정)
+
+data={'홍길동':[15,13,11],'윤건':[13,14,15],'나얼':[10,9,12]}
+data
+df=DataFrame(data,index=['2015','2016','2017'])
+df.rank() # 낮은 값이 1위로 간다. 
+
+x=df.rank()
+x
+plt.plot(x)
+plt.show()
+
+from matplotlib import font_manager, rc
+font_name=font_manager.FontProperties(fname='c:/windows/fonts/malgun.ttf').get_name()
+rc('font',family=font_name)
+
+plt.plot(x.ix[:,0],label='나얼') # 범례 만들기
+plt.plot(x.ix[:,1],label='윤건',linestyle='--')
+plt.plot(x.ix[:,2],label='홍길동',linestyle=':')
+plt.title('기록 순위 비교 그래프',fontsize=15)
+plt.xlabel('년도',fontsize=10)
+plt.ylabel('순위',fontsize=10)
+plt.legend() # 범례출력
+#plt.ylim([1,2,3])
+plt.yticks([1,2,3],['1등','2등','3등']) # 기존의 레벨을 다른 형식으로 변화
+plt.xticks(['2015','2016','2017'],['2015년','2016년','2017년'])
+plt.show()
+
+# 수평막대 그래프 
+df.plot(kind='barh')
+
+# 수직막대 그래프
+df.plot(kind='bar')
+
+# 스택형 막대그래프
+df.plot(kind='barh',stacked=True)
+df.plot(kind='bar',stacked=True)
+
+# 연도별 출생현황
+
+t=[]
+
+for i in range(2000,2017):
+    filename='c:/data/yob%d.txt' %i
+    yob=pd.read_csv(filename,names=['name','gender','count'])
+    total=yob['count'].groupby(yob['gender']).sum()
+    f_cn=total.loc['F']
+    m_cn=total.loc['M']
+    t.append([i,f_cn,m_cn])
+    
+T=DataFrame(t,columns=['년도','여','남'])
+T.index=T['년도'] # 인덱스에 년도로 놓아야 한번에 뽑아내는것이 가능하다.
+del T['년도']
+
+T.plot(kind='bar',stacked=True)
+T.plot(kind='bar')
+
+df = df.set_index("년도") # 인덱스를 적용하는 방법 , 자동으로 컬럼이 없어지고 인덱스에 값이 들어간다.
+
+# 선그래프로 보기
+
+plt.plot(T.ix[:,0], label="여", color="r", linestyle="--")
+plt.plot(T.ix[:,1], label="남", color="b", linestyle=":")
+plt.title("성별 출생 현황", fontsize=15)
+plt.xlabel("년도",fontsize=10)
+plt.ylabel("출생수",fontsize=10)
+plt.legend()
+plt.grid()

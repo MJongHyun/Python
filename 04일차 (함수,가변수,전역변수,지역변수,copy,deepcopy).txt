@@ -1,0 +1,179 @@
+# 함수
+- 기능의 프로그램
+- 반복되는 코드를 하나로 묶어서 처리하는 방법
+
+
+def 함수이름(인수,인수,인수,,,): # 인수는 필수가 아니다.
+	수행해야될 문장...
+
+	[return 값] # 파이썬에서도 옵션이다. return값 옆에 값을 적지 않으면 그냥 종료가 된다.
+
+
+함수이름() # 실행 
+
+def message():
+	print('오늘 하루도 행복하자')
+
+message()
+오늘 하루도 행복하자
+
+def message(x):
+	print("%s 화이팅" %(x)) # 인수 타입에 관계 없이 아무 값을 넣어도 실행이 가능하다.
+
+message('A')
+
+def message():
+    print('매일 행복하자')
+    return "happy"
+    
+message()
+word=message()
+print(word)
+
+# *인수: 가변으로 함수를 수행하고 싶을 때 사용하는 옵션
+
+def 함수이름 (*인수):
+	수행할 문장
+
+def sum(*x): #형식 매개변수
+    total=0
+    for i in x:
+        total=total+i
+    return total
+
+[j for j in int(0) for i in x for j in [j+i]][-1]
+
+# return 정리 - return은 여러문쓰면 맨위의 return 값만 받는다.
+
+def f1(x,y):
+    return x+y
+    return x*y   
+
+z=f1(2,3)
+결과 : 5
+
+# 해결방법 : return 하나에 , 를 붙여서 해결한다.
+
+def f1(x,y):
+    return x+y,x*y   
+
+sum,avg= f1(2,3) #return 값이 2개이므로 값에 맞게 변수를 추가한다. 
+
+sum        
+Out[69]: 5
+
+avg
+Out[70]: 6
+
+
+# 수정하기
+
+def aggF(*x):
+    sum=0
+    for i in x:
+        sum=sum+i
+    print('합 : %s\n평균 : %0.2f' %(sum,sum/len(x)))
+    return sum,sum/len(x)
+
+# 값이 없는 리턴문은 종료다. / 오류가 나지 않게 하는 방법
+
+def f2(x,y):
+	if y==0:
+		return 
+	print(x/y,' 값 입니다.')
+
+f2(4,2)
+f2(4,0)
+
+# 값을 고정시키는 방법
+
+def f3(name,age,gender='M'):
+	print("이름은 ",name)
+	print("나이는 ",age)
+	if gender == "M":
+		print("남자")
+	else:
+		print("여자")
+
+f3("홍길동",30)
+f3("a",20,"F")
+
+# 전역변수 (global) : 프로그램이 종료될 때까지 어디서든지 사용할 수 있는 변수
+# 지역변수 (local) : 함수 안에서만 사용하는 변수
+
+x = 10 # 전역변수
+def f4(x): # 지역변수, 매개변수 
+    print("x 변수 값은",x) # 전역변수의 값
+    x=20 # 지역변수
+    print("x 변수 값은",x) # 지역변수의 값
+
+f4(x)
+x 변수 값은 10
+x 변수 값은 20
+
+print(x)
+10
+
+
+x= 10
+def f5(arg):
+	global x # 전역변수로 받아 들인다.
+	x=20 # 10 이였던 값이 20 으로 전역으로 바뀐다.
+	print('x 변수 값은',x)
+
+f5(x)
+x 변수 값은 20
+
+print(x)
+20
+
+# copy : 이름만 다를 뿐 주소값은 같기 때문에 변수를 copy할 때 주의해야 한다.
+
+a=[1,2,3]
+b=a
+print(a,b)
+print(id(a),id(b)) # 값이 같은 주소인 것을 확인 할 수 있다.
+
+a.append(4)
+print(a,b) # a,b가 같이 바뀐 것을 확인할 수 있다.
+
+# 틀리게 복제하는 방법 - [:]를 사용한다. # deepcopy 라고한다.
+
+c=a[:]
+
+print (a,b,c)
+[1, 2, 3, 4] [1, 2, 3, 4] [1, 2, 3, 4]
+
+print(id(a),id(b),id(c))
+124215688 124215688 124101128
+
+a.append(5)
+
+print (a,b,c)
+[1, 2, 3, 4, 5] [1, 2, 3, 4, 5] [1, 2, 3, 4]
+
+
+# copy 함수를 불러서 사용하는 방법
+
+import copy
+d=copy.deepcopy(a)
+
+print(id(a),id(d))
+124215688 123654792
+
+a.append(6)
+
+print(a,d)
+[1, 2, 3, 4, 5, 6] [1, 2, 3, 4, 5]
+
+
+
+
+
+
+
+
+
+
+
+

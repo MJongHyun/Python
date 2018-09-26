@@ -1,0 +1,461 @@
+import pandas as pd
+from pandas import Series,DataFrame
+
+Series
+- 1차원배열
+
+DataFrame
+- 2차원배열
+
+obj = Series([10,20,30,40],index=['c','d','a','b'])
+
+import pandas as pd
+from pandas import Series,DataFrame
+
+obj = Series([10,20,30,40],index=['c','d','a','b'])
+
+obj2=obj.reindex(['a','b','c','d'])
+obj2
+
+obj3=obj.reindex(['a','b','c','d','f'])
+obj3
+
+
+# fill_value : NaN 값을 대체해주는 요소
+
+obj4=obj.reindex(['a','b','c','d','f'],fill_value=0) # defalut 값 0 
+obj4
+
+obj4
+Out[12]: 
+a    30
+b    40
+c    10
+d    20
+f     0
+dtype: int64
+
+# numpy :수치관련 method
+import numpy as np 
+
+# arange: 수보다 작은 값 array형 생성, range 범위와 같다.
+
+np.arange(4)
+Out[14]: array([0, 1, 2, 3])
+
+
+np.arange(4).reshape(2,2) #2행 2열 생성
+Out[15]: 
+array([[0, 1],
+       [2, 3]])
+
+np.arange(1,10).reshape(3,3)
+Out[17]: 
+array([[1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 9]])
+
+# dataframe에 행렬 추가
+
+df=DataFrame(np.arange(9).reshape(3,3),index=['a','b','c'],columns=['x','y','z'])
+
+df
+Out[21]: 
+   x  y  z
+a  0  1  2
+b  3  4  5
+c  6  7  8
+
+df2=df.reindex(['a','b','c','d'])
+
+df2
+Out[23]: 
+     x    y    z
+a  0.0  1.0  2.0
+b  3.0  4.0  5.0
+c  6.0  7.0  8.0
+d  NaN  NaN  NaN
+
+# ffill, pad : 앞의 있는 인덱스의 데이터를 복사하는 옵션 / NaN 옵션일때 만 채운다. 
+df3=df.reindex(['a','b','c','d'],method='ffill')
+df4=df.reindex(['a','b','c','d'],method='pad')
+
+df3
+Out[25]: 
+   x  y  z
+a  0  1  2
+b  3  4  5
+c  6  7  8
+d  6  7  8
+
+df3=df.reindex(['f','a','b','c'],method='ffill')
+
+# 기준을 알아야한다.
+df3
+Out[33]: 
+   x  y  z
+f  6  7  8
+a  0  1  2
+b  3  4  5
+c  6  7  8
+
+obj=Series(['sql','r','python'],index=[0,2,4])
+obj2=obj.reindex(range(6))
+
+obj2
+Out[37]: 
+0       sql
+1       NaN
+2         r
+3       NaN
+4    python
+5       NaN
+dtype: object
+
+# 이건 바로 뒤의 값을 복사...
+
+obj2=obj.reindex(range(6),method='ffill')
+
+obj2
+Out[39]: 
+0       sql
+1       sql
+2         r
+3         r
+4    python
+5    python
+dtype: object
+
+# bfill, backfill : 바로 뒤의 값을 NaN으로 가져와서 값을 채운다.
+obj2=obj.reindex(range(6),method='bfill')
+obj2=obj.reindex(range(6),method='backfill')
+
+obj2
+Out[45]: 
+0       sql
+1         r
+2         r
+3    python
+4    python
+5       NaN
+dtype: object
+obj2[5]='sql' # 값 추가
+
+# 행삭제 <drop('컬럼이름'>
+
+obj=Series(np.arange(5),index=['a','b','c','d','e'])
+obj.drop('e') # 바로 삭제가 아닌 미리보기로 되어있기 때문에 반드시 변수에 지정을 해줘야 한다.
+
+obj=obj.drop(['c','d','e']) # 여러개 삭제할 시 리스트 형을 사용해서 삭제를 한다.
+
+
+
+df=DataFrame(np.arange(16).reshape(4,4),index=['w','x','y','z'],columns=['one','two','three','four'])
+df
+Out[64]: 
+   one  two  three  four
+w    0    1      2     3
+x    4    5      6     7
+y    8    9     10    11
+z   12   13     14    15
+ 
+# axis : 행,열 표시하는 옵션
+
+df.drop('x',axis=0) # axis=0은 행을 의미한다. / 이것도 마찬가지로 미리보기이다.
+df.drop('four',axis=1) # axis=1은 열을 의미한다.
+- list 표현으로 여러개 삭제 가능하다.
+df = df.drop(['w','y'],axis=0)
+df = df.drop(['one','two'],axis=1)
+
+# 인덱싱 표현
+
+obj=Series([10,20,30,40],index=['a','b','c','d'])
+obj['a']
+obj[0]
+obj[1:3]
+obj['b':'c'] #인덱스 이름으로 값을 불러올 경우는 번호와 달리 b,c 모두를 가져온다.
+obj['a':'d'] # a~d까지 모두 값을 가져온다.
+obj[['a','c']] # 값 따로따로 불러오기 
+obj[[0,2]]
+
+obj<30
+Out[81]: 
+a     True
+b     True
+c    False
+d    False
+
+
+obj[obj<30] # 조건절에 대한 값 가져온다.
+Out[80]: 
+a    10
+b    20
+dtype: int64
+
+df = DataFrame(np.arange(16).reshape(4,4), index=['w','x','y','z'],columns=['one','two','three','four'])
+
+df['one']
+df[['one','two']]
+df[2:] # 2번인덱스부터 다나옴
+df[0:2]
+df<5
+
+df[df<5]
+Out[88]: 
+   one  two  three  four
+w  0.0  1.0    2.0   3.0
+x  4.0  NaN    NaN   NaN
+y  NaN  NaN    NaN   NaN
+z  NaN  NaN    NaN   NaN
+
+df[df['one']<5] # 다른 열들도 다 나온다. 0, 4 가 5보다 작은 행이 w,x 이므로 모두 나온다.
+   one  two  three  four
+w    0    1      2     3
+x    4    5      6     7
+
+
+# 인덱스 이름을 통해 값을 가져오는 방법 - ix,loc,iloc
+
+df.ix['x']
+df.ix[0]
+df.loc['x']
+df.loc[0] # 오류 발생
+df.iloc[0] # iloc로 할시는 해결이 된다.
+
+Out[98]: 
+one      0
+two      1
+three    2
+four     3
+Name: w, dtype: int32
+
+df.ix['x','one'] # ix(인덱스이름,컬럼이름) - 특정값 보는 방법
+df.ix['x',['one','two']]
+df.ix[['x','y']]
+
+df.ix[['x','y'],['one','two']] # ix(행,열)
+df.ix[['x','y'],[0,1]] # 숫자로도 가능하다.
+
+   one  two
+x    4    5
+y    8    9
+
+df.ix[0,'one']
+df.ix[[0,2],[0,1]]
+df.ix[:]
+df.ix[0:2]
+df.ix[0:2,0:2]
+df.ix[:,0:2]
+df.ix[-1]
+df.ix[:,-1]
+
+# at :새로운 행을 추가 하는 방법 
+예) 2013년도 PYTHON:70, SQL:90, R:85 추가한다.
+
+데이터프레임.at[행이름,열이름]=값
+
+df.at[2013,'PYTHON']=70
+df.at[2013,'SQL']=90
+df.at[2013,'R']=85
+
+df=df.drop(2013)
+
+# 다른방법 - set_value , 곧 사라짐 
+데이터프레임.set_value(행이름,열이름,값)
+
+df.set_value(2013,'PYTHON',70)
+df.set_value(2013,'SQL',90)
+df.set_value(2013,'R',85)
+
+# PLSQL 열을 추가하는 방법 - 열 값의 새로운 값을 넣어서 추가를 한다.
+
+df.at[2013,'PLSQL']=50
+df.at[2014,'PLSQL']=60
+df.at[2015,'PLSQL']=70
+df.at[2016,'PLSQL']=80
+
+# 파일 정렬하기
+
+df=df.reindex([2013,2014,2015,2016])
+df=df.reindex(columns=['SQL','PLSQL','R','PYTHON'])
+
+# 기존방법
+
+import csv
+file=open('c:/data/emp.csv','r')
+emp_csv=csv.reader(file)
+next(emp_csv)
+
+for emp_list in emp_csv:
+    if emp_list[0]=='100':
+        print(emp_list[7])
+
+file.close()       
+
+# pandas로 csv 값을 불러오는 방법, 타입확인방법 
+
+emp=pd.read_csv("c:/data/emp.csv")
+emp.dtypes # 각 컬럼들 데이터타입을 확인하는 방법, object: 문자타입 int,float: 정수형, 실수형
+emp.info() # R에서 쓴 str과 같은 방법 
+
+# 위 방법과 다르게 100번 사원 불러오기
+
+emp.ix[(emp['EMPLOYEE_ID']==100),'SALALY']
+
+student = DataFrame([[60,80,70],[50,70,85],[90,80,95]],index=['홍길동','박찬호','손흥민'],columns=['영어','수학','국어'])
+
+제임스 영어 100 수학 50 국어 80
+
+student.at['제임스','영어']=100
+student.at['제임스','수학']=50
+student.at['제임스','국어']=80
+
+student_new=DataFrame([[60,80,70],[50,75,85],[90,80,85]],index=['윤건','김건모','이문세'],columns=['영어','수학','국어'])
+
+# 데이터 한번에 추가하기 : append, pd.concat
+
+student_new=DataFrame([[60,80,70],[50,75,85],[90,80,85]],index=['윤건','김건모','이문세'],columns=['영어','수학','국어'])
+student.append(student_new) # 미리보기이다.
+
+student=student.append(student_new)
+
+student1=DataFrame([[60,80,70],[50,75,85],[90,80,85]],index=['싸이','나얼','윤상'],columns=['영어','수학','국어'])
+student=pd.concat([student,student1])
+
+student.info()
+<class 'pandas.core.frame.DataFrame'>
+Index: 10 entries, 홍길동 to 윤상 # 인덱스 갯수 확인 가능
+Data columns (total 3 columns):
+영어    10 non-null float64
+수학    10 non-null float64
+국어    10 non-null float64
+dtypes: float64(3)
+memory usage: 320.0+ bytes
+
+student.info()
+
+student['과학']=[100,70,90,95,85,75,60,80,50,55]
+student['한국사']='조선'
+student['음악']=''
+del student['음악']
+student=student.drop('제임스',axis=0)
+student=student.drop('한국사',axis=1)
+
+student.ix['윤건']
+student.loc['윤건']
+student.xs('윤건',axis=0) # 괄호 차이
+student.xs('영어',axis=1)
+student['영어']
+
+# 수정 컬럼,인덱스
+student.rename(index={'윤상':'김상'}) # 미리보기이다.
+student=student.rename(index={'윤상':'김상'}) # 인덱스수정
+student=student.rename(columns={'과학':'물리'}) # 컬럼 수
+
+# series 끼리 값 연산하기
+
+obj1=Series([10,5,3,7],index=['a','b','c','d'])
+obj2=Series([2,4,6,8,10],index=['a','b','c','e','f'])
+
+obj1*100
+obj1+obj2 # 값을 연산할 때는 각각 Series의 인덱스 이름이 같은 것끼리 연산이 된다
+
+Out[142]: 
+a    12.0
+b     9.0
+c     9.0
+d     NaN
+e     NaN
+f     NaN
+dtype: float64
+
+# 인덱스의 상관없이 연산을 가능하게 해주는 함수 
+
+# add : 더하게 해주는 옵션
+
+obj1.add(obj2,fill_value=0)  #fill_value : NaN 값을 0으로한다.
+
+# sub: 빼는 걸 도와주는 옵션
+
+obj1.sub(obj2,fill_value=0) 
+
+# mul : 곱
+
+obj1.mul(obj2,fill_value=1)
+
+# div: 나누기
+
+obj1.div(obj2,fill_value=1)
+
+df1=DataFrame(np.arange(6).reshape(2,3),index=['2015','2016'],columns=['python','sql','plsql'])
+df2=DataFrame(np.arange(12).reshape(3,4),index=['2014','2015','2016'],columns=['python','r','sql','plsql'])
+
+df1+df2 # 인덱스 값 기준으로 값이 더해진다.
+df1.add(df2,fill_value=0)
+df1.sub(df2,fill_value=0)
+df1.mul(df2,fill_value=1)
+df1.div(df2,fill_value=1)
+
+# 브로드캐스팅(broadcasting) : 행렬을 자동으로 맞춰서 연산을 하게 하는 것 
+
+obj1=np.arange(15).reshape(5,3) # 5행 3열
+obj2=np.arange(3) # 1행 3열
+obj1+obj2 # 행렬이 다르기 때문에 계산이 되면 안되지만 여기선 돌아간다. 즉, 5행 3열로 바뀐다
+obj1-obj2
+obj1*obj2
+obj1/obj2 # 0으로 나누면 0/0 nan, 숫자/0 은 inf 로 나온다.
+
+# 반복 repeat, 위의 브로드캐스팅 모양을 바꿔서 만드는 방법
+obj1+obj2.repeat(5).reshape(3,5).T ★★
+
+df1=DataFrame(np.arange(15).reshape(5,3),index=[str(i) for i in range(2012,2017)],columns=['a','b','c'])
+type(df1)
+Out[167]: pandas.core.frame.DataFrame
+
+s=df1.ix[0]
+type(s)
+Out[171]: pandas.core.series.Series
+
+df1+s # 이것도 브로드캐스팅이 돌아간 것을 확인 할 수 있다.
+
+# sort_index() : index 정렬 sort_values: values 정렬
+
+obj=Series([2,3,5,6],index=['d','c','b','a'])
+obj.sort_index() # 인덱스를 기준으로 오름차순을 한다.
+obj.sort_index(ascending=False) # 내림차순
+obj.sort_values() # value값 기준으로 오름차순
+obj.sort_values(ascending=False) # 내림차순
+
+df=DataFrame(np.arange(8).reshape(2,4),index=['two','one'],columns=['d','a','c','b'])
+df.sort_index() # 행 오름차순 
+Out[181]: 
+     d  a  c  b
+one  4  5  6  7
+two  0  1  2  3
+df.sort_index(ascending=False)
+Out[197]: 
+     d  a  c  b
+two  0  1  2  3
+one  4  5  6  7
+df.sort_index(axis=1) # 0: row, 1:colume
+Out[194]: 
+     a  b  c  d
+two  1  3  2  0
+one  5  7  6  4 
+df.sort_index(ascending=False,axis=1) # 내림차순
+Out[195]: 
+     d  c  b  a
+two  0  2  3  1
+one  4  6  7  5
+df.sort_values(by= 'b', axis=0, ascending=False) # b라는 열을 기준으로 내림차순 정렬, 행값도 바뀐다.
+Out[196]: 
+     d  a  c  b
+one  4  5  6  7
+two  0  1  2  3
+
+df.sort_values(by='one', axis = 1, ascending=False) # 행 값 기준으로 내림차순을 한다. one에서 가장 큰 값 기준으로 내림차순
+Out[198]: 
+     b  c  a  d
+two  3  2  1  0
+one  7  6  5  4
+

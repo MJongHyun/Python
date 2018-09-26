@@ -1,0 +1,93 @@
+obj=Series([78,88,92,79,67,91,70,86,90,90])
+obj.sort_values()  # 값을 기준으로 오름차순 정리
+obj.sort_values(ascending=False) # 값을 기준으로 내림차순 정렬
+
+# rank : 순위 
+obj.rank() # 오름차순으로 순위를 구함, 인덱스에 따른 순위를 적어놓음
+           # 등수가 같을 경우 평균을 구해서 등수를 적어놓고, 다음 순위는 없다.
+obj.rank(ascending=False) # 내림차순으로 순위를 구한다.
+obj.rank(ascending=False, method='average') # 동일한 순위가 있을 경우 평균으로 값을 보여준다.
+obj.rank(ascending=False, method='min') # 동일한 순위가 아닌 그냥 순위 값으로 나온다. 더 작은 값으로 나온다. SQL: Rank
+obj.rank(ascending=False, method='max') # 동일한 순위가 아닌 그냥 순위가 나오지만, 등수 다음값 으로 나온다.
+obj.rank(ascending=False, method='first') # 동일한 순위가 있을 경우, 인덱스가 앞에 있는 것에 높은 순위를 준다.
+obj.rank(ascending=False, method='dense') # 연이은 순위로 보겠다. 즉, 중복이 되어도 다음 순위로 숫자가 나오게 함 SQL : dense_rank
+
+DataFrame({'순위':obj.rank(ascending=False, method='dense'),'점수':obj})
+obj1.sort_values(by='순위') # 순위 결정
+
+import numpy as np
+
+obj2=Series([70,60,80,np.nan,90]) # NaN 추가: np.nan
+
+# 오름차순,내림차순으로 상관없이 NaN 값은 맨뒤로 가게된다.
+
+obj2.sort_values()
+obj2.sort_values(ascending=False)
+
+# 만약 NaN을 가장 앞으로 뽑아내고 싶다면. na_position을 사용한다.
+
+obj2.sort_values(ascending=False,na_position='first')
+obj2.sort_values(ascending=False,na_position='last') # 제일 뒤로 간다. 
+
+
+obj2.rank() 
+obj2.rank(ascending=False)
+
+
+# na_option : NaN 옵션들 
+
+obj2.rank(na_option='keep') # 기본 값, NaN이 있을 경우 순위에 해당되지 않는다.
+obj2.rank(na_option='top') # 오름차순으로 구하면서 NaN 순위는 1위로 고정
+obj2.rank(ascending=False,na_option='top') # 내림차순으로 구하면서 NaN 순위 는 1위로 고정
+obj2.rank(na_option='bottom') # NaN 값을 가장 낮은 순위에 놓고 오름차순
+obj2.rank(ascending=False,na_option='bottom') # NaN 값을 가장 낮은 순위로 놓고 내림차순 정렬
+
+df=DataFrame({'영어':[60,80,70],'수학':[50,72,86]},index=['홍길동','박찬호','손흥민'])
+df.sort_values(by='수학')
+df.sort_values(by='수학',ascending=False)
+df['수학'].sort_values() # 특정과목 순위만 보고 싶을 경우
+df['수학'].sort_values(ascending=False)
+
+df.rank(ascending=False) # 과목별로 자동으로 순위가 만들어진다.
+df.rank(ascending=False,axis=1) # 한 학생이 어떤 과목을 더 잘하는지 순위를 볼 수 있다. (axis 활용)
+df['영어'].sort_values(ascending=False)
+
+df.ix['홍길동'].rank(ascending=False) # 원하는 값 추출, 영어가 높은지 수학이 높은지 확인.
+df.loc['홍길동'].rank(ascending=False)
+
+# isin : 값이 있으면 추출
+
+df[df['수학'].isin([72,86])] 
+df[~df['수학'].isin([72,86])] # 이 조건에 반하는 값을 추출
+
+# fillna : Na값 대신 값을 설정해주는 옵션, 미리보기이다.
+
+obj.fillna(0) # 미리보기
+obj.isnull() # Null 값의 위치를 찾아준다.
+pd.isnull(obj) # pandas를 이용하여 찾는 방법
+obj.notnull() # Null이 아닌 값들 찾기
+obj[obj.isnull()] # NaN 값 추출
+
+# NaN 아닌 값 추출
+
+obj[~obj.isnull()]
+obj[obj.notnull()]
+obj.dropna()
+
+df = DataFrame([[1,2,3],[1,None,NA],[NA,NA,NA,],[NA,2,3]])
+df.dropna() # NaN 값이 행 하나라도 존재하면 삭제된다. 즉, 행에 NaN 없는 값만 추출된다.
+df.dropna(axis=0) # 행으로 따지는 경우
+df.dropna(axis=1) # 열로 따지는 경우
+df.dropna(how='all',axis=0) # row가 모두 NaN인 경우 삭제된다.
+df[4]=NA # 컬럼 추가
+df.dropna(how='all',axis=1) # column가 모두 NaN인 경우 삭제된다.
+
+df.fillna(0)
+df[0].fillna(0) # 0번열에 있는 NaN 값에 0읗 넣는다.
+
+df.fillna({0:0,1:1,2:2,4:4}) # dictionary 성질을 통해 각각 열에 있는 NaN값에 다른 값 넣기
+df.fillna(0,inplace=True) # 미리보기가 아닌 바로 값을 채우는 방법 (inplace 옵션)
+
+
+
+

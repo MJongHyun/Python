@@ -1,0 +1,135 @@
+# break : 종료하는 보조제어문
+
+i=0
+while 1: # 무조건 반복
+    if i>10:
+        break
+    else:
+        i +=1
+        print('반복하는 값: %d' %i)
+
+i=10
+while 1:
+    if i<0:
+        break
+    else:
+        print('반복하는 값: %d' %i)
+        i -=1
+
+i=10
+while 1:
+    print('반복하는 값: %d' %i)
+    i -=1
+    if not i: # not -1 -> True 이므로 활용하는 방법도 있다.
+	   break
+
+
+# continue : continue문은 while문으로 돌아가게 하는 문이다. 
+        
+i=0
+while i<10:
+    i+=1
+    if i%2==0:
+        continue 
+    print(i)
+    
+
+# for 문
+
+for 반복변수 in (리스트, 튜플, 문자열):
+	반복수행해야할 문장
+
+for i in [1,2,3,4,5]:
+	print(i)
+
+x=[1,2,3,4,5]
+
+for i in x:
+    print(i)
+
+x=(1,2,3,4,5)
+
+for i in x:
+	print(i)
+
+1
+2
+3
+4
+5
+
+for i in ['a','b','c']:
+	print(i)
+
+x=['sql','plspl','r','python']
+for i in x:
+	print(i)
+
+sql
+plspl
+r
+python
+
+for i in '대한민국':
+	print(i)
+
+대
+한
+민
+국
+
+
+x = [(1,2),(3,4),(5,6)]
+
+for (a,b) in x: # 각각 갯수만큼 비교해서 값을 구할 수도 있다.
+    print(a+b)
+3
+7
+11
+
+# range : 범위를 쓸 때 사용하는 함수
+
+range(시작점,끝점-1,간격)
+
+list(range(1,11,1)) # 1부터 10까지 1차이
+list(range(0,101,5)) # 0부터 100까지 5차이
+
+for i in range(1,11,2): # 1부터 10까지 1에서 2차이 
+    print(i)
+
+
+# enumerate: 리스트 변수 안에 있는 인덱스값과 list값을 반환해주는 변수
+
+for i,name in enumerate(lst):
+	print('{}번 {}값이 있습니다.'.format(i,name)) 
+
+ 
+# ★★ 리스트 내장객체
+
+[표현식 for 반복변수 in 반복가능한 객체]
+
+예) 
+x=range(1,10)
+z = [i*2 for i in x]
+
+Out[272]: [2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+
+x=['apple','banana','orange']
+z=[len(i) for i in x]
+
+Out[278]: [5, 6, 6]
+
+
+lst1 = [1,2,3]
+lst2 = [4,5,6]
+
+z=[i*j for i in lst1 for j in lst2] # 첫번째 for문 두번째 for문으로 해서 중첩이 된다.
+
+
+z=[i for i in range(1,101) if i%2==0] # if문도 추가가 가능하다.
+
+
+
+
+

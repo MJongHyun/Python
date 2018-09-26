@@ -1,0 +1,128 @@
+import numpy as np
+
+s=Series([2,4,8,np.nan,6])
+s.sum() # NaN 있지만 sum이 가능하다.
+s.sum(skipna=True) # 기본옵션
+s.sum(skipna=False) # skip하지 않은경우 False가 나온다.
+
+s.mean() # 평균
+s.var() # 분산
+s.std() # 표준편차
+s.max() # 최대값
+s.min() # 최소값
+s.cumsum() # 누적 합
+s.idxmin() # 최소값이 있는 인덱스
+s.idxmax() # 최대값이 있는 인덱스
+s[s.idmin()]
+s[s.idmax()]
+
+s=Series([2,4,8,np.nan,6,8,2])
+
+# 최대값 최소값이 2개 이지만 인덱스는 가장 앞에 있는 값만 나오게 된다.
+
+s.idxmin()
+s.idxmax()
+
+s[s==s.min()] # 해결방법 
+s[s==s.max()]
+
+# 인덱스, value 만 보는 방법
+
+s[s==s.min()].index
+s[s==s.min()].values
+s[s==s.max()].index
+s[s==s.max()].values
+
+s.describe() # 4분위 수, 갯수, 평균, 최대값, 최소값, 표준편차 
+s.count() # NaN은 빼고 센다.
+len(s) # NaN을 포함하여 길이를 센다.
+
+df=DataFrame([[60,80,70],[50,75,83],[90,83,81]],index=['홍길동','박찬호','손흥민'],columns=['영어','수학','국어'])
+df.sum() # 컬럼으로 더해진다.
+df.sum(axis=0)  # 행을 전체 잡아서 각각 더했다.
+df.sum(axis='rows')
+df.sum(axis=1)  # 열을 전체 잡아서 각각 더했다.
+df.sum(axis='columns')
+
+# sum 뿐만아니라 모든 계싼이 그렇게 된다. / axis=0이 기본이다.
+df.mean()
+df.mean(axis=1)
+
+# 제임스 영어 100, 수학 np.nan, 국어 90 추가
+
+df.at['제임스','영어']=100
+df.at['제임스','수학']=np.nan
+df.at['제임스','국어']=90
+
+df.sum()
+df.mean()
+df.mean(skipna=False)
+df.mean(axis=1,skipna=False)
+df.idxmin() # 과목별 해당하는 인덱스 값이 나온다. NaN은 제외
+df.idxmax()
+
+df['영어'].sum()
+df['영어'].mean()
+df['영어'].var()
+df['영어'].std()
+df['영어'].max()
+df['영어'].min()
+df.loc['홍길동'].sum()
+df.describe()
+
+# 컬럼이 없는 경우 값을 생성 - names를 통해 컬럼이름을 생성하여 값을 구한다.
+
+import pandas as pd
+emp=pd.read_csv('c:/data/emp_new.csv',names=['empid','name','job','mgr','hire_date','sal','comm','deptno'])
+
+from pandas import Series,DataFrame
+import numpy as np
+
+s=Series([1,2,3,4,1,2,3,4,5,1,2,3,4,5,6,np.nan])
+
+# 유일한 값 : Series인 경우 pandas 옵션에 unique가 있다.
+s.unique()
+
+# 만약 NaN 값을 없애고 싶다면 Series로 형변환 후 값을 바꾸면 된다.
+
+ss=Series(s.unique())
+ss.dropna() 
+
+s[~s.isnull()].unique()
+
+# 각각 값들 갯수를 세어주는 옵션 / Series 에서 가능하다.
+
+s.value_counts() # 값이 인덱스가 되고 건수가 만들어 진다.
+s.value_counts(sort=True) # 건수가 높은 것부터 정렬 
+s.value_counts(sort=False) # 인덱스 기준 정렬
+s.value_counts(normalize=True) # 값을 가지고있는 상대적 비율
+
+# 상대비율 구하기
+
+s_unique={}
+
+for i in s:
+    if i=='':
+        continue
+    elif i not in s_unique:
+        s_unique[i]=1
+    else:
+        s_unique[i]=s_unique[i]+1
+
+t=[]
+
+for i in s_unique.values():
+    t.append(i/len(s))
+
+for k,v in s_unique.items():
+    print(k,v/len(s))
+
+df=DataFrame({'a':['a1','a1','a1','a2','a2','a2','a3'],'b':['b1','b1','b1','b2','b2','b3',np.nan]})
+
+df['a'].unique()
+df['b'].unique()
+Series(df['b'].unique()).dropna()
+df['a'].value_counts()
+df['b'].value_counts() #NaN 값은 count에서 제외
+df['b'].value_counts(dropna=True)
+df['b'].value_counts(dropna=False) # NaN 값도 세어진다.

@@ -1,0 +1,246 @@
+# 어떤 자연수 n이 있을 때, d(n)을 n의 각 자릿수 숫자들과 n 자신을 더한 숫자라고 정의하자.
+
+예를 들어
+
+d(91) = 9 + 1 + 91 = 101
+
+이 때, n을 d(n)의 제네레이터(generator)라고 한다. 위의 예에서 91은 101의 제네레이터이다.
+
+어떤 숫자들은 하나 이상의 제네레이터를 가지고 있는데, 101의 제네레이터는 91 뿐 아니라 100도 있다. 그런데 반대로, 제네레이터가 없는 숫자들도 있으며, 이런 숫자를 인도의 수학자 Kaprekar가 셀프 넘버(self-number)라 이름 붙였다. 예를 들어 1,3,5,7,9,20,31 은 셀프 넘버 들이다.
+
+1 이상이고 5000 보다 작은 모든 셀프 넘버들의 합을 구하라.
+
+def gene(x):
+    b=0
+    z=[]
+    for i in range(1,x+1):
+        t=str(i)
+        y=int(t)
+        for j in range(0,len(t)): 
+            y=y+int(t[j])
+            if j==len(t)-1:
+                z.append(y)
+    a=set(z)
+    for i in range(1,x+1):
+        if i not in a:
+            b=b+i
+    return b
+
+# 집합에선 append가 아닌 add이다. 따라서 위의 함수를 고치면
+
+def gene(x):
+    b=0
+    z=set()
+    for i in range(1,x+1):
+        t=str(i)
+        y=int(t)
+        for j in range(0,len(t)): 
+            y=y+int(t[j])
+            if j==len(t)-1:
+                z.add(y)
+    for i in range(1,x+1):
+        if i not in z:
+            b=b+i
+    return b
+
+# 10미만의 자연수에서 3과 5의 배수를 구하면 3,5,6,9이다. 이들의 총합은 23이다.
+
+1000미만의 자연수에서 3,5의 배수의 총합을 구하라.
+
+sum=0
+for i in range(1,1000):
+    if i%3==0 or i%5==0:
+        sum+=i
+
+print(sum)
+
+
+# 1~1000에서 각 숫자의 개수 구하기
+
+예로 10 ~ 15 까지의 각 숫자의 개수를 구해보자
+
+10 = 1, 0
+11 = 1, 1
+12 = 1, 2
+13 = 1, 3
+14 = 1, 4
+15 = 1, 5
+
+그러므로 이 경우의 답은 0:1개, 1:7개, 2:1개, 3:1개, 4:1개, 5:1개
+
+# 실수
+
+def div(x,y):
+	
+	tmp=0
+
+	if x>y:
+		tmp=y
+		y=x
+		x=tmp
+		
+	str_x=str(x)
+	str_y=str(y)
+
+	lst=[]
+
+	for i in range(0,len(str_x)):
+		lst.append(int(str_x[i]))
+
+	for i in range(0,len(str_y)):
+		lst.append(int(str_y[i]))
+
+	lst_set=set(lst)
+	t_ls=list(lst_set)
+	t=[]
+
+	for i in range(0,len(t_ls)):
+		t.append(lst.count(t_ls[i]))
+
+	for i in range(0,len(t)):
+		print(t_ls[i],':',t[i],'개')
+
+
+
+x=[]
+y=[]
+z=['0','1','2','3','4','5','6','7','8','9']
+t=[]
+
+for i in range(1,1001):
+	x.append(str(i))
+
+for j in range(0,len(x)):
+    y.extend(list(''.join(x[j])))
+  
+for i in range(0,len(z)):
+    t.append(y.count(z[i]))
+    print (i,":",t[i],"개")
+
+		
+# 1부터 10,000까지 8이라는 숫자가 총 몇번 나오는가?
+
+8이 포함되어 있는 숫자의 갯수를 카운팅 하는 것이 아니라 8이라는 숫자를 모두 카운팅 해야 한다.
+(※ 예를들어 8808은 3, 8888은 4로 카운팅 해야 함)
+
+total=[]
+div_t=[]
+
+for i in range(1,10001):
+	total.append(str(i))
+
+for j in range(0,len(total)):
+    div_t.extend(list(''.join(total[j])))
+    
+print(div_t.count('8'))
+	
+		
+
+# 자기 자신을 제외한 모든 양의 약수들의 합이 자기 자신이 되는 자연수를 완전수라고 한다. 예를 들면, 6과 28은 완전수이다. 6=1+2+3 // 1,2,3은 각각 6의 약수 28=1+2+4+7+14 // 1,2,4,7,14는 각각 28의 약수
+
+입력으로 자연수 N을 받고, 출력으로 N 이하의 모든 완전수를 출력하는 코드를 작성하라.		
+	
+	
+def pf_num(x):
+    global z
+    z=[]
+    for i in range(1,x+1):
+        y=0
+        for j in range(1,i):
+            if i%j==0:
+                y=y+j
+        if i==y:
+            print(y)     
+	
+# 1차원의 점들이 주어졌을 때, 그 중 가장 거리가 짧은 것의 쌍을 출력하는 함수를 작성하시오. (단 점들의 배열은 모두 정렬되어있다고 가정한다.)
+
+예를들어 S={1, 3, 4, 8, 13, 17, 20} 이 주어졌다면, 결과값은 (3, 4)가 될 것이다.
+S=[1, 3, 4, 8, 13, 17, 20]
+result=max(S)**2
+k=0
+for i in range(0,len(S)):
+    k=k+1
+    if k==len(S):
+        break
+    for j in range(k,len(S)):
+        z=abs(S[i]-S[j])
+        if result>z:
+            result=z
+            u=[S[i],S[j]]
+u      
+
+# 문자열을 입력받아서, 같은 문자가 연속적으로 반복되는 경우에 그 반복 횟수를 표시하여 문자열을 압축하기.
+
+입력 예시: aaabbcccccca
+
+출력 예시: a3b2c6a1
+
+x=input('문자열을 입력해주세요: ')
+cn=1
+
+for i in range(0,len(x)):
+    if i==len(x)-1:
+        break
+    if x[i]==x[i+1]:
+        cn=cn+1
+    else:
+        print(x[i],cn,end='')
+        cn=1
+    if i==len(x)-2 and x[i]!=x[i+1]:
+        cn=1
+        print(x[i+1],cn,end='')
+
+# 숫자 출력하기
+
+4가지 기준만 만족하면 됩니다.
+
+코드 내에 숫자가 없어야 합니다.
+파일 이름이나 경로를 사용해서는 안됩니다.
+시간, 날짜 함수를 사용해서는 안됩니다.
+에러 번호 출력을 이용해서는 안됩니다.
+
+20150111
+
+zero=str(len(''))
+one=str(len('o'))
+two=str(len('tt'))
+five=str(len('fffff'))
+
+print(two+zero+one+five+zero+one+one+one)
+
+# A씨는 게시판 프로그램을 작성하고 있다.
+
+A씨는 게시물의 총 건수와 한 페이지에 보여줄 게시물수를 입력으로 주었을 때 총 페이지수를 리턴하는 프로그램이 필요하다고 한다.
+
+입력 : 총건수(m), 한페이지에 보여줄 게시물수(n) (단 n은 1보다 크거나 같다. n >= 1)
+출력 : 총페이지수
+
+A씨가 필요한 프로그램을 작성하시오.
+
+
+def page(m,n):
+    if m==0:
+        print('출력: 0')
+    if m>n:
+        print('출력: %d' %(round(m/n+0.5)))
+    else:
+        print('출력: 1')
+	
+
+
+
+
+
+
+
+
+		
+	
+	
+
+	
+	
+
+	
+
+

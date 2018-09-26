@@ -1,0 +1,565 @@
+# 중첩리스트
+
+x = []
+type(x)
+
+x=[1,2,3,['a','b','c'],4,5]
+x[2:5]
+
+- 결과
+[3, ['a', 'b', 'c'], 4]
+
+x[3]
+Out[115]: ['a', 'b', 'c']
+
+x[3][0]
+Out[116]: 'a'
+
+x[3][0:2]
+Out[117]: ['a', 'b']
+
+x[3][-1]
+Out[118]: 'c'
+
+- 값 추가
+
+x[3].append('d')
+Out[125]: [1, 2, 3, ['a', 'b', 'c', 'd'], 4, 5]
+
+- 값 삭제
+
+del x[3][3]
+Out[131]: [1, 2, 3, ['a', 'b', 'c'], 4, 5]
+
+- 문자형 바꾸기, 리스트 전체를 바꾸는 것은 불가능하여서 각각 하나씩 값을 바꿔줘야 한다.
+
+x[3][0]=x[3][0].upper()
+x[3][1]=x[3][1].upper()
+x[3][2]=x[3][2].upper()
+
+Out[140]: [1, 2, 3, ['A', 'B', 'C'], 4, 5]
+
+x[0] = x[0] * 10 # 숫자는 우리가 아는 곱
+x[3][0] = x[3][0] * 2 # 문자는 반복 
+Out[144]: [10, 2, 3, ['AA', 'B', 'C'], 4, 5]
+
+- 변수값 모두 지우기
+x.clear()
+
+
+x = [1,5,3,4,2]
+
+# sort : 리스트 내의 값을 기준으로 정렬 기본값을 오름차순 , 바로 적용이 된다.
+
+x.sort()
+x.sort(reverse=True) # 내림차순으로 정렬이 가능
+
+# reverse : sort옵션에서 사용하지 않을 경우 그냥 역순으로 값을 추출해준다. / 리스트 인덱스 순서를 반대로 뒤집는다.
+
+x=[1,5,3,4,2]
+
+x.reverse()
+Out[155]: [2, 4, 3, 5, 1]
+
+# sorted : sort와 다른것은 미리보기로 값을 확인할 수 있다. 따라서 변수에 값을 넣으려면 변수를 설정하고 값을 설정
+
+sorted(x)
+sorted(x,reverse=True)
+
+# 자료형 tuple
+
+- 리스트자료형과 똑같다. 차이점은 수정,삭제,추가 안된다.
+- 상수처럼 값이 움직이는 것이므로 자료처리 속도가 빠르다.
+- 리스트 [], 튜플 ()
+
+list1 = []
+type(list1)
+Out[189]: list
+
+tuple1 = ()
+type(tuple1)
+Out[189]: tuple
+
+
+tuple2=10,20 # 괄호 없이 튜플 만들기
+type(tuple2)
+Out[191]: tuple
+
+tuple3=(1,) # 하나만 만들기
+type(tuple3)
+Out[192]: tuple
+
+tuple4=(1,2,3,4)
+tuple5=(1,2,3,('a','b')) # 중첩도 가능하다.
+
+tuple5[3][0]
+Out[194]: 'a'
+
+
+tuple[0]=10 # 튜플의 성질의 의해서 수정이 불가능하다.
+Traceback (most recent call last):
+
+  File "<ipython-input-195-cf86ac95ae2d>", line 1, in <module>
+    tuple[0]=10
+
+TypeError: 'type' object does not support item assignment
+
+
+del tuple5[0] # 삭제도 불가능 하다.
+Traceback (most recent call last):
+
+  File "<ipython-input-196-1f1b2b6af35b>", line 1, in <module>
+    del tuple5[0]
+
+TypeError: 'tuple' object doesn't support item deletion
+
+tuple4.append(4) # 추가도 불가능하다.
+
+# 튜플을 합치려면 + 를 사용하면 가능하다.
+
+x=(1,2,3)
+y=(4,5,6)
+
+x+y
+Out[201]: (1, 2, 3, 4, 5, 6)
+
+x=x+(4,)
+Out[203]: (1, 2, 3, 4)
+
+# 튜플을 합친다는 의미는 기존에 값에 추가하는 것이 아니라 새로운 값이 생성되는 것을 의미한다.
+
+x=(1,2,3)
+
+id(x) # 변수값의 위치를 알려주는 함수 인데 밑과 비교하면 값이 다른 것을 확인할 수 있다.
+
+Out[209]: 150197808
+
+x=x+(4,)
+
+id(x)
+Out[211]: 149928680
+
+# 다른 함수들은 튜플에서 사용가능하다. (index,count ....)
+
+x.index(3)
+x.count(1)
+
+x=(2,3,4,1)
+x.sort # 오류 발생
+type(x) 
+Out[220]: tuple
+
+z=sorted(x) # 오류 발생하지 않는다 단, tuple형이 list형으로 바뀌게 된다.
+
+type(z)
+Out[222]: list
+
+# dictionary
+
+- key를 통해 value를 확인하는 자료형
+
+key			value
+이름			홍길동
+전화번호		01012345678
+주소			경기도
+
+dic = {'이름':'홍길동','전화번호':'01012345678','주소':'경기도'}
+type(dic)
+Out[247]: dict
+
+# 키 값을 알고 있으면 데이터를 뽑는 것이 가능하다.
+
+dic['이름']
+Out[248]: '홍길동'
+
+sports={'축구':'메시','농구':'커리','야구':'박찬호'}
+
+
+sports['축구']
+Out[252]: '메시'
+
+
+sports['컬링'] # 없는 key값은 오류가 난다.
+Traceback (most recent call last):
+
+  File "<ipython-input-253-cc65aa9cd27f>", line 1, in <module>
+    sports['컬링']
+
+KeyError: '컬링'
+
+sports['컬링']='김영미' # 없는 값도 추가 가능하다.
+
+sports['컬링']=['김은정','김경애','김영미','김선영','김초희']
+
+sports
+Out[256]: 
+{'축구': '메시',
+ '농구': '커리',
+ '야구': '박찬호',
+ '컬링': ['김은정', '김경애', '김영미', '김선영', '김초희']}
+
+# 각각 값들 확인하는 방법
+
+sports.keys()
+Out[258]: dict_keys(['축구', '농구', '야구', '컬링'])
+
+sports.values()
+Out[259]: dict_values(['메시', '커리', '박찬호', ['김은정', '김경애', '김영미', '김선영', '김초희']])
+
+sports.items()
+Out[260]: dict_items([('축구', '메시'), ('농구', '커리'), ('야구', '박찬호'), ('컬링', ['김은정', '김경애', '김영미', '김선영', '김초희'])])
+
+sports['농구']
+Out[261]: '커리'
+
+sports.get('농구') # dictionary 값.get(키값) - 키값에 따른 value가 나온다. 
+Out[261]: '커리'
+
+sports['봅슬레이'] # 없으면 오류가 난다.
+
+Traceback (most recent call last):
+
+  File "<ipython-input-263-db3852abba6d>", line 1, in <module>
+    sports['봅슬레이']
+
+KeyError: '봅슬레이'
+
+sports.get('봅슬레이') # 오류가 나지 않고 None 값으로 나온다.
+
+# 값 확인 (in)
+
+'컬링' in sports.keys() # 키 값확인
+Out[265]: True
+
+'봅슬레이' in sports.keys()
+Out[266]: False
+
+'메시' in sports.values() # value 확인
+Out[267]: True
+
+'호날두' in sports.values()
+Out[268]: False
+
+'김영미' in sports.values() # 리스트로 넣은 값은 리스트자체가 하나이기 때문에 값이 없다고 나온다.
+Out[269]: False
+
+sports.values() # 모든 values 값 확인
+Out[270]: dict_values(['메시', '커리', '박찬호', ['김은정', '김경애', '김영미', '김선영', '김초희']])
+
+# key 값으로 인한 삭제
+del sports['야구']
+
+sports['축구']=[] # del과 같이 값이 지워진다.
+sports
+
+sports.clear() # sports dic 모두 삭제
+
+
+x=sports.values() # values 값만 옮길 수 있다.
+
+str(x)
+Out[278]: "dict_values(['메시', '커리', '박찬호'])"
+
+list(x) # list로 형 변환이 된다.
+Out[279]: ['메시', '커리', '박찬호']
+
+# set (집합)
+
+- list type 비슷하다. 
+- index가 없다.
+- 중복을 허용하지 않는다. ★
+
+
+x={1,1,2,3,4,2,4,3} # {}안에 숫자만 나열하면 set이다.
+
+x
+Out[293]: {1, 2, 3, 4}
+
+type(x)
+Out[292]: set
+
+y={2,3,4,5}
+
+# 합집합 
+
+x.union(y)
+x|y
+Out[295]: {1, 2, 3, 4, 5}
+
+# 교집합
+
+x.intersection(y)
+x&y
+Out[298]: {2, 3, 4}
+
+# 차집합
+
+x.difference(y)
+x-y
+Out[299]: {1}
+
+y.difference(x)
+y-x
+Out[301]: {5}
+
+1 in x
+Out[303]: True
+
+6 in x
+Out[304]: False
+
+x[0] # 집합은 index가 없기 때문에 index값으로 불러 올 수가 없다.
+Traceback (most recent call last):
+
+  File "<ipython-input-305-2f755f117ac9>", line 1, in <module>
+    x[0]
+
+TypeError: 'set' object does not support indexing
+
+x.remove(1) # 값 제거
+x.add(1) # 값 추가
+
+x.update([5,6,7]) # 집합 변수에 여러개의 값 추가
+
+# [], () : list, tuple
+
+a={} # dic 표현
+type(a)
+Out[313]: dict
+
+s=set() # 집합 표현
+type(s)
+Out[315]: set
+
+
+# bool : 참(True), 거짓(False)를 나타내는 자료형
+
+x=True
+
+type(x)
+Out[326]: bool
+
+y=False
+
+x==y
+Out[328]: False
+
+1==1
+Out[329]: True
+
+2>1
+Out[330]: True
+
+1!=2
+Out[331]: True
+
+
+
+not 1 
+Out[332]: False
+not -1
+Out[333]: False
+
+not 0
+Out[334]: True
+not None
+Out[335]: True
+
+# True를 표현하는 방법
+
+bool(1)
+bool(-1)
+bool('python')
+bool([1,2,3])
+bool((1,2,3))
+bool({1,2,3})
+
+# False 표현하는 방법
+
+bool(0)
+bool([])
+bool(())
+bool([{})
+bool(None)
+bool('')
+
+★ IF문 
+
+if 조건문:
+	수행해야할 문장 ★ 들여쓰기 중요
+else:
+	수행해야할 문장
+
+if 1: # 1은 TRUE를 표현한다.
+    print('참')
+    print('오늘 하루도 행복하자')
+
+참
+오늘 하루도 행복하자
+
+if 0: # 0은 FALSE를 표현한다.
+    	print('참')
+  	print('오늘 하루도 행복하자')
+
+else:
+	print('거짓')
+	print('그냥 사는거지 뭐..')
+
+거짓
+그냥 사는거지 뭐..
+
+x=[]
+if x: # 비여있는 자료형도 FALSE를 의미
+    	print('참')
+  	print('오늘 하루도 행복하자')
+
+else:
+	print('거짓')
+	print('그냥 사는거지 뭐..')
+
+거짓
+그냥 사는거지 뭐..
+
+x=1
+if x==1: # 값에 따라서 비교 한다.
+	print('참')
+	print('오늘 하루도 행복하자')
+else:
+	print('거짓')
+	print('그냥 사는거지 뭐...')
+
+x=0
+
+if x>10 and 1/x: # 첫번째 조건이 어차피 False이기 때문에 1/x에 상관없이 False 값이 추출된다.
+    print('x는 10보다 크다')
+else:
+    print('x는 10보다 작다.')
+
+
+★★ 파이썬 특징 : 조건제어문에서 AND 조건에서 앞의 조건이 False이면 뒷값에 상관없이 False 이므로 실행이 된다.
+		   두 값을 바뀌었을 땐 오류가 뜬다.
+
+# and 연산자
+
+if 1/x and x>10:
+    print('x는 10보다 크다')
+else:
+    print('x는 10보다 작다.')
+
+Traceback (most recent call last): # 처음이 1/x 일땐 오류가 발생한다.
+
+  File "<ipython-input-364-6b4a9cbaa426>", line 1, in <module>
+    if 1/x and x>10:
+
+ZeroDivisionError: division by zero
+
+
+# 만약 두개다 비교하고 싶다면 & 부호를 사용한다.
+
+if x>10 & 1/x: 
+    print('x는 10보다 크다')
+else:
+    print('x는 10보다 작다.')
+
+
+Traceback (most recent call last): # 둘다 비교해서 위와 다르게 오류가 뜬다.
+
+  File "<ipython-input-365-f5678e24103e>", line 1, in <module>
+    if x>10 & 1/x:
+
+ZeroDivisionError: division by zero
+
+# or 연산자
+
+if x<10 or 1/x: # or 인 경우 and와 같이 앞의 값이 true이면 True 이므로 바로 True로 값이 나온다.
+    print('x는 10보다 크다')
+else:
+    print('x는 10보다 작다.')
+
+if 1/x | x<10:  # 둘다 비교해서 오류가 나온다.
+    print('x는 10보다 크다')
+else:
+    print('x는 10보다 작다.')
+
+
+Traceback (most recent call last):
+
+  File "<ipython-input-370-1e75214f424b>", line 1, in <module>
+    if 1/x | x<10:
+
+ZeroDivisionError: division by zero
+
+# elif : 다시 조건을 걸어 놓는 방법
+
+score=88
+
+if 90<=score<=100:
+    print('A')
+elif 80<=score<90:
+    print('B')
+elif 70<=score<80:
+    print('C')
+elif 60<=score<70:
+    print('D')
+else:
+    print('F')
+
+
+
+# list안에 있는 값이 같더라도 인덱스의 방으로 비교했을 때 값이 다르므로 False 이다.
+
+x=[1,2]
+y=[2,1]
+
+if x==y:
+	print('참')
+else:
+	print('거짓')
+
+
+
+# 집합인 경우 인덱스가 없으므로 True로 나온다.
+
+x={1,2}
+y={2,1}
+
+if x==y:
+	print('참')
+else:
+	print('거짓')
+
+
+# 반복문 
+
+- while 문 : 조건이 참인 동안에 while 문을 반복해서 수행한다.
+
+while 조건문:
+	반복수행해야할 문장
+
+	
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
