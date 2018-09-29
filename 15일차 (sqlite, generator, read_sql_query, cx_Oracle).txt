@@ -1,0 +1,351 @@
+# sqlite - 별도의 DB서버가 필요 없이 DB파일 기초하여 데이터베이스 처리하는 엔진 
+
+import sqlite3
+
+conn = sqlite3.connect(":memory:") # 메모리 구성, 연결
+c = conn.cursor() # 연결 처리준비
+c.execute("create table emp1(id integer, name text, sal integer)") # create table 테이블이름(컬럼이름, 속성)
+c.execute("insert into emp1(id,name,sal) values(1,'홍길동',1000)") # insert into 테이블이름(컬럼이름) values (값)
+c.execute("select * from emp1") # 실행은 되지만 메모리만 나오게 된다. 그러므로 값을 가져와야 한다.
+c.fetchone() # 한줄을 fetch한것을 의미 한다.
+c.execute("insert into emp1(id,name,sal) values(2,'박찬호',2000)")
+c.execute("select * from emp1") 
+c.fetchone() 
+c.fetchone()  # 값을 한줄 한줄 불러오므로 처음은 첫번째 테이블 값 두번째는 두번째 테이블 값이 나온다. 
+
+# 한꺼번에 수행하는 방법 - fetchall
+c.execute("select * from emp1") 
+c.fetchall() # 값이 다 나온다.
+
+# conn.rollback() : 값을 rollback 하는 방법 
+conn.rollback()
+c.execute("select * from emp1")
+c.fetchall() # data가 없다 transaction 하는 중이였기 때문에 rollback 하면 값이 사라진다.
+
+# conn.excute() : commit , 영원히 저장
+c.execute("insert into emp1(id,name,sal) values(1,'홍길동',1000)")
+c.execute("insert into emp1(id,name,sal) values(2,'박찬호',2000)")
+conn.commit()
+c.execute("select * from emp1")
+c.fetchall()
+
+# cursor, connect 모두 종료 : close
+c.close() # cousor 종료
+conn.close() # conn 종료
+
+# 모두 close 했기 때문에 기존의 값은 모두 지워져 있다.
+conn = sqlite3.connect(":memory:") 
+c = conn.cursor()
+c.execute("select * from emp1")
+c.fetchall() # error 발생, 아무것도 없다.
+c.close() 
+conn.close() 
+
+# 만약 close가 되더라도 계속 사용하고 싶다면? 파일로 떨어뜨리면 된다.
+conn = sqlite3.connect("c:/data/insa.db") # dirtory를 직접 적어서 DB 값으로 저장을 한다. 
+c = conn.cursor()
+c.execute("create table emp1(id integer, name text, sal integer)")
+c.execute("insert into emp1(id,name,sal) values(1,'홍길동',1000)")
+c.execute("select * from emp1")
+c.fetchall()
+conn.commit()
+c.close()
+conn.close() # directory 경로를 보면 파일이 만들어 진 것을 확인할 수 있다.
+
+conn = sqlite3.connect("c:/data/insa.db") 
+c = conn.cursor()
+c.execute("select name from sqlite_master where type='table'") # 내가만든 object type을 보는 방법
+c.fetchall() # 테이블을 확인 할 수 있다..
+
+# PRAGMA : DB안에 테이블 컬럼 값을 확인 할 수 있다. 
+
+c.execute('PRAGMA table_info(emp1)')
+c.fetchall()
+
+c.execute("insert into emp1(id,name,sal) values(?,?,?)",(3,'나얼',3000))
+c.execute("select * from emp1")
+c.fetchone()
+
+insert_sql = "insert into emp1(id,name,sal) values(?,?,?)"
+c.execute(insert_sql,(4,'윤건',4000))
+c.fetchall()
+conn.commit()
+c.execute('select * from emp1')
+c.fetchmany(4) # fetch 갯수 추가
+
+c.execute('update emp1 set sal=6000 where id = 1')
+c.execute('select * from emp1 where id =1')
+c.fetchone()
+conn.rollback()
+c.execute('select * from emp1 where id = 1')
+c.fetchone()
+
+c.execute('delete from emp1 where id = 2') 
+c.execute('select * from emp1')
+c.fetchall()
+conn.rollback()
+c.execute('select * from emp1')
+c.fetchall()
+
+# 컬럼 추가 : alter 문으로 추가한다.
+c.execute("alter table emp1 add column deptno integer") # alter table 테이블이름 add column 컬럼이름 type
+c.execute('PRAGMA table_info(emp1)') # 컬럼추가 확인
+c.fetchall()
+
+c.execute('drop table emp1') # 테이블 제거 
+c.execute('create table emp(id integer,name text, sal integer, deptno integer)')
+c.execute('insert into emp(id,name,sal,deptno) values(1,"홍길동",1000,10)')
+c.execute('insert into emp(id,name,sal,deptno) values(2,"박찬호",2000,20)')
+c.execute('insert into emp(id,name,sal,deptno) values(3,"나얼",3000,30)')
+c.execute('insert into emp(id,name,sal,deptno) values(4,"윤건",4000,40)')
+conn.commit()
+c.execute('select * from emp')
+c.fetchall()
+c.execute("create table dept(deptno integer, dname text)")
+c.execute('insert into dept(deptno,dname) values(10,"총무부")')
+c.execute('insert into dept(deptno,dname) values(20,"영업1")')
+c.execute('insert into dept(deptno,dname) values(30,"영업2")')
+c.execute('insert into dept(deptno,dname) values(40,"분석팀")')
+conn.commit()
+c.execute('select * from dept')
+c.fetchall()
+
+c.execute('insert into emp(id,name,sal,deptno) values(5,"김건모",5000,null)')
+c.execute("insert into dept(deptno,dname) values(50,'인사팀')")
+conn.commit()
+c.execute("select * from emp")
+c.fetchall()
+c.execute('select * from dept')
+c.fetchall()
+
+# join 하기, ANSI 표준으로 제공을 한다.
+
+c.execute('select emp.id, emp.name, emp.deptno, dept.dname from emp inner join dept on emp.deptno=dept.deptno')
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp inner join dept 
+          on emp.deptno=dept.deptno''') # 줄을 띄어서 할땐 ''',""" 을 사용한다.
+c.fetchall()
+
+# 조인하지 않은 값도 나오게 하는 방법
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp left outer join dept 
+          on emp.deptno=dept.deptno''') 
+c.fetchall()
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp right outer join dept 
+          on emp.deptno=dept.deptno''') # 오류가 뜬다. full 이나 right는 값이 없다. 왜냐면 위치만 바꾸면 되기 때문이다. 
+c.fetchall()
+
+# 해결
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from dept left outer join emp 
+          on emp.deptno=dept.deptno''') 
+c.fetchall()
+
+# 그렇다면 full outer를 해결하는 방법은? union 을 사용한다.
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp left outer join dept 
+          on emp.deptno=dept.deptno 
+          union
+          select emp.id, emp.name, emp.deptno, dept.dname 
+          from dept left outer join emp 
+          on emp.deptno=dept.deptno''') 
+
+c.fetchall()
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp left outer join dept 
+          on emp.deptno=dept.deptno 
+          union all
+          select emp.id, emp.name, emp.deptno, dept.dname 
+          from dept left outer join emp 
+          on emp.deptno=dept.deptno''') # union all 도 가능하다. 그대신 중복을 막아주지 않는다. /SQL 에서와 같다.
+
+c.fetchall()
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp left outer join dept 
+          on emp.deptno=dept.deptno 
+          intersect
+          select emp.id, emp.name, emp.deptno, dept.dname 
+          from dept left outer join emp 
+          on emp.deptno=dept.deptno''') # 집합 관련 함수는 모두 있다.
+
+c.fetchall()
+
+c.execute('''select emp.id, emp.name, emp.deptno, dept.dname 
+          from emp left outer join dept 
+          on emp.deptno=dept.deptno 
+          except
+          select emp.id, emp.name, emp.deptno, dept.dname 
+          from dept left outer join emp 
+          on emp.deptno=dept.deptno''') # except: 교차되는값 제외대고 나온다.
+
+c.fetchall()
+
+c.execute('select * from emp where sal > (select sal from emp where deptno=10)') # 서브쿼리 가능하다.
+c.fetchall()
+
+c.execute('select dept.dname,a.sal from (select deptno,sal from emp group by deptno) as a join dept on a.deptno=dept.deptno') # inlineview 가능
+c.fetchall()
+
+c.execute('select * from emp where exists (select "x" from dept where emp.deptno=dept.deptno)') # exists 가능
+c.fetchall()
+
+c.close()
+conn.close()
+
+conn = sqlite3.connect('c:/data/phonebook.db')
+c=conn.cursor()
+
+c.execute('create table phonebook(name text, pn text)')
+c.execute('insert into phonebook(name,pn) values("홍길동","010-1234-5678")') # 데이터 값을 하나하나 넣는것이 힘들다.
+
+# 변수 처리해서 한번에 값을 넣는 방법 : 함수를 만들고, executemany 를 사용한다.
+
+def dataGenerator():
+    datalist={('윤건','010-7777-8888'),('나얼','010-1004-1004')} # 들어갈 값을 미리 만든다. generator 방식이다.
+    for i in datalist:
+        yield i # yield : 함수에서 return하는 것과 같이 사용하는 것이다.
+        
+c.executemany("insert into phonebook(name,pn) values(?,?)",dataGenerator()) # 값을 한번에 부르는 함수
+c.execute('select * from phonebook')
+c.fetchall()
+conn.rollback()
+c.close()
+conn.close()
+
+# generator 방식
+
+lst=[x*x for x in range(5)]
+lst # list 결과값이 만들어져 있다.
+for i in lst:
+    print(i)
+
+lst=(x*x for x in range(5)) # 리스트내장객체과 같이 돌아가지만 genarator object를 통해 수행된다.
+lst # <generator object <genexpr> at 0x00000000074107D8> 
+for i in lst:
+    print(i)
+
+# 만약 리스트에 저장할 값이 엄청나게 크다면, generator를 통해 memory 저장을 한 후 값을 사용하면, 보다 효율적으로 사용할 수 있다. ★★
+# generator는 호출 값을 사용할 때 실행되는 것이다. 즉, 호출할 때에만 값이 실행되는 것이므로 그전에는 메모리를 사용하지 않고 값을 가지고있다.
+
+# ★★★ 정리   
+- list는 list안에 속한 데이터를 메모리에 적재하기 때문에 list크기만큼 메모리 사이즈가 늘어나게 된다.
+- generator의 경우는 데이터 값을 한꺼번에 메모리에 적재하는 것이 아니라 next() method를 통해 차례로 값에 접근할 때마다, 메모리에 적재하는 방식이다.
+
+def gen():
+    yield 1
+    yield 2
+    yield 3
+    
+g=gen()
+print(next(g)) # 첫번째 주제에서 가져오는 값 추출 하고 없어짐 (pop과 같음)
+print(next(g))
+print(next(g))
+print(next(g)) # 다음값이 없으므로 오류 발생
+
+conn=sqlite3.connect('c:/data/insa4.db')
+c=conn.cursor()
+import pandas as pd
+from pandas import Series,DataFrame
+
+data={'id':[1,2,3,4],'name':['홍길동','박찬호','이병헌','김태리'],'sal':[1000,2000,3000,4000]}
+df=DataFrame(data)
+
+# to_sql : dataframe을 sqlite로 저장하게 해주는 method (pandas 함수임)
+df.to_sql('test',conn,index=False) #index 값은 안오게 하려면 False를 한다
+
+c.execute('select * from test')
+c.fetchall()
+
+data = pd.read_csv('c:/data/emp_new.csv',names=('empid','name','job','mgr','hire_date','sal','comm','deptno'))
+data
+data.to_sql('emp_new',conn,index=False)
+c.execute('select * from emp_new')
+c.fetchall()
+
+# read_sql_query: sqlite 값을 dataframe으로 값을 가져오는 방법, sql언어로 가져온다.
+
+df_new=pd.read_sql_query("select *from test",conn) # pd_sql_query('sql 문장',연결값)
+
+c.execute('select deptno,max(sal),min(sal) from emp_new group by deptno') # sum, min 가능
+c.fetchall()
+c.execute('select sum(sal),total(sal) from emp_new') # sum과 total은 같다.
+c.fetchall()
+c.execute('select deptno,job from emp_new group by deptno,job')
+c.fetchall()
+c.execute('select deptno,group_concat(job) from emp_new group by deptno')
+c.fetchall()
+c.execute('select deptno,group_concat(distinct job) from emp_new group by deptno') #group_concat : 그룹화 하여 값을 보여준다.
+c.fetchall()
+
+★★아나콘다 prompt 수행
+python -m pip install cx_Oracle --upgrade
+
+import cx_Oracle
+dsn = cx_Oracle.makedsn('localhost',1521,"XE")
+db = cx_Oracle.connect('hr','hr',dsn)
+cursor = db.cursor()
+
+
+# Oracle DB와 직접 연결하기
+
+import cx_Oracle
+dsn = cx_Oracle.makedsn('localhost',1521,"XE")
+db = cx_Oracle.connect('hr','hr',dsn)
+cursor = db.cursor()
+cursor.execute("select * from employees")
+row=cursor.fetchone()
+row
+
+row = cursor.fetchmany()
+cursor.rowcount
+
+cn = 0
+for i in cursor.execute("select * from employees"):
+    cn+=1
+    print(i)
+print(cn)
+
+# file을 따로 불러서 떨어뜨려 놓기 , 데이터만 가져오므로 name을 따로 넣어야한다.
+
+import csv
+import cx_Oracle
+con=cx_Oracle.connect('hr/hr@localhost/xe')
+cursor=con.cursor()
+csv_file=open('c:/data/emp_20180927.csv','w')
+writer = csv.writer(csv_file,delimiter=',')
+for row in cursor.execute('select * from employees'):
+    writer.writerow(row)
+    
+cursor.close()
+con.close()
+csv_file.close()
+
+emp=pd.read_csv('c:/data/emp_20180927.csv')
+
+# 컬럼도 가져오기
+
+import csv
+import cx_Oracle
+con=cx_Oracle.connect('hr/hr@localhost/xe')
+cursor=con.cursor()
+csv_file=open('c:/data/emp_20180927.csv','w')
+writer = csv.writer(csv_file,delimiter=',')
+col=[]
+for i in cursor.execute("select column_name from user_tab_cols where table_name='EMPLOYEES'"): # user_tab_cols : 컬럼의 정보를 가져올 수 있다.
+    print(i) # 튜플인 것을 확인할 수 있다.
+	col.append(''.join(i)) # 튜플로 되기 때문에 append를 통해 list로 만들기위해 사용한다.
+writer.writerow(row)
+for row in cursor.execute('select * from employees'):
+    writer.writerow(row)    
+cursor.close()
+con.close()
+csv_file.close()
+
+

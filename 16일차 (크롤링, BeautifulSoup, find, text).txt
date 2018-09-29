@@ -1,0 +1,244 @@
+# AnaConda Prompt
+
+pip install beautifulsoup4
+
+from bs4 import BeautifulSoup
+
+html = """
+<html>
+    <body>
+        <h1> 스크래핑 </h1>
+            <p> 웹페이지 분석하기 </p>
+            <p> 데이터 정제작업하기1 </p>
+            <p> 데이터 정제작업하기2 </p>
+    </body>
+</html>
+"""
+
+# html : 시작, <body> : 메인, <h1> : 헤드라인, <p> : 페이지 적기
+
+# 웹페이지를 가져오는 것이 아니고, 분석하기 위해 사용하는 함수, html 소스는 다른 library를 통해 가져와야 한다.
+
+soup=BeautifulSoup(html,"html.parser") # BeautifulSoup(html소스, "html.parser")  "html.parser"는 분석한다는 의미이다. 
+
+# 접근 방식을 통해 값을 가져온다.
+
+h1=soup.html.body.h1 # 원하는 태그를 가져오기, 경로를 통해서 값을 가져온다.
+
+h1.string # 앞에 태그들을 제거하고 문자만 가져오는 방법
+
+p1=soup.html.body.p # h1은 제목이라서 p만 가져와서 한다.
+p1.string
+
+# 두번째 p를 가져오고 싶다면? 동일한 레벨의 값을 가져오고 싶다면 맨위를 기준으로 다음줄로 가서 가져오는 방법
+
+p2=p1.next_sibling.next_sibling
+p2.string
+
+# 한번만 할 경우 \n을 가져오게 된다. 다음줄을 띄우므로
+p2=p2.next_sibling
+p2
+
+# 세번째 꺼 뽑기 (응용)
+
+p3=p2.next_sibling.next_sibling
+p3.string
+
+html = """
+<html>
+    <body>
+        <h1 id='title'> beautifulsoup </h1>
+        <p id='subtitle'> 스크래핑 </p>
+        <p> 데이터 추출하기 </p>
+    </body>
+</html>
+"""
+
+soup=BeautifulSoup(html,"html.parser") # html 분석기 돌리기
+
+# h1이 많이 있다고 가정할 떄 특정한 h1값을 뽑고싶다. <속성값을 통해 값을 가져오는 방법>
+
+soup.find(id='title').string # id 특정 값을 통해서 값을 가져온다.
+title=soup.find(id='title')
+title.string
+
+soup.find(id='subtitle').string # 경로에 상관없이 id가 특정값이기 때문에 한번에 값을 가져오는 것이 가능하다.
+
+html = """
+<html>
+    <body>
+        <ul>
+            <li> <a href="http://www.itwill.com"> 아이티윌 </a> <li>
+            <li> <a href="http://www.naver.com"> 네이버 </a> <li>
+    </body>
+</html>
+"""
+
+# <ul> : url, <li> : 링크, <a> : 사이트 이름
+
+soup=BeautifulSoup(html,'html.parser') 
+a1=soup.body.ul.li.a
+a1.string
+
+a1.next_sibling.next_sibling
+soup.find('a').string # 첫번째 값이 나온다, find는 첫번째 값만 찾아낸다.
+
+# 그다음 값을 찾으려면?
+
+soup.find_all('a') # 리스트로 만들어지면서 값을 따로 부를 수 있다.
+
+a = soup.a # 첫번째 값을 찾아내는 방법
+a.attrs # 주소값을 불러올 수 있다. (url), a의 속성값을 부른다.
+'href' in a.attrs # 키값이 있는지 확인
+
+# 주소값이 dic으로 되어있으므로 주소만 불러내고 싶다면 value값을 부르면 된다.
+a.attrs.values()
+a['href']
+a.attrs['href']
+
+link=soup.find_all('a')
+
+# 각각의 값을 뽑아 내는 방법
+
+for i in link:
+    print(i.attrs['href'])
+    print(i.string)
+
+for i in link:
+    print(i.attrs['href'])
+    print(i.string)
+
+# html 페이지를 만들어서 사용
+
+with open("c:/data/b.html",encoding='UTF8') as html: # 저장할 떄 UTF8로 바꿔서 저장을 해야 encoding 할 때 가능하다.
+    soup=BeautifulSoup(html,'html.parser')
+
+with open("c:/data/a.html") as html:
+    soup=BeautifulSoup(html,'html.parser')
+
+soup.find('title').string
+soup.find('body')
+soup.find('p')
+p=soup.find_all('p')
+
+for i in p: # 그냥 string 할 경우 나오지 않는다
+    i.string
+
+for i in p: # get_text()를 사용하여 text 모두를 가져온다.
+    print(i.get_text())
+    
+p = soup.findAll('p') # findAll도 가능하다.
+
+for i in p: # get_text()를 사용하여 text 모두를 가져온다.
+    print(i.get_text())
+
+soup.find('body') # body의 모든값을 보여준다.
+soup.find('body').string # NaN 값이다.
+
+soup.find('body').get_text() # \n이 나온다
+' 환영합니다. \n 이름 : 홍길동  나이 : 25 \n                               취미 : 음악감상 \n 오늘 하루도 행복하세요... \n 아이티윌 \n 네이버 \n 구글 '
+
+soup.find('body').get_text(strip=True) # strip 옵션으로 해결
+'환영합니다.이름 : 홍길동나이 : 25취미 : 음악감상오늘 하루도 행복하세요...아이티윌네이버구글'
+
+# 값이 나오지만 <br>에 관한 값이 나오지 않는다.
+
+body = soup.find('body')
+for i in body:
+    print(i.string)
+
+ 환영합니다. 
+
+
+None
+
+
+ 오늘 하루도 행복하세요... 
+
+
+ 아이티윌 
+
+
+ 네이버 
+
+
+ 구글 
+
+body = soup.find('body') # 에러가 난다. 즉, find.get_text()는 한줄로만 값을 뽑아내서 for문에서 추출하는 것이 불가능하다.
+for i in body:
+    print(i.get_text())
+
+# 해결: findAll을 사용해 get_text()를 사용하면 된다. ( findAll.get_text() 를 한 줄로 생각하자.)
+
+body = soup.findAll('body')
+for i in body:
+    print(i.get_text())
+
+# 주소값 뽑기
+
+soup.find('a')
+link=soup.findAll('a')    
+
+for i in link:
+    print(i.attrs['href'])
+    print(i.get_text())
+    
+
+link=soup.find_all('a')    
+for i in link:
+    print(i.attrs['href'])
+    print(i.string)
+
+link=soup.findAll('a') 
+for i in link:
+    print(i.attrs['href'])
+    print(i.string)
+    
+link=soup.find_all('a')   
+for i in link:
+    print(i.attrs['href'])
+    print(i.get_text())
+
+    
+# class 값을 통해서 값을 뽑기 : findAll을 사용
+    
+a1=soup.findAll('a',{'class':'cafe1'}) # 각 이름에 따라 값을 뽑는 것이 가능하다.
+for i in a1:
+    print(i.get_text())
+
+a2=soup.findAll('a',{'class':'cafe2'})
+for i in a2:
+    print(i.get_text())
+
+a3=soup.findAll('a',{'class':'cafe3'}) 
+for i in a3:
+    print(i.get_text())
+
+# find 값으로 stiring을 가져오는것은 가능하다. 하지만 attrs 즉, 주소값을 가져올 때에는 오류가 뜨기 때문에 findAll을 사용하는 것이 좋다. ★★
+
+a=soup.find('a',{'class':'cafe1'})
+for i in a:
+    print(i.string)
+    print(i.attrs['href'])
+
+# id 기준으로 찾고 싶은 경우
+    
+a1=soup.findAll('a',{'id':'link1'})
+for i in a1:
+    print(i.attrs['href'])
+    print(i.get_text())
+
+# class 이름으로만, 즉, a에 상관없이 class로 하고싶다면 class_로 검색을 해야한다.
+
+soup.findAll(class_='cafe1') 
+
+for i in soup.findAll(class_='cafe1'):
+    print(i.attrs['href'])
+    print(i.get_text())
+
+# id는 그냥 id 값으로 찾아서 사용한다.
+
+for i in soup.findAll(id='link1'):
+    print(i.attrs['href'])
+    print(i.get_text())
+    
