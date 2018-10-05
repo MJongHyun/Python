@@ -1,0 +1,179 @@
+from bs4 import BeautifulSoup
+html="""
+<html>
+	<body>
+		<div id='lecture1'>
+			<h1> 데이터 과학 </h1>
+		</div>
+		<div id='lecture2'>
+			<h1> 빅데이터분석 </h1>
+				<ul class='subject'>
+					<li> SQL </li>
+					<li> R </li>
+					<li> PYTHON </li>
+				</ul>
+		</div>
+	</body>
+</html>
+"""
+
+# html 분석
+
+# 순서 1. 긁어오기 2.분석준비하기 
+
+soup=BeautifulSoup(html,'html.parser')
+soup.find('h1').get_text() # 첫번째 찾기
+soup.body.div.h1.string
+
+soup.findAll('h1')[1].string # 2번째 찾기
+soup.find_all('h1')[1].text
+soup.find(id='lecture2').h1.get_text()
+soup.find(id='lecture2').find('h1') # find를 계속 써서 찾는 것도 가능하다.
+
+# class 이름으로 찾기
+
+for i in soup.find(class_='subject').findAll('li'):
+    print(i.get_text())
+
+soup.find('ul',class_='subject').get_text()
+A=soup.findAll('ul',class_='subject') # findAlld은 = 임
+
+for i in A:
+    print(i.get_text())
+
+for i in A:
+    print(i.text)
+    
+B=soup.find_all('ul',class_='subject')
+
+for i in B:
+    print(i.text)
+
+C=soup.find_all('ul',{'class':'subject'}) # dict 로 표현하는 건 find_all
+
+for i in C:
+    print(i.text)
+
+# css(cascading stylesheets)
+
+# select_one은 css 선택자 요소 하나를 추출
+
+soup.select_one('div > h1').string # 분석.select_one('경로 > 경로'), find와 같다, 무조건 첫번째 값이 나온다.
+soup.select_one('div#lecture1 > h1').string # 두번째 값을 찾고 싶다면 태그이름#id이름 (id의 경우는 #으로 표현한다.)
+soup.select_one('div#lecture2 > h1').string
+
+                
+# copy selector로 통해 경로를 알려준다.
+                
+#contents > div:nth-child(9) > div > div:nth-child(2) > div > p.tit > a:nth-child(1)
+# 뒤는 아이디, .뒤는 클래스를 의미
+
+# select 는 css 선택자로 요소 여러개를 리스트로 추출한다.
+
+s=soup.select('div#lecture2 > ul.subject > li')
+
+for i in s:
+    print(i.string)                
+
+import urllib.request as req
+
+# 값 가져오기
+
+url='https://finance.naver.com/marketindex/'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+soup.select_one('#exchangeList > li.on > a.head.usd > div > span.value').string
+soup.find(class_='head_info').find(class_='value').string
+dollor = soup.select_one('div.head_info > span.value').string
+print('USD/KRW',dollor)
+
+
+soup.select_one('#worldExchangeList > li.on > a.head.jpy_usd > div > span.value').string # 안되는 경우가 있다.
+soup.select_one('div.head_info.point_dn > span.value').string # class이름이 다르다. (즉, 클래스 안의 클래스)
+soup.select_one('a.head.cny > div.head_info.point_dn > span.value').string # head 마다 각각 다르다.
+soup.select_one('a.head.usd_eur > div.head_info.point_up > span.value').string
+
+html="""
+<ul id = '조선왕'>
+    <li id = '태조'> '이성계' </li>
+    <li id = '정종'> '이방과' </li>
+    <li id = '태종'> '이방원' </li>
+    <li id = '세종'> '이도' </li>
+    <li id = '문종'> '이향' </li>
+</ul>
+"""
+
+soup=BeautifulSoup(html,'html.parser')
+soup.find(id='세종').string
+soup.select_one('ul > li#세종').string
+soup.select_one('li#세종').string
+soup.findAll('li',id='세종')
+soup.find_all('li',{'id':'세종'})
+soup.select_one('#세종').text
+soup.select_one('li[id=세종]').string
+
+# 순서를 통해서 값을 뽑아내는 방법 - li:nth-of-type(위치값) : select_one의 옵션값이다.
+
+soup.select_one('li:nth-of-type(4)').string 
+
+for i in soup.select('li'):
+    print(i.text)
+soup.select('li')[3] # list형식이므로 원하는값 추출가능
+
+# 적용하기
+
+url='https://finance.naver.com/marketindex/'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+
+soup.select_one('div.data > ul#exchangeList.data_lst > li:nth-of-type(1)')
+soup.select_one('div.data > ul#exchangeList > li:nth-of-type(1) > a.head.usd > div.head_info.point_up > span:nth-of-type(1)').string
+
+# 연속으로 nth-of-type을 2번 연속 사용하면 오류가 날 수 있으므로 값으로 하나 처리해서 다음값에 적용한다. 
+                
+l=soup.select_one('div.market1 > div.data > ul.data_lst > li:nth-of-type(1)') 
+l.select_one('span:nth-of-type(2)').string
+
+l=soup.select_one('div.market1 > div.data > ul.data_lst > li:nth-of-type(2)') 
+l.select_one('span:nth-of-type(2)').string
+
+# 보통 동일하게 되어있어서 값이 잘 분포되어 나온다.
+
+l=soup.select_one('div.market2 > div.data > ul.data_lst > li:nth-of-type(2)') 
+l.select_one('span:nth-of-type(2)').string
+
+
+# 응용 : 기사만 뽑아내기
+
+url='https://news.joins.com/article/23009520'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+
+for i in range(2,7):
+    A='div#article_body > p:nth-of-type({})' .format(i)
+    print(soup.select_one(A).get_text())
+
+# 형태소 구분 ★★
+
+# https://www.lfd.uci.edu/~gohlke/pythonlibs/#jpype - 먼저 사이트에 들어가서 JPype1-0.6.3-cp36-cp36m-win_amd64를 들어가서 c드라이브로 옮긴다 
+# prompt anaconda에서 설치: pip install konlpy, pip install JPype1-0.6.3-cp36-cp36m-win_amd64
+# cd c:/ -> dir *.whl
+# 자바 환경구성이 반드시 되어있어야한다. (저번 R에서 깔았던 R 환경구성이 있어야 가능)
+
+
+    
+from konlpy.tag import Twitter
+
+twitter = Twitter()
+malist = twitter.pos('아버지 가방에 들어가신다.',norm=True, stem=True)
+print(malist)
+
+# norm : 그래욬ㅋㅋㅋ => 그래요 변환해주는 기능
+# stem : 그래요 => 그렇다 같은 원형을 찾아줌
+
+malist = twitter.pos('엌ㅋㅋㅋ 저거머얔ㅋㅋㅋ', norm = True, stem = True) # 어저거뭐야 로 만들어준다.
+print(malist)
+
+txt = '텍스트 마이닝은 텍스트 형태의 데이터를 수학적 알고리즘에 기초하여 수집, 처리, 분석, 요약하는 연구기법을 통칭하는 용어이다.'  
+twitter.nouns(txt)
+malist = twitter.pos(txt, norm=True, stem=True)

@@ -1,0 +1,250 @@
+# Á¤±ÔÇ¥Çö½Ä(Regular Expression)
+
+import re
+
+source = "Data Science"
+
+# match - ±ÛÀÚ Ã£±â (x<=±ÛÀÚ<y+1), re.match(Ã£´Â±ÛÀÚ,±ÛÀÚ¹üÀ§) , boolean ÇüÅÂÀÌ´Ù.
+
+re.match('Da',source) # span=(0, 2)
+re.match('da',source) # ´ë¼Ò¹®ÀÚ ±¸ºÐ
+
+print(re.match('da',source)) # None À¸·Î ³ª¿Â´Ù.
+ 
+# ÀÀ¿ë
+m=re.match('Da',source) #  Ã³À½³ª¿À´Â °ÍÀÌ ÀÏÄ¡ÇÏ´ÂÁö ºÒÀÏÄ¡µÇ´ÂÁö µûÁø´Ù.
+
+if m:
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù')
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+    
+if re.match('da',source):
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù')
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+    
+if re.match('da',source,re.I): # ¿É¼Ç I, ´ë¼Ò¹®ÀÚ¸¦ ±¸ºÐÇÏÁö ¾Ê°í ½ÇÇàµÈ´Ù.
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù.')
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+
+m=re.match('da',source,re.I)
+if m:
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù.')
+    print(m.group()) # ÀÏÄ¡ÇÑ °ªÀ» ÃßÃâÇÑ´Ù.
+    print(m.start()) # ½ÃÀÛ À§Ä¡ °ª
+    print(m.end()) # ³¡ À§Ä¡ °ª : Ç×»ó 1Å©°Ô ³ª¿Â´Ù.
+    print(m.span()) # ÀüÃ¼¹üÀ§ 
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+
+bool(re.match('D','Data')) # Data¶ó´Â ±ÛÀÚ ÆÐÅÏ¿¡ D°¡ ÀÖ´À³Ä È®ÀÎ
+bool(re.match('[0-9]th','2th')) # th¶ó´Â ±ÛÀÚ ¾Õ¿¡ ¼ýÀÚ°¡ ÀÖ´ÂÁö È®ÀÎ
+bool(re.match('[0-9]th','21th')) # False°¡ ¶á´Ù. ±ÛÀÚ ÇÏ³ª¸¸ ºñ±³ÇØ¼­ 1ÀÌ ºñ±³°¡ µÇÁö¾Ê´Â´Ù.
+bool(re.match('[0-9][0-9]th','21th')) # True°¡ µÈ´Ù.
+bool(re.match('[0-9]*th', '21th')) # '*'Àº 0¹øÀÌ»ó °ªÀÌ ³ª¿À°Ô µÇ¸é True·Î ³ª¿Â´Ù.
+bool(re.match('[0-9]*th', '2th')) # True
+bool(re.match('[0-9]*th', 'th')) # True
+bool(re.match('[0-9]th','th')) # ¹«Á¶°Ç ¼ýÀÚ°¡ ³ª¿Í¾ß ÇÏ¹Ç·Î False ÀÌ´Ù.
+bool(re.match('[0-9]*th', '212th')) # True
+bool(re.match('\d\dth', '21th')) # \d : [0-9]¿Í °°´Ù.
+bool(re.match('\d*th', '21th')) # '*'ÀÌ ºÙÀ¸¸é °°´Ù.
+
+# meta ¹®ÀÚ
+# a.b : .À§Ä¡ÀÇ ¸ðµç ¹®ÀÚ°¡ ¿Â´Ù. (aab, acb, ....)
+bool(re.match('D.','Data')) 
+bool(re.match('D...','Data')) # .Àº °¢°¢ ÇÑ±ÛÀÚ ÇÑ±ÛÀÚ¸¦ ÀÇ¹ÌÇÑ´Ù.
+
+# a[.]b : .À» ¹®ÀÚ·Î ÀÎ½ÄÇØ¼­ Ã£´Â´Ù.
+bool(re.match('D[.]a','D.ata')) # ´ë°ýÈ£ ¾ÈÀÇ °ªÀ» Á¤±ÔÇ¥Çö½ÄÀ¸·Î ÀÐ´Â °ÍÀÌ ¾Æ´Ï¶ó ¼ø¼ö ¹®ÀÚ·Î ¹­°ÔµÈ´Ù. 
+
+# a*b : *Àº 0¹ø, 1¹ø, ¸î ¹øÀÌ»ó
+bool(re.match('D*','Data'))
+bool(re.match('D*','DData'))
+
+# a+b : + ¾Õ¿¡ ±ÛÀÚ°¡ ÃÖ¼Ò 1¹ø ÀÌ»ó ¹Ýº¹
+
+bool(re.match('c+','ccat'))
+bool(re.match('c+','cat'))
+bool(re.match('c+','at')) # 1¹øÀÌ»ó ³ª¿ÀÁö ¾Ê¾ÒÀ¸¹Ç·Î False
+bool(re.match('c*','at'))
+
+# a?b : ?¾Õ¿¡ ÀÖ´Â ±ÛÀÚ°¡ 0¹ø, 1¹ø ¹Ýº¹µÇ´Â °æ¿ì
+
+bool(re.match('c?a','ccat')) # False , 2¹ø ¹Ýº¹µÇ¹Ç·Î
+bool(re.match('c?a','cat')) # True
+bool(re.match('c?a','at')) # True
+
+# a{2}b : a°¡ 2¹ø ¹Ýº¹ {2}
+
+bool(re.match('c{2}a','ccat')) # ¾Õ±ÛÀÚ 2¹ø ¹Ýº¹
+bool(re.match('c{2}a','cat')) # 2¹ø ¹Ýº¹ ¾ÈÇÏ¹Ç·Î False
+bool(re.match('c{2}a','cccat')) # 3¹øÇÏ¹Ç·Î False
+
+# a{2,3}b : a°¡ 2¹ø ¶Ç´Â 3¹ø ¹Ýº¹ aab,aaab
+
+bool(re.match('c{2,3}a','ccat')) # True
+bool(re.match('c{2,3}a','cccat')) # True
+bool(re.match('c{2,3}a','cat')) # False
+bool(re.match('c{2,3}a','ccccat')) # False
+
+# a|b : a ¶Ç´Â b
+
+bool(re.match('c|a','cat')) # True
+bool(re.match('c|a','aat')) # True
+bool(re.match('c|a','bat')) # False
+
+## Á¤¸® 
+
+# [a-zA-z] ¾ËÆÄºª ¸ðµÎ
+# [0-9] ¼ýÀÚ ¸ðµÎ
+# \d : ¼ýÀÚ [0-9]
+# \D : ¼ýÀÚ°¡ ¾Æ´Ñ°Í°ú ¸ÅÄ¡, [^0-9]
+# \s : °ø¹é¹®ÀÚ¿Í ¸ÅÄ¡ 
+# \S : °ø¹é¹®ÀÚ°¡ ¾Æ´Ñ°Í°ú ¸ÅÄ¡
+# \w : ¹®ÀÚ, ¼ýÀÚ¿Í ¸ÅÄ¡, [a-zA-Z0-9]
+# \W : ¹®ÀÚ, ¼ýÀÚ°¡ ¾Æ´Ñ ¹®ÀÚ, [^a-zA-Z0-9]
+
+source = "Data Science"
+m = re.match('Science',source,re.I)
+
+
+if m:
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù.')
+    print(m.group()) 
+    print(m.start()) 
+    print(m.end()) 
+    print(m.span())
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+    
+m = re.match('.*Science',source,re.I) # ¾ÕÀÇ ¾î¶² ¹®ÀÚ°¡ ¿Íµµ »ó°ü¾øÀÌ ÃßÃâ°¡´É
+m = re.match('.+Science',source,re.I) # 1°³ ÀÌ»ó True
+m = re.match('.?Science',source,re.I) # 0 ¶Ç´Â 1 ÀÌ´Ï False
+
+if m:
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù.')
+    print(m.group()) 
+    print(m.start()) 
+    print(m.end()) 
+    print(m.span())
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+
+# search : ÀüÃ¼¸¦ ´ë»óÀ¸·Î °Ë»ö / boolean Çü½ÄÀÌ´Ù.
+
+bool(re.search('Science',source,re.I))
+m = re.search('Science',source,re.I)
+
+if m:
+    print('ÆÐÅÏÀÌ ÀÏÄ¡ÇÑ´Ù.')
+    print(m.group()) 
+    print(m.start()) 
+    print(m.end()) 
+    print(m.span())
+else:
+    print('ÆÐÅÏÀÌ ºÒÀÏÄ¡ÇÑ´Ù.')
+
+# findallÀº Á¤±Ô½Ä¿¡ ÀÏÄ¡ÇÏ´Â ¹®ÀÚ¿­À» ¸®½ºÆ®·Î ¹ÝÈ¯ÇÑ´Ù. / ¸ðµç°Å ¹ÝÈ¯
+
+source = 'Data Science'
+re.findall('a',source)
+re.findall('A',source) # ´ë¹®ÀÚ ±¸ºÐ
+re.findall('A',source,re.I)
+
+re.findall('a.',source) # aµÚÀÇ ±ÛÀÚ±îÁö Æ÷ÇÔÇØ¼­ Ã£±â, °ø¹é¹®ÀÚ Æ÷
+re.findall('.a',source)
+
+re.findall('a.?',source) # 0 ¶Ç´Â 1
+re.findall('a.+',source) # µÞ±ÛÀÚ ¸ðµÎ°¡ ³ª¿À°Ô µÈ´Ù.
+re.findall('a.*',source) # µÞ±ÛÀÚ ¸ðµÎ°¡ ³ª¿À°Ô µÈ´Ù. (0°³ ÀÌ»ó)
+
+re.findall('[0-9]','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù') # ¼ýÀÚ listÇüÀ¸·Î ³ª¿Â´Ù.
+re.findall('\d','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù') # ¼ýÀÚ listÇüÀ¸·Î ³ª¿Â´Ù.
+re.findall('\d+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù') # 1°³ÀÌ»ó ¼ýÀÚµé¸¸ »Ì±â 
+re.findall('[0-9]+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù')
+
+# ¹®ÀÚ¸¸ »Ì±â
+re.findall('\D+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù.')
+re.findall('[^0-9]+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù.')
+re.findall('[a-zA-Z]+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù.') # ¾ËÆÄºªÀÌ ¾Æ´Ï¶ó¼­ ³ª¿ÀÁö ¾Ê´Â´Ù.
+re.findall('[°¡-ÆR]+','¿À´ÃÀº 2018³â 10¿ù 5ÀÏ ÀÔ´Ï´Ù.')
+
+source = "Data Science"
+source = source.replace('Science','Scientist')
+
+# sub : ÀÏÄ¡ÇÏ´Â ÆÐÅÏÀ» ´ëÃ¼ÇØÁÖ´Â ÇÔ¼ö
+source = re.sub('Scientist','Science',source) # re.sub(¿¹Àü°ª,¹Ù²Ü°ª,º¯¼ö), ¹Ì¸®º¸±âÀÌ´Ù.
+
+# split : ÀÔ·ÂµÈ ÆÐÅÏÀ» ±¸ºÐÀÚ·Î ºÐ¸®
+re.split('[:]','python:programming') # :À» ±âÁØÀ¸·Î ±¸ºÐ
+re.split('[\:]','python:programming') 
+re.split('[,]','python,programming') 
+re.split('[,:]','python,programming:R') # ´ë°ýÈ£ ¾È¿¡ ºÐ¸® ½ÃÅ°·ÁÇÏ´Â ±¸ºÐÀÚµéÀ» ´Ù ³ÖÀ¸¸é ´Ù ±¸ºÐÀÌ µÈ´Ù.
+re.split('[\,\:]','python,programming:R') 
+re.split('[ ]','python programming R') 
+re.split('[\s]','python programming R')  # \s : °ø¹é¹®ÀÚ ºÐ¸® ¹æ¹ý
+re.split('[,\s]','python,programming R') 
+
+# GroupÈ­ ÇÏ¿© »ç¿ëÇÏ±â
+
+010101-1234567 
+010101-*******
+
+re.sub('(\d{6})[-]\d{7}','\g<1>-*******','010101-1234567') # ±×·ìÀ» ¸¸µé¾î¼­ »ç¿ëÇÏ±â
+
+p=re.compile(r"(\w+)\s+((\d+)[-]\d+[-]\d+)")
+p.sub("\g<1> \g<2>","james 010-1234-1234")
+p.sub("\g<2> \g<1>","james 010-1234-1234") # ¼ø¼­ ¹Ù²Ù±â °¡´É
+
+# group : º¸Åë ±×·ì³ª±¸±â
+m=p.search("james 010-1234-1234")
+m.group(0)
+m.group(1)
+m.group(2)
+
+
+# ÀÌ¸§À» Áö¾î¼­ ±×·ì ³ª´©±â
+p=re.compile(r"(?P<name>\w+)\s+(?P<phone>(\d+)[-]\d+[-]\d+)")
+m=p.search("james 010-1234-1234")
+m.group('name')
+m.group('phone')
+
+txt = "of the people, by the people, for the people"
+
+re.findall('people',txt)
+re.findall('of|by|for',txt)
+re.findall('^of',txt) # ^´Â ½ÃÀÛÀÇ ÀÇ¹ÌÇÑ´Ù. ([^0-9] ^ not )
+re.findall('people$',txt) # : $ ³¡
+
+# the ÀÌÀü¿¡ ³ª¿À´Â for¸¦ Ã£´Â´Ù.
+re.findall('for (?=the)',txt)
+
+# the ´ÙÀ½¿¡ ³ª¿À´Â peopleÀ» Ã£´Â´Ù.
+re.findall('(?<=the) people',txt)
+
+print('¿ì¸® "Çàº¹"ÇÏ°Ô »ìÀÚ')
+print("¿ì¸® \"Çàº¹\"ÇÏ°Ô »ìÀÚ")
+txt='Let`s live happily'
+p=re.compile('\w+[\`].') # ¹®ÀÚ·Î ÀÎ½ÄÇÒ ¼ö ÀÖµµ·Ï '\'¸¦ »ç¿ëÇÑ´Ù.
+p.findall(txt)
+
+p = re.compile('Physical | Computer')
+p.sub('Data','Physical Science and Computer Science')
+p.subn('Data','Physical Science and Computer Science') # ¹Ù²ï °¹¼öµµ ³ª¿Â´Ù.
+
+
+# () ÇÏ³ª°¡ ±×·ìÀÌ´Ù. µû·Î µû·Î Á¶°¢À» ³»°í ½Í´Ù¸é ÀÌ·¸°Ô »ç¿ëÇÑ´Ù.
+
+p=re.compile(r"(\w+)\s+((\d+)[-](\d+)[-](\d+))") # rÀº ¿ª½½·¡½¬ ´ë½Å »ç¿ë
+m=p.search("james 010-1234-1234")
+
+m.group(0)
+m.group(1)
+m.group(2)
+m.group(3)
+m.group(4)
+m.group(5)
+
+

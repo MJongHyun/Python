@@ -1,0 +1,253 @@
+# KoNLPy(코엔엘파이) : 한국어 정보처리를 위한 파이썬 패키지
+# 형태소 (morpheme): 언어학에서 일정한 의미가 있는 가장 작은 말의 단위를 뜻한다. 자연어 처리에서는 토큰으로 형태소를 이용한다.
+# 형태소 분석 (morphological anlysis): 단어로 부터 어근, 접두사, 접미사, 품사 등 다양한 언어적 속성을 파악하고 이를 이용하여 형태소를 찾아내거나 처리하는 작업을 의미한다.
+
+# KoNLPy 형태소 분석을 하기위해서 필요한 라이브러리를 모아 놓은 패키지이다.
+# Twitter : 트위터 코리아에서 개발, http://github.com/twitter/twitter-korean-text
+# Kkma : 꼬꼬마 서울대학교에서 개발, http://kkma.snu.ac.kr
+# Hannaum : 한나눔 KAIST 개발, http://semanticweb.kaist.ac.kr/hannanum
+# Mecab : 매카브 일본어 형태소 분석기를 한국어를 사용할 수 있도록 수정, http://bitbucket.org/eunjeon/mecab-ko
+# Komoran : 코모란 shineware에서 개발 http://github.com/shin285/KOMORAN
+
+pip install konlpy
+pip install jpype1
+
+from konlpy.tag import Kkma
+kkma = Kkma()
+txt = '통찰력은 사물이나 현상의 원인과 결과를 이해하고 간파하는 능력이다 통찰력을 얻는 좋은 방법은 독서이다'
+txt = '통찰력은 사물이나 현상의 원인과 결과를 이해하고 간파하는 능력이고 통찰력을 얻는 좋은 방법은 독서이다'
+# 문장 분석
+kkma.sentences(txt) # sentence 문장이 몇개인지 분석하는 method, .(마침표)를 넣지않아도 구분을 한다
+                    # 값을 이어서 하게 되면 한문장으로 나오게된다. 
+
+# 형태소 분석
+kkma.pos(txt)
+
+# 명사 분석
+kkma.nouns(txt)
+
+from konlpy.tag import Twitter
+twitter = Twitter()
+twitter.pos(txt) # 형태소 분석
+twitter.pos(txt,norm=True,stem=True)
+
+# norm '그래욬ㅋㅋㅋㅋ => 그래요'
+# stem 그렇다 원형으로 찾아준다.
+
+twitter.nouns(txt) # 명사 분석
+
+txt = '텍스트 마이닝은 텍스트 형태의 데이터를 수학적 알고리즘에 기초하여 수집, 처리, 분석, 요약하는 연구기법을 통칭하는 용어이다.'
+
+kkma.pos(txt)
+twitter.pos(txt) # 마이닝이란 단어가 없다.
+
+# 한국어 분석을 할 떄 Kkma가 더 잘맞는 거 같다. 개인적의견
+
+
+#C:\Users\stu\Anaconda3\Lib\site-packages\konlpy\data\corpus\kolaw
+
+# anaconda prompt 에서 pip install nltk 설치
+import nltk
+
+from konlpy.corpus import kolaw
+kolaw.fileids() # 파일 정보를 확인 할 수 있다. dir 내용을 보여준다.
+
+doc_ko=kolaw.open('constitution.txt').read() # open(파일이름).read() : 파일을 읽어온다.
+tokens_ko=twitter.nouns(doc_ko)
+tokens_ko
+
+# 빈도수를 체크 해주기 위해 사용하는 package : nltk
+
+ko=nltk.Text(tokens_ko) # 토큰화 한다.
+len(ko.tokens)  # 전체갯수
+len(set(ko.tokens)) # 중복제거
+ko.vocab() # 빈도수 체크 ★★
+ko.vocab().most_common(10) # most_common : 갯수 조절해서 나오게 하는 옵
+
+# 한글을 분석하기 위해 해주는 값
+
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+font_name=font_manager.FontProperties(fname='c:/windows/fonts/malgun.ttf').get_name()
+rc('font',family=font_name)
+
+plt.figure(figsize=(12,6))
+ko.plot(50)
+plt.show()
+
+# 연습하기
+import nltk
+from konlpy.corpus import kolaw
+kolaw.fileids()
+A=kolaw.open('moon.txt').read()
+B=nltk.Text(A)
+B.vocab()
+
+plt.figure(figsize=(12,6))
+B.plot(50)
+plt.show()
+
+stopword=['.',',','(',')','의','지','에','간','것','곳','달']
+ko = [eachword for eachword in ko if eachword not in stopword] # append 할 필요 없이 바로가능
+
+# 정제후 작업
+ko = nltk.Text(ko)
+ko.vocab()
+ko.vocab().most_common(10)
+
+
+stopword=['.',',','(',')','의','지','에','간','것','곳','달','제','정','수','관','때','그','이','바','모든','위','및','안','이상','장']
+ko = [eachword for eachword in ko if eachword not in stopword] 
+
+ko.count('국민') # 특정 값을 확인하고 싶다면!
+ko.concordance('국민') # 연관있는 단어를 확인하는 함수 ★★
+
+# anaconda prompt : pip install wordcloud - 워드클라우드 설치
+
+from wordcloud import WordCloud
+
+data=ko.vocab().most_common(50)
+
+wordcloud = WordCloud(font_path="c:\windows\Fonts\malgunbd.ttf",background_color='White',width=1000,height=800).generate_from_frequencies(dict(data))
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+
+# kkma로 해보기
+doc_ko=kolaw.open('constitution.txt').read() # open(파일이름).read() : 파일을 읽어온다.
+tokens_ko=kkma.nouns(doc_ko)
+ko2=nltk.Text(tokens_ko)
+ko2.vocab()
+ko2.vocab().most_common(50)
+stop=['조','이','일','장','수','자','외','인','관','3','1','1운동','4','19','19민주이념']
+ko2 = [i for i in ko2 if i not in stop]
+
+ko2=nltk.Text(ko2)
+ko3=ko2.vocab().most_common(50)
+
+wordcloud = WordCloud(font_path="c:\windows\Fonts\malgunbd.ttf",background_color='White',width=1000,height=800).generate_from_frequencies(dict(ko3))
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+
+[문제185] 동아일보에서 인공지능에 기사 스크롤링 하셔서 단어의 빈도수를 체크하시고
+	  워드클라우드를 그리세요.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+A=[]
+for i in range(1,10):
+    A.append(1+i*15)
+A.insert(0,1)
+
+t_u=[]
+for i in A:
+    url='http://news.donga.com/search?p={}&query=%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5&check_news=1&more=1&sorting=1&search_date=1&v1=&v2=&range=1' .format(i)
+    res=req.urlopen(url)
+    soup=BeautifulSoup(res,'html.parser')
+    B=soup.select('div.searchList > div.p > a')
+    t_u.extend(B)
+      
+total=[]
+
+for i in t_u:
+    total.append(i.attrs['href'])
+
+D=[]
+E=[]
+for i in total:
+    url=i
+    res=req.urlopen(url)
+    soup=BeautifulSoup(res,'html.parser')
+    C=soup.select_one('div.article_txt').get_text()
+    D=C.split('기자')
+    E.append(D[0])
+
+import nltk
+from konlpy.corpus import kolaw
+from wordcloud import WordCloud
+
+F=','.join(E)
+
+ko=kkma.nouns(F)  
+ko1=nltk.Text(ko)
+ko1.vocab().most_common(50)        
+ko1
+ko2 = [i for i in ko1 if len(i)>=2]
+ko3=nltk.Text(ko2)
+ko3.vocab().most_common(50)      
+stop= ['우리','이번','코넬대','대로','마련','무엇','만큼','수천','추후','위안','권대']
+ko4 = [i for i in ko3 if i not in stop]
+ko5=nltk.Text(ko4)
+cn=ko5.vocab().most_common(40)
+
+wordcloud = WordCloud(font_path="c:\windows\Fonts\malgunbd.ttf",background_color='White',width=1000,height=800).generate_from_frequencies(dict(cn))
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+
+ko5.concordance('월렛')
+
+pip.exe list # anaconda prompt에서 불러운 모듈 값 다 확인
+# scipy - 공학관련
+
+# 만약 wordcloud 바로 부르고 싶다면 (정제 없이)
+
+from wordcloud import WordCloud, STOPWORDS # 불용어
+import matplotlib.pyplot as plt
+
+with open("c:/data/moon.txt","r",encoding='utf8') as file:
+	text = file.read()
+
+
+from scipy.misc import imread # 그림 불러올 때 사용하는 모듈
+
+heart_mask = imread("c:/data/heart.jpg") 
+
+wordcloud = WordCloud(font_path = "c://Windows//Fonts//malgunbd.ttf", 
+		stopwords=STOPWORDS,
+		background_color="white",
+		width=1000,
+		height=800,
+		mask=heart_mask).generate(text)
+
+# 문장을 나눈 기준: 문장의 줄바꿈, 띄어쓰기
+
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()
+ 
+## from scipy.misc import imread 
+
+## heart_mask = imread("c:/data/heart.jpg") # deprecated
+
+import imageio # 이미지함수의 다른방법
+
+heart_mask = imageio.imread("c:/data/heart.jpg")
+
+wordcloud = WordCloud(font_path = "c://Windows//Fonts//malgunbd.ttf", 
+		stopwords=STOPWORDS,
+		background_color="white",
+		width=1000,
+		height=800,
+		mask=heart_mask).generate(text)
+
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()  
+
+# 그림 가져오기
+
+url='http://www.hani.co.kr/arti/cartoon/home01.html'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+link=soup.select_one('div.today-comic > a > img').attrs['src']
+link1=soup.select_one('div.today-comic > a > img').get('src')
+
+from urllib import request # 사진을 가져오는 방법
+request.urlretrieve(link,'c:/data/20181002.jpg')

@@ -1,0 +1,194 @@
+[문제186] http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp
+이미지를 다운로드하세요.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+url='http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+link=soup.select('div.list_group > div.sell > div.sum > a > img')
+link[0]['alt']
+from urllib import request
+
+for i in range(0,len(link)):
+    A='http://www.skwyverns.com'+link[i].get('src') # 주소를 붙인 이유 : 앞 페이지에선 실제주소가 없어 이미지를 가져오는 것이 불가능 하기 때문.
+    B=i['alt']
+    request.urlretrieve(A,'c:/data/sk_{}.jpg' .format(B))    
+
+# selenum : 웹브라우저를 컨트롤하여 웹 UI(User Interface)를 자동화하는 도구 , 꼭 로그인을 해야지만 값을 가져올 수 있는 경우 사용한다.
+# anaconda prompt 에서 설치 : pip install selenium, 설치 후 selenium driver를 설치한다.
+# firefox driver : http://github.com/mozilla/geckodriver/releases
+# chrom driver : http://sites.google.com/a/chromium.org/chromedriver/downloads
+# phantomJS : http://phantomjs.org
+    
+# 경로에 저장하기
+from selenium import webdriver
+url='http://www.naver.com'
+driver = webdriver.PhantomJS('c:/data/phantomjs.exe')
+driver.implicitly_wait(3) # 3초동안 대기후 실행
+driver.get(url) # url 가져오기
+driver.save_screenshot('c:/data/naver.png') # 기능 :스크린샷
+driver.quit() # 나가기
+
+from selenium import webdriver
+from bs4 import BeautifulSoup
+
+user="" # 아이디
+mypass="" #비밀번호
+
+driver = webdriver.PhantomJS("c:/data/phantomjs.exe")
+driver.implicitly_wait(3)
+url_login = "https://nid.naver.com/nidlogin.login"
+driver.get(url_login)
+
+# id를 입력하는 input 요소를 찾는다.
+# find_element_by_id(id) : id 속성으로 요소를 하나 추출한다.
+inputid=driver.find_element_by_id("id") #id 값을 찾는 방법
+# 입력박스에 있는 텍스트 지우기
+inputid.clear()
+# 입력박스에 아이디 입력
+inputid.send_keys(user)
+# 비밀번호 입력하는 input 요소를 찾는다.
+inputpw=driver.find_element_by_id("pw") #pw 값을 찾는다. #pw 이런거 찾는거임. id속성값
+# 입력박스에 있는 텍스트 지우기
+inputpw.clear()
+inputpw.send_keys(mypass)
+# find_element_by_css_selector: 클래스 기준으로 찾기 / css선택자로 요소하나 추출, 로그인버튼 찾기
+loginbn=driver.find_element_by_css_selector('input.btn_global[type=submit]') # 로그인 클릭하는 배너 , driver.find_element_by_css_selector('이름.클래스[type=타입]')
+
+# 아이디와 비밀번호 전송
+loginbn.submit() # 버튼클릭
+
+# 로그인이 필요해서 가져오는 방법
+# - 주소가져오기
+driver.get('https://pay.naver.com/introduction/merchant/list?searchMerchantCategoryCode=50000003&searchTapType=merchant&searchSortType=payOrderCount&searchType=merchantName&searchKeyword=')
+
+html=driver.page_source
+soup=BeautifulSoup(html,'html.parser')
+
+notices=soup.find_all('table',class_='tb_list tb_store')
+
+# 실험 할 땐 
+
+for n in notices:
+    print(n.text)
+
+driver.quit()
+
+# 응용하기 : 장바구니 가기
+
+from selenium import webdriver
+from bs4 import BeautifulSoup
+
+user="" # 아이디
+mypass="" #비밀번호
+driver = webdriver.PhantomJS("c:/data/phantomjs.exe")
+driver.implicitly_wait(3)
+url_login='https://www.musinsa.com/?mod=login'
+driver.get(url_login)
+
+inputid=driver.find_element_by_css_selector("input.xinput[type=text]")
+inputid.clear()
+inputid.send_keys(user)
+inputpw=driver.find_element_by_css_selector("input.xinput[type=password]")
+inputpw.clear()
+inputpw.send_keys(mypass)
+
+loginbn=driver.find_element_by_css_selector("[type=submit]")
+loginbn.submit()
+
+driver.get('https://store.musinsa.com/app/mypage')
+
+html=driver.page_source
+soup=BeautifulSoup(html,'html.parser')
+notices=soup.select('div.section_contents > table.table_basic > p.txt_brand')
+notices=soup.select('div.section_contents > table.table_basic > tbody > tr > td > div.article_info.connect_info > p.txt_brand ')
+
+for i in notices:
+    print(i.text)
+
+driver.quit()
+
+
+driver = webdriver.PhantomJS("c:/data/phantomjs.exe")
+driver.implicitly_wait(3)
+url_login = "https://nid.naver.com/nidlogin.login"
+driver.get(url_login)
+
+# chrome 으로 응용하기
+
+driver = webdriver.Chrome('c:/data/chromedriver.exe')
+driver.implicitly_wait(3) # 3초동안 대기후 실행
+url_login = "https://nid.naver.com/nidlogin.login"
+driver.get(url_login)
+user=''
+mypass=''
+
+inputid=driver.find_element_by_id("id") 
+
+inputid.clear()
+
+inputid.send_keys(user)
+
+inputpw=driver.find_element_by_id("pw") 
+
+inputpw.clear()
+inputpw.send_keys(mypass)
+
+loginbn=driver.find_element_by_css_selector('input.btn_global[type=submit]') 
+
+loginbn.submit() 
+driver.get('https://pay.naver.com/introduction/merchant/list?searchTapType=merchant')
+
+html=driver.page_source
+soup=BeautifulSoup(html,'html.parser')
+
+notices=soup.find_all('table',class_='tb_list tb_store')
+
+for n in notices:
+    print(n.text)
+    
+driver.quit()
+
+# 이미지 가져오기
+
+import urllib.request as req
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys # 스크롤바를 제어하는 모듈
+import time 
+
+browser = webdriver.Chrome('c:/data/chromedriver.exe')
+browser.get("https://search.naver.com/search.naver?where=image&sm=tab_jum&query=") # 빈칸 이미지 검색
+elem=browser.find_element_by_id('nx_query') # 검색창
+elem.send_keys("아이언맨") # 검색어 
+elem.submit() # 검색실행
+# 전체 가져오기, end키도 들어갈 수 있도록 해야한다. (스크롤 제어기능)
+browser.find_element_by_tag_name('body').send_keys(Keys.END) 
+# 계속하게 되면 막히거나, 오류가 뜨므로 time을 건다
+time.sleep(5)
+
+# 한번만 되므로 전체 페이지를 불러 오려면 반복문을 사용해야한다. body도 이미지를 추가할 때 바뀌므로 한번에 아래로 보낸다.
+
+for i in range(1,2):
+    browser.find_element_by_tag_name('body').send_keys(Keys.END) 
+    time.sleep(5)
+
+html = browser.page_source # page 가져오기
+soup = BeautifulSoup(html,'html.parser')
+
+params = []
+
+imglist=soup.find_all('img',class_="_img")
+
+for im in imglist:
+    params.append(im['src'])
+
+a=1
+for p in params:
+    req.urlretrieve(p,'c:/data/iron/'+str(a)+".jpg")
+    a+=1
+
+browser.quit()
+
+

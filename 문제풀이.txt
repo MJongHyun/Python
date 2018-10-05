@@ -863,7 +863,7 @@ stddev(2,3,1,7)
 		total=0
 		for i in arg:
 			total=total+(i-m)**2
-		return total/(len(arg)-1
+		return total/(len(arg)-1)
 
 	v=variance(mean())
 
@@ -2646,3 +2646,239 @@ with open('c:/data/year_gender_total.csv','w') as f:
     for n,k in m.items():
         txt = '%s,%s\n' %(n,k)
         f.write(txt)
+
+[문제180] 2010 ~ 2016  년도까지 성별 출생 현황을 그래프를 그리세요.
+
+import csv
+from pandas import Series,DataFrame
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/malgun.ttf").get_name()
+rc('font', family=font_name)
+%matplotlib inline
+
+with open('c:/python_data/year_gender_total.csv','w',encoding="utf-8") as f:
+    writer = csv.writer(f, delimiter=',')
+    writer.writerow(['년도','여자','남자'])
+    for y in range(2000,2017):
+        filename='c:\python_data\yob%d.txt'%y
+        name = os.path.basename(filename)
+        name = name.split('.')[0]
+        df = pd.read_csv(filename, names=['name','gender','birth'])
+        gender_cn = df['birth'].groupby(df['gender']).sum()
+        writer.writerow([name[3:],gender_cn.loc['F'],gender_cn.loc['M']])
+     
+import csv
+from pandas import Series,DataFrame
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+df = pd.read_csv('c:/python_data/year_gender_total.csv')
+df
+
+df = df.set_index("년도")
+df
+df.plot()
+df.plot(kind="bar")
+df.plot(kind="barh")
+
+plt.plot(df.ix[:,0], label="여자", color="r", linestyle="--")
+plt.plot(df.ix[:,1], label="남자", color="b", linestyle=":")
+plt.title("성별 출생 현황", fontsize=15)
+plt.xlabel("년도",fontsize=10)
+plt.ylabel("출생수",fontsize=10)
+plt.legend()
+plt.grid()
+
+
+[문제181] 이 주소로 접속하셔서 게시글을 출력하세요.
+
+import urllib.request as req
+
+http://home.ebs.co.kr/ladybug/board/6/10059819/oneBoardList?hmpMnuId=106
+
+url='http://home.ebs.co.kr/ladybug/board/6/10059819/oneBoardList?hmpMnuId=106'
+res=req.urlopen(url)
+
+soup=BeautifulSoup(res,'html.parser')
+soup
+
+for i in soup.findAll(class_='con'):
+    print(i.get_text())
+
+soup.findAll('p',{'class':'con'})
+
+[문제182] 게시글 뿐만 아니라 게시날짜 정보도 같이 출력하시오 !
+
+2017.04.12 19:48 레이디버그 3기나오면 좋은사람 손~~
+
+for i in soup.findAll(class_=['date','con']):
+    print(i.get_text())
+
+a=[]
+for i in soup.findAll(class_='date'):
+    a.append(i.get_text())
+
+b=[]
+for i in soup.findAll(class_='con'):
+    b.append(i.get_text())
+
+for i in range(0,len(a)):
+    c=b[i].split('\t')
+    d=''.join(c)
+    e=d.split('\n')
+    f=''.join(e)
+    g=f.split('\r')
+    h=''.join(g)
+    print(a[i],h)
+
+[문제183] 게시판에 게시글 전부를 수집해주세요.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+
+url=[]
+for i in range(1,17):
+    url1='http://home.ebs.co.kr/ladybug/board/6/10059819/oneBoardList?c.page=%d&hmpMnuId=106&searchKeywordValue=0&bbsId=10059819&searchKeyword=&searchCondition=&searchConditionValue=0&' %i
+    url.append(url1)
+    
+total=[]
+for i in range(0,len(url)):    
+    res=req.urlopen(url[i])
+    soup=BeautifulSoup(res,'html.parser')
+    a=soup.find_all('p',class_="con")
+    b=soup.find_all('span',class_="date")
+    cnt=0
+    for j in a:
+        total.append(b[cnt].text+j.get_text(strip=True))
+        cnt=cnt+1
+
+total
+
+[문제 184] 동아일보 기사를 크롤링하시오.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+
+url='http://news.donga.com/search?query=%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5&x=0&y=0'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+
+
+test=soup.find(class_='tit')
+test.a.attrs['href']
+
+
+tit=soup.findAll(class_='tit')
+tit
+t_u=[]
+
+for i in tit:
+    t_u.append(i.a.attrs['href'])
+
+total=[]
+for i in range(1,len(t_u)):
+    url=t_u[i]
+    res=req.urlopen(url)
+    soup=BeautifulSoup(res,'html.parser')
+    total.append(soup)
+
+t_u
+
+total[0]
+
+gisa=[]
+total[0].find(class_='article_txt').get_text(strip=True)
+
+
+gisa=[]
+for i in range(0,len(total)):
+    gisa.append(total[i].find(class_='article_txt'))
+
+
+end=[]
+
+for i in range(0,len(gisa)):
+    end.append(gisa[i].get_text(strip=True))
+
+for i in range(0,len(end)):
+    A=end[i].split('Copy')
+    end[i]=A[0]
+
+[문제185] 동아일보에서 인공지능에 기사 스크롤링 하셔서 단어의 빈도수를 체크하시고
+	  워드클라우드를 그리세요.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+A=[]
+for i in range(1,10):
+    A.append(1+i*15)
+A.insert(0,1)
+
+t_u=[]
+for i in A:
+    url='http://news.donga.com/search?p={}&query=%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5&check_news=1&more=1&sorting=1&search_date=1&v1=&v2=&range=1' .format(i)
+    res=req.urlopen(url)
+    soup=BeautifulSoup(res,'html.parser')
+    B=soup.select('div.searchList > div.p > a')
+    t_u.extend(B)
+      
+total=[]
+
+for i in t_u:
+    total.append(i.attrs['href'])
+
+D=[]
+E=[]
+for i in total:
+    url=i
+    res=req.urlopen(url)
+    soup=BeautifulSoup(res,'html.parser')
+    C=soup.select_one('div.article_txt').get_text()
+    D=C.split('기자')
+    E.append(D[0])
+
+import nltk
+from konlpy.corpus import kolaw
+from wordcloud import WordCloud
+
+F=','.join(E)
+
+ko=kkma.nouns(F)  
+ko1=nltk.Text(ko)
+ko1.vocab().most_common(50)        
+ko1
+ko2 = [i for i in ko1 if len(i)>=2]
+ko3=nltk.Text(ko2)
+ko3.vocab().most_common(50)      
+stop= ['우리','이번','코넬대','대로','마련','무엇','만큼','수천','추후','위안','권대']
+ko4 = [i for i in ko3 if i not in stop]
+ko5=nltk.Text(ko4)
+cn=ko5.vocab().most_common(40)
+
+wordcloud = WordCloud(font_path="c:\windows\Fonts\malgunbd.ttf",background_color='White',width=1000,height=800).generate_from_frequencies(dict(cn))
+plt.figure(figsize=(10,10))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+
+[문제186] http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp
+이미지를 다운로드하세요.
+
+from bs4 import BeautifulSoup
+import urllib.request as req
+url='http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp'
+res=req.urlopen(url)
+soup=BeautifulSoup(res,'html.parser')
+link=soup.select('div.list_group > div.sell > div.sum > a > img')
+link[0]['alt']
+from urllib import request
+
+for i in range(0,len(link)):
+    A='http://www.skwyverns.com'+link[i].get('src') # 주소를 붙인 이유 : 앞 페이지에선 실제주소가 없어 이미지를 가져오는 것이 불가능 하기 때문.
+    B=i['alt']
+    request.urlretrieve(A,'c:/data/sk_{}.jpg' .format(B))    
