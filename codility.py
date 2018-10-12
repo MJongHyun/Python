@@ -239,6 +239,18 @@ def solution(X, A): #54%
         if C==D:
             return i
     return -1
+
+def solution(X, A):
+    B={}
+    count=0
+    for i in A:
+        if i not in B:
+            B[i]=1
+        if len(B.keys())==X:
+            return count
+        count=count+1
+    return -1
+
         
 You are given N counters, initially set to 0, and you have two possible operations on them:
 
@@ -428,6 +440,63 @@ def solution(A): #66%
             return B[i+1]+1            
     if B[0]==cn:
         return cn+1
+
+A non-empty array A consisting of N integers is given. The consecutive elements of array A represent consecutive cars on a road.
+
+Array A contains only 0s and/or 1s:
+
+0 represents a car traveling east,
+1 represents a car traveling west.
+The goal is to count passing cars. We say that a pair of cars (P, Q), where 0 ≤ P < Q < N, is passing when P is traveling to the east and Q is traveling to the west.
+
+For example, consider array A such that:
+
+  A[0] = 0
+  A[1] = 1
+  A[2] = 0
+  A[3] = 1
+  A[4] = 1
+We have five pairs of passing cars: (0, 1), (0, 3), (0, 4), (2, 3), (2, 4).
+
+Write a function:
+
+def solution(A)
+
+that, given a non-empty array A of N integers, returns the number of pairs of passing cars.
+
+The function should return −1 if the number of pairs of passing cars exceeds 1,000,000,000.
+
+For example, given:
+
+  A[0] = 0
+  A[1] = 1
+  A[2] = 0
+  A[3] = 1
+  A[4] = 1
+the function should return 5, as explained above.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [1..100,000];
+each element of array A is an integer that can have one of the following values: 0, 1.     
+
+A=[0,1,0,1,1]
+def solution(A): # 60%
+    B=[]
+    C=[]
+
+    for i in range(0,len(A)):
+        if A[i]==0:
+            B.append(i)
+        else:
+            C.append(i)
+
+    cn=0
+    for i in range(0,len(B)):
+        for j in range (0,len(C)):
+            if B[i]<C[j]:
+                cn+=1
+    return cn
         
 A DNA sequence can be represented as a string consisting of the letters A, C, G and T, which correspond to the types of successive nucleotides in the sequence. Each nucleotide has an impact factor, which is an integer. Nucleotides of types A, C, G and T have impact factors of 1, 2, 3 and 4, respectively. You are going to answer several queries of the form: What is the minimal impact factor of nucleotides contained in a particular part of the given DNA sequence?
 
@@ -465,4 +534,202 @@ M is an integer within the range [1..50,000];
 each element of arrays P, Q is an integer within the range [0..N − 1];
 P[K] ≤ Q[K], where 0 ≤ K < M;
 string S consists only of upper-case English letters A, C, G, T.
+
+a={'A':1,'C':2,'G':3,'T':4}
+
+S='CAGCCTA'
+
+P=[2,5,0]
+Q=[4,5,6]
+
+
+def solution(S, P, Q): # 50 %
+    B=[]
+    for i in range(0,len(P)):
+        A=S[P[i]:Q[i]]
+        if A=='':
+            if S[P[i]]=='A':
+                B.append(1)
+            elif S[P[i]]=='C':
+                B.append(2)
+            elif S[P[i]]=='G':
+                B.append(3)
+            elif S[P[i]]=='T':
+                B.append(4)
+        elif 'A' in A:
+            B.append(1)
+            continue
+        elif 'C' in A:
+            B.append(2)
+            continue
+        elif 'G' in A:
+            B.append(3)
+            continue
+        elif 'T' in A:    
+            B.append(4)
+            continue
+    
+    return B
+
+def solution(S, P, Q): # 100%
+    B=[]
+    for i in range(0,len(P)):
+        A=S[P[i]:Q[i]+1]
+   
+        if 'A' in A:
+            B.append(1)
+            continue
+        elif 'C' in A:
+            B.append(2)
+            continue
+        elif 'G' in A:
+            B.append(3)
+            continue
+        elif 'T' in A:    
+            B.append(4)
+            continue
+    
+    return B
+
+A non-empty array A consisting of N integers is given. A pair of integers (P, Q), such that 0 ≤ P < Q < N, is called a slice of array A (notice that the slice contains at least two elements). The average of a slice (P, Q) is the sum of A[P] + A[P + 1] + ... + A[Q] divided by the length of the slice. To be precise, the average equals (A[P] + A[P + 1] + ... + A[Q]) / (Q − P + 1).
+
+For example, array A such that:
+
+    A[0] = 4
+    A[1] = 2
+    A[2] = 2
+    A[3] = 5
+    A[4] = 1
+    A[5] = 5
+    A[6] = 8
+contains the following example slices:
+
+slice (1, 2), whose average is (2 + 2) / 2 = 2;
+slice (3, 4), whose average is (5 + 1) / 2 = 3;
+slice (1, 4), whose average is (2 + 2 + 5 + 1) / 4 = 2.5.
+The goal is to find the starting position of a slice whose average is minimal.
+
+Write a function:
+
+def solution(A)
+
+that, given a non-empty array A consisting of N integers, returns the starting position of the slice with the minimal average. If there is more than one slice with a minimal average, you should return the smallest starting position of such a slice.
+
+For example, given array A such that:
+
+    A[0] = 4
+    A[1] = 2
+    A[2] = 2
+    A[3] = 5
+    A[4] = 1
+    A[5] = 5
+    A[6] = 8
+the function should return 1, as explained above.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [2..100,000];
+each element of array A is an integer within the range [−10,000..10,000].
+
+A=[4,2,2,5,1,5,8]
+
+def solution(A):
+    D={}
+    m=99999999
+    for i in range(0,len(A)-1):
+        for j in range(i+1,len(A)):
+            B=A[i:j+1]
+            C=sum(B)/len(B)
+            if C<m:
+                m=C
+                D[i]=m
+        
+    for i,j in D.items():
+        if j==min(D.values()):
+            return i 
+
+solution(A)
+
+Write a function:
+
+def solution(A, B, K)
+
+that, given three integers A, B and K, returns the number of integers within the range [A..B] that are divisible by K, i.e.:
+
+{ i : A ≤ i ≤ B, i mod K = 0 }
+
+For example, for A = 6, B = 11 and K = 2, your function should return 3, because there are three numbers divisible by 2 within the range [6..11], namely 6, 8 and 10.
+
+Write an efficient algorithm for the following assumptions:
+
+A and B are integers within the range [0..2,000,000,000];
+K is an integer within the range [1..2,000,000,000];
+A ≤ B.
+
+def solution(A, B, K):
+    cn=0
+    if K==1:
+        return B-A+1
+    for i in range(A,B+1):
+       if i%K==0:
+           cn=cn+1
+    return cn
+
+Write a function
+
+def solution(A)
+
+that, given an array A consisting of N integers, returns the number of distinct values in array A.
+
+For example, given array A consisting of six elements such that:
+
+ A[0] = 2    A[1] = 1    A[2] = 1
+ A[3] = 2    A[4] = 3    A[5] = 1
+the function should return 3, because there are 3 distinct values appearing in array A, namely 1, 2 and 3.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [0..100,000];
+each element of array A is an integer within the range [−1,000,000..1,000,000].
+
+def solution(A):
+    return len(set(A))
+    
+A=[2,1,1,2,3,1]
+solution(A)
+
+An array A consisting of N integers is given. A triplet (P, Q, R) is triangular if 0 ≤ P < Q < R < N and:
+
+A[P] + A[Q] > A[R],
+A[Q] + A[R] > A[P],
+A[R] + A[P] > A[Q].
+For example, consider array A such that:
+
+  A[0] = 10    A[1] = 2    A[2] = 5
+  A[3] = 1     A[4] = 8    A[5] = 20
+Triplet (0, 2, 4) is triangular.
+
+Write a function:
+
+def solution(A)
+
+that, given an array A consisting of N integers, returns 1 if there exists a triangular triplet for this array and returns 0 otherwise.
+
+For example, given array A such that:
+
+  A[0] = 10    A[1] = 2    A[2] = 5
+  A[3] = 1     A[4] = 8    A[5] = 20
+the function should return 1, as explained above. Given array A such that:
+
+  A[0] = 10    A[1] = 50    A[2] = 5
+  A[3] = 1
+the function should return 0.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [0..100,000];
+each element of array A is an integer within the range [−2,147,483,648..2,147,483,647].
+
+
+
 
