@@ -1,0 +1,425 @@
+class Person:
+    hobbys = [] # 클래스 변수 : 인스턴스간의 값이 공유가 된다. 
+    def add_hobby(self,hobby):
+        self.hobbys.append(hobby)
+
+p1 = Person()
+p1.add_hobby('노래부르기')
+print(p1.hobbys)
+
+p2 = Person()
+p2.add_hobby('글쓰기')
+print(p2.hobbys) # 인스턴스를 다르게 했지만 값이 공유 된 것을 확인할 수 있다. 즉, 전역변수 기능
+
+# 바꾸고 싶다면 인스턴스 변수로 만들어서 해결을 해야한다.
+
+class Person:
+    
+    def add_hobby(self,hobby):
+        self.hobbys=[] # 안에 있는 값으로만 해결하고 싶다면 self를 붙여서 변수를 만들면 된다. <인스턴스변수>
+        self.hobbys.append(hobby)
+
+p1 = Person()
+p1.add_hobby('노래부르기')
+print(p1.hobbys)
+
+p2 = Person()
+p2.add_hobby('글쓰기')
+print(p2.hobbys) 
+
+
+# 오류 발생의 이유 : 리스트형
+
+class Person:
+    
+    def add_hobby(self,hobby):
+        self.hobbys=[] 
+        self.hobbys.append(hobby)
+        
+    def show(self): # 오류 : hobbys는 리스트 이기 때문에 인덱스로 값을 불러오거나 새로 class를 만들어야 한다.
+        print("내 취미는"+self.hobbys)
+        
+p1 = Person()
+p1.add_hobby('노래부르기')
+p1.hobbys
+p1.show()
+
+# 해결 1
+
+class Person:
+    
+    def add_hobby(self,hobby):
+        self.hobbys=[] 
+        self.hobbys.append(hobby)
+        
+    def show(self): 
+        self.sentence=''
+        for i in self.hobbys:
+            self.sentence+=i
+        print("내 취미는 "+self.sentence)
+        
+p1 = Person()
+p1.add_hobby('노래부르기')
+p1.hobbys
+p1.show()
+
+# 해결 2
+
+class Person:
+    
+    def add_hobby(self,hobby):
+        self.hobbys=hobby
+    def show(self): 
+        print("내 취미는"+self.hobbys)
+
+p1 = Person()
+p1.add_hobby('노래부르기')
+p1.hobbys
+p1.show()
+
+# init을 통한 해결
+
+class Person:
+    def __init__(self,name):
+        self.name = name
+        self.hobbys = []
+    def add_hobby(self,hobby):
+        self.hobbys.append(hobby)
+        
+p1=Person('홍길동')        
+p1.add_hobby('음반수집')
+p1.add_hobby('노래부르기')        
+print(p1.hobbys)        
+
+p2=Person('박찬호')        
+p2.add_hobby('글쓰기')        
+print(p2.hobbys)        
+
+[문제 189] 초기 생성자에는 이름, 주소, 급여를 입력값으로 받고 아래와 같이 출력되는 클래스를 생성하세요. 
+인스턴스 생성될때 마다 건수를 출력해주세요.
+
+
+사원수 : 1
+이름 : 홍길동 , 주소 : 덴마크,  급여 : 1000
+
+사원수 : 2
+이름 : 홍아들 , 주소 : 노르웨이,  급여 : 2000
+
+class employee:
+    
+    count=0
+    
+    def __init__(self,name,addr,sal):
+        self.name=name
+        self.addr=addr
+        self.sal=sal
+        employee.count=employee.count+1 # class 변수 count 
+        
+    def emp_print(self):
+        print('사원 수 : ',self.count)
+        print('이름 : ',self.name+' , '+'주소 : ',self.addr+' , ','급여 : ',self.sal)
+
+p1=employee('홍길동','덴마크',1000)
+p1.emp_print()
+
+p2=employee('홍아들','노르웨이',2000)
+p2.emp_print()
+
+[문제190]
+
+id_number1 = "010101-3234567"
+id_number2 = "990202-2123456"
+
+2001 01 01 남성
+1992 02 02 여성
+
+class id:
+
+    def x(self,id_num):
+        self.id_num=id_num
+        if self.id_num[7]=='1':
+            print('19'+id_num[:2],id_num[2:4],id_num[4:6],'남성')
+        elif self.id_num[7]=='2':
+            print('19'+id_num[:2],id_num[2:4],id_num[4:6],'여성')
+        elif self.id_num[7]=='3':
+            print('20'+id_num[:2],id_num[2:4],id_num[4:6],'남성')
+        elif self.id_num[7]=='4':
+            print('20'+id_num[:2],id_num[2:4],id_num[4:6],'여성')
+
+id_number1 = "010101-3234567"            
+p1=id()        
+p1.x(id_number1)
+id_number2 = "990202-2123456"
+p2=id()        
+p2.x(id_number2)
+
+def id_process(id):
+    first, second = id.split("-") # 어차피 2개가 나오므로 변수를 두개 지정해서 값을 넣는다.
+    gender = second[0]
+    
+    if gender == "1" or gender == "2":
+        year='19'+first[0:2]
+    else:
+        year='20'+first[0:2]
+    
+    if gender == "2" or gender == "4":
+        gener = "여성"
+    else:
+        gener = "남성"
+
+    month=first[2:4]
+    day=first[4:6]
+    
+    return year,month,day,gener
+
+id_number1 = "010101-3234567"                
+id_process(id_number1)
+id_number2 = "010101-3234567"                
+id_process(id_number2)
+
+
+# Class 변수와 인스턴스 변수 비교
+
+class Employee:
+
+    empCount=0
+    raise_ratio = 1.1
+    
+    def __init__(self,name,salary):
+        self.name=name
+        self.salary=salary
+        Employee.empCount +=1
+        
+    def showCount(self):
+        print("전체 종원업의 수는 {}" .format(Employee.empCount))
+        
+    def showEmp(self):
+        print('이름 {}, 급여 {}' .format(self.name,self.salary))
+        
+    def raise_salary(self):
+        print(self.raise_ratio)
+        self.salary=int(self.salary)*self.raise_ratio
+        
+p1=Employee('홍길동',1000)
+p1.showCount()
+p1.showEmp()
+p1.raise_salary()
+p1.showEmp()
+p1.raise_ratio=1.2 # 20 프로 급여 인상 된것을 확인할 수 있다.
+p1.raise_salary()
+p1.showEmp()
+
+p2=Employee('박찬호',2000)
+p2.showCount()
+p2.showEmp()
+p2.raise_salary()
+p2.showEmp()
+p2.raise_salary() # 10프로 인상으로 되어있다.
+p2.showEmp()
+
+# ★★ 즉, raise_ratio는 인스턴스 변수로 되어 있는 것이다. (주의사항 ★), self로 불렀기 떄문에
+
+
+
+
+# 클래스로 바꾸게 된 경우 
+
+class Employee:
+
+    empCount=0
+    raise_ratio = 1.1
+    
+    def __init__(self,name,salary):
+        self.name=name
+        self.salary=salary
+        Employee.empCount +=1
+        
+    def showCount(self):
+        print("전체 종원업의 수는 {}" .format(Employee.empCount))
+        
+    def showEmp(self):
+        print('이름 {}, 급여 {}' .format(self.name,self.salary))
+        
+    def raise_salary(self):
+        print(Employee.raise_ratio)
+        self.salary=int(self.salary)*Employee.raise_ratio
+        
+p1=Employee('홍길동',1000)
+p1.showCount()
+p1.showEmp()
+p1.raise_salary()
+p1.showEmp()
+Employee.raise_ratio=1.2 # 클래스 변수 바꾸기
+p1.raise_salary()
+p1.showEmp()
+
+p2=Employee('박찬호',2000)
+p2.showCount()
+p2.showEmp()
+p2.raise_salary() # 클래스 변수 값을 바꿨기 때문에 1.2로 되어있다.
+p2.showEmp()
+p2.raise_salary() 
+p2.showEmp() 
+
+class Person:
+    hobbys = []
+    def __init__(self,name):
+        self.name=name
+    def add_hobby(self,hobby):
+        self.hobbys.append(hobby)
+    def show_info(self):
+        print(self.name, self.hobbys) # hobbys를 self로 하였더라도 인스턴스 변수가 아닌 클래스 변수이다.
+
+p1=Person("홍길동")
+p1.add_hobby("음반수집")
+p1.show_info()
+
+p2=Person('박찬호')
+p2.show_info() # 클래스 변수라서 위의 취미도 나오게 된다,
+p2.add_hobby('글쓰기')
+p2.show_info()
+
+# 해결방법
+
+class Person:
+
+    def __init__(self,name):
+        self.name=name
+        self.hobbys=[]
+        
+    def add_hobby(self,hobby):
+        self.hobbys.append(hobby)
+    def show_info(self):
+        print(self.name, self.hobbys) 
+
+
+p1=Person("홍길동")
+p1.add_hobby("음반수집")
+p1.show_info()
+
+p2=Person('박찬호')
+p2.show_info()
+p2.add_hobby('글쓰기')
+p2.show_info()
+
+# 인스턴스와 클래스 변수 구분
+
+class Employee:
+    raise_ratio = 1.1
+    def __init__(self,name,salary):
+        self.name=name
+        self.salary=salary
+        
+    def emp_info(self):
+        print('이름 : ',self.name,", 급여 : ",self.salary)
+        
+    def raise_salary(self):
+        self.salary = int(self.salary) * self.raise_ratio
+    
+emp1 = Employee("홍길동",1000)
+emp1.emp_info()
+print(emp1.raise_ratio)        
+emp1.raise_ratio=1.2
+print(emp1.raise_ratio)
+
+emp2 = Employee("박찬호",2000)
+emp2.emp_info()
+print(emp2.raise_ratio) # 값이 바뀌지 않았다, 인스턴스 변수이다.
+
+# 클래스 method : 클래스를 통해서 호출, @classmethod 데코레이터로 정의하고 클래스 자신을 자동으로 전달하는 인자 cls 사용
+
+class Employee:
+    raise_ratio = 1.1
+    def __init__(self,name,salary):
+        self.name=name
+        self.salary=salary
+        
+    def emp_info(self):
+        print('이름 : ',self.name,", 급여 : ",self.salary)
+        
+    def raise_salary(self):
+        self.salary = int(self.salary) * self.raise_ratio
+
+    @classmethod
+    def change_raise_ratio(cls,ratio): # class 변수 선언 후 반드시 cls를 써야한다 (인스턴스의 self와 같다.)
+        cls.raise_ratio = ratio
+        print("인상률",round((ratio-1)*100), "%")
+
+emp1 = Employee("홍길동",1000)
+emp1.emp_info()
+print(emp1.raise_ratio) # 1.1       
+emp1.change_raise_ratio(1.2)
+print(emp1.raise_ratio) # 1.2
+emp1.raise_salary() 
+emp1.emp_info()
+
+emp2 = Employee("박찬호",2000)
+emp2.emp_info()
+print(emp2.raise_ratio)  # 클래스 method로 인해 값이 바뀐 것을 확인 할 수 있다.
+emp2.change_raise_ratio(1.5)
+print(emp2.raise_ratio)
+print(emp1.raise_ratio) # emp2 인스턴스에만 적용된 것이 아닌 emp1 에도 적용된 것을 확인 할 수 있다.
+
+## 직접 적용
+
+Employee.change_raise_ratio(1.6) # 클래스 이름으로 직접 적용하기
+print(emp1.raise_ratio) 
+print(emp2.raise_ratio) 
+
+# 인스턴스 method : 인스턴스를 통해 호출되고 인수 값은 인스턴스 자신을 자동으로 전달하는 self를 사용해야 한다.
+
+# 스택틱 method : 인자를 받지 않는다. (self나 cls를 사용하지 않는다.)
+
+class test:
+    num = 0
+    @staticmethod
+    def add(x,y):
+        return x+y
+    
+t = test
+t.add(1,1)
+test.add(10,20)
+
+# 인스턴스, 클래스에 상관없이 무조건 된다.
+
+class test:
+    num = 0
+    @staticmethod
+    def add(x,y):
+        num = x+y
+        return num
+
+test.add(1,2)
+test.add(10,20)
+
+
+# 클래스 종료 
+
+class Viva:
+    cnt=0
+    def __init__(self,name):
+        self.name = name
+        print("{}님이 게임방에 들어왔습니다.".format(self.name))
+        Viva.cnt+=1
+        
+        #@classmethod # 재적용 하지 않을 것으면 데코레이터(@)을 사용한다.
+    def count_viva(cls):
+        print('현재 {} 명이 남았습니다.' .format(cls.cnt))
+        
+    count_viva=classmethod(count_viva) # 클래스 메소드로 재 적용
+    
+    def __del__(self): # 클래스 종료
+        print("{}님이 게임방에서 나가셨습니다." .format(self.name))
+        Viva.cnt -= 1
+        
+
+man1 = Viva("홍길동")
+man1.count_viva()
+
+man2 = Viva("박찬호")
+man2.count_viva()
+
+del man1
+man2.count_viva() # 1명이 줄어있다.
+del man2 # 제거
+man1.count_viva() # 오류: 값이 없으므로.

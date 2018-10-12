@@ -1,0 +1,348 @@
+id_number1="010101-3123456"
+id_number2="990101-2123456"
+
+def id_process(id):
+
+    gender=id[7]
+    if gender=="1" or gender=="2":
+        year = "19"+id[:2]
+    else:
+        year = "20"+id[:2]
+        
+    if gender=="2" or gender=="4":
+        gender ="여성"
+    else:
+        gender ="남성"
+    
+    month=id[2:4]
+    day=id[4:6]
+    
+    return year, month, day, gender
+
+id_process(id_number1)
+id_process(id_number2)
+
+class Person:
+    def __init__(self,year,month,day,gender):
+        self.year = year
+        self.month = month
+        self.day = day
+        self.gender = gender
+    
+    def __str__(self): # print 해주는 method
+        return "{}년 {}월 {}일 성별은 {}입니다." .format(self.year,self.month,self.day,self.gender)
+
+p=Person(2018,10,11,"남")
+print(p)
+
+# 클래스 안에 변수를 함수로 넘겨 주는 방법
+
+p1 = Person(*id_process(id_number1)) # 함수 return 값을 class에 하는 방법: 반드시 맨 앞에 '*'을 해야한다.
+print(p1)
+
+# class 와 함수 합치기
+
+class Person:
+    
+    def __init__(self,year,month,day,gender):
+        self.year = year
+        self.month = month
+        self.day = day
+        self.gender = gender
+    
+    def __str__(self): # print 해주는 method
+        return "{}년 {}월 {}일 성별은 {}입니다." .format(self.year,self.month,self.day,self.gender)
+
+    @classmethod # 따로 만든 함수값을 넣을 땐 cls로 설정한다.
+    def id_process(cls,id): # 클래스 method로 설정을 해야한다.
+        # 값을 가져올 때 cls.으로 해서 가져올때만 사용, 여기선 어차피 local 변수이므로 굳이 cls를 붙일 이유가 없다.
+        gender=id[7]
+        if gender=="1" or gender=="2":
+            year = "19"+id[:2]
+        else:
+            year = "20"+id[:2]
+            
+        if gender=="2" or gender=="4":
+            gender ="여성"
+        else:
+            gender ="남성"
+        
+        month=id[2:4]
+        day=id[4:6]
+        
+        return cls(year, month, day, gender) # cls 값으로 해야 class가 실행
+
+p1 = Person.id_process(id_number1)
+print(p1)
+
+p2 = Person.id_process(id_number2)
+print(p2)
+
+# ★★ 상속 : 재사용의 방법, 공통에 있는 값을 가져온다.
+
+class Person:
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+        print("{}객체를 만드는 중" .format(self.name))
+
+    def show_info(self):
+        print("이름은 {}, 나이는 {}세이다" .format(self.name,self.age))
+        
+p1 = Person("홍길동",20)
+p1.show_info()        
+
+class Student(Person): # 위에서 선언되어있는 클래스를 받겠다고 할 때, 괄호안에 클래스 이름을 적는다.
+    
+    def __init__(self,name,age,hakbun):
+        Person.__init__(self,name,age) #다른 클래스에서 (상속클래스) 초기생성자값 가져오는 방법
+        self.hakbun=hakbun
+
+    def show_info(self):
+        Person.show_info(self) # 클래스이름.함수(변수)
+        print("학번은 {} 입니다." .format(self.hakbun))
+
+s1 = Student("홍길동",20,20181011)
+s1.show_info()
+
+class Professor(Person):
+    
+    def __init__ (self,name,age,years):
+        Person.__init__(self,name,age)
+        self.years=years
+        
+    def show_info(self):
+        Person.show_info(self)
+        print("근무 연수가 {}년 입니다." .format(self.years))
+            
+p1 = Professor('정교수',40,10)
+p1.show_info()
+        
+[문제191] Person 클래스를 생성하세요. 생성자는 이름, 나이, 성별을 만드세요.
+Person 클래스 에는 printMe 메소드를 생성하셔서 이름, 나이 성별을 출력합니다.
+
+
+Employees클래스를 생성한후 Person상속받습니다.
+생성자는 이름, 나이, 성별, 주소, 생일입니다.
+단 이름, 나이, 성별은 person에서 상속받으세요.
+Employees 클래스에 printMe를 재구성하셔서 주소, 생일을 출력하세요.
+
+
+myPerson = Person("홍길동","10", "남")
+myPerson.printMe()
+
+myEmployee = Employee("송준기", "2", "남", "서울", "2016년 01월 01일")
+myEmployee.printMe()
+
+
+
+이름은 홍길동 ,  나이는 10살 이고, 성별은 남 입니다.
+이름은 송준기 ,  나이는 2살 이고, 성별은 남 입니다.
+집 주소는  서울  생일은  2016년 01월 01일 입니다. 
+
+class Person:
+    def __init__(self,name,age,gender):
+        self.name=name
+        self.age=age
+        self.gender=gender
+    
+    def printMe(self):
+        print("이름은 {} , 나이는 {}살 이고, 성별은 {} 입니다." .format(self.name,self.age,self.gender))
+
+class Employee(Person):
+    
+    def __init__(self,name,age,gender,home,hbd):
+        Person.__init__(self,name,age,gender)
+        self.home=home
+        self.hbd=hbd
+    
+    def printMe(self):
+        Person.printMe(self)
+        print('집 주소는 {} 생일은 {} 입니다.' .format(self.home,self.hbd))
+
+myPerson=Person("홍길동","10", "남")
+myPerson.printMe()
+
+myEmployee = Employee("송준기", "2", "남", "서울", "2016년 01월 01일")
+myEmployee.printMe()
+
+# 그냥 전에 있던 클래스 값 받는 방법 
+
+class Emp(Person):
+    pass
+
+e = Emp("홍길동",10,"남")
+e.printMe()
+
+[문제192] Add 클래스에 두수를 더하는 값을 리턴하는 add 메소드 생성
+Multiply 클래스에 두수를 곱한값을 리턴하는 multiply 메소드 생성
+Divide 클래스에 두수를 나눈값을 리턴하는 divide메소드 생성
+Calculator클래스에는 Add, Multiply, Divide 상속받고 두수를 뺀값을 리턴하는 sub 메소드 생성하세요.
+
+class Add:
+    def add(self,x,y):
+        return x+y
+
+class Multiply:
+
+    def multiply(x,y,self):
+        return x*y
+    
+class Devide:
+    
+    def divide(self,x,y):
+        return x/y
+    
+class Calculator(Add,Multiply,Devide):
+    def sub(self,x,y):
+        return x-y
+    
+# 클래스안에 함수 넣기 - 여기 안에 있는 값들은 모두 인스턴스 값이다.
+
+class Calculator:
+    
+    def add(self,x,y):
+        return x+y
+
+    def sub(self,x,y):
+        return x-y
+
+    def multiply(x,y,self):
+        return x*y
+    
+    def sub(self,x,y):
+        return x-y
+
+Calculator.add(1,2) # 오류발생, 클래스 값이 아니기 때문이다.
+
+# 해결
+
+c = Calculator()
+c.add(1,2)
+
+# 만약 클래스로도 진행하고 싶고, 인스턴스로도 실행을 하고 싶다면? static으로 해결
+# ★★ staticmethod 설정시 반드시 cls,self를 쓰면 안된다.
+
+class Calculator:
+    
+    @staticmethod    
+    def add(x,y):
+        return x+y
+
+    @staticmethod
+    def sub(x,y):
+        return x-y
+
+    @staticmethod
+    def multiply(x,y):
+        return x*y
+    
+    @staticmethod
+    def sub(x,y):
+        return x-y
+
+Calculator.add(1,2)
+c=Calculator()
+c.add(1,2)
+
+
+# 클래스 로 지정했을 때는 가능하지만, 인스턴스로는 불가능하다.
+
+class Calculator:
+    
+    def add(x,y):
+        return x+y
+
+    def sub(x,y):
+        return x-y
+
+    def multiply(x,y):
+        return x*y
+    
+    def sub(x,y):
+        return x-y
+
+
+# class를 자주 사용할 때 모듈식 저장을 통해 사용하는 방법
+
+import sys
+sys.path
+sys.path.append('c:\\data')
+import cal
+
+dir(cal)
+c=cal.Calculator()
+c.add(1,2)
+
+from cal import *
+c=Calculator()
+
+# import 로직 
+
+PI = 3.141592
+
+class Math:
+	def cal(self,r):
+		return PI*(r**2)
+
+def mySum(i,j):
+	return i+j
+
+if __name__=="__main__": # import 작업시 수행하지 않게 하는 방법
+	print(PI)
+	m = Math()
+	print(m.cal(10))
+	print(mySum(PI,10))
+
+import math_1
+
+dir(math_1)
+
+math_1.PI
+m=math_1.Math()
+m.cal(10)
+math_1.mySum(math_1.PI,10)
+
+
+# 상속 확인하기
+
+class mother:
+    def talk(self):
+        print("대화를 합니다")
+        
+class father:
+    def running(self):
+        print("달리기를 합니다.")
+
+class child(mother,father):
+    def play(self):
+        print('난 노는게 제일 좋아')
+
+m=mother()
+m.talk()
+
+f=father()
+f.running()
+c=child()
+c.talk()
+c.running()
+c.play()
+print(child.__mro__) # 상속된 클래스들을 확인할 수 있다.
+
+class Person:
+    country = "한국"
+    def __init__(self,name):
+        self.name=name
+    def myPrint(self):
+        print(self.name+"은 "+self.country+" 사람이다")
+        
+p1=Person("홍길동")
+p1.myPrint()
+
+p2=Person("제임스")
+p2.country = "핀란드"
+p2.myPrint()        
+
+Person.country = "영국" #클래스 변수 라서 클래스로 적용하고 싶었으나 바뀌지 않는다.
+p2.myPrint() # 인스턴스를 바꾸고 클래스로 바꾸려 하면 바뀌지 않는다 (인스턴스>클래스)
+p1.myPrint() # 클래스 변수 변경 으로 인해 영국으로 바뀐다.

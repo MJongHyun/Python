@@ -1,0 +1,366 @@
+# 절차(구조적) 지향 프로그램(procedural language)
+
+- C언어 
+- 물이 위에서 아래로 흐르는 것처럼 순차적인 처리가 중요시되며 프로그램 전체가 유기적으로 연결되도록 만드는 프로그래밍 기법
+
+- 단점
+	- 재사용할 수 없다.
+	- 확정성이 떨어진다.
+	- 유지보수가 어렵다.
+
+# 객체지향 설명 예시
+
+adder(3)
+adder(4)
+결과는 7이 출력되도록 함수를 만드세요.
+
+x=0
+def adder(arg):
+    global x
+    x=x+arg
+    return x
+
+# 한 PC에서 같은 함수를 쓰게 되면 값이 다르게 나온다. 즉, 위 함수처럼하면 a,b가 모두 누적되서 옳은 값이 나오지 않는다.
+
+a    
+adder(3)
+adder(4)
+
+b
+adder(5)
+adder(5)
+
+# 해결 방법 1: 따로 함수를 만든다.
+
+y=0
+def adder2(num):
+   global y
+   y=y+num
+   return y
+
+# 2. 객체지향 프로그램으로 해결한다.
+   
+# 객체지향 프로그램 (object oriented language) 
+- java, c++, c#, python
+- 구조적프로그래밍과 다르게 큰 문제를 작게 쪼개는 것이 아니라 먼저 작은 문제들을 해결할 수 있는 객체들을 만든 뒤 이 객체들을
+  조합해서 큰 문제를 해결하는 방법
+
+- 객체 : 사물 개념 중에서 명사로 표현할 수 있는 것을 의미한다. (사람, 건물, 학생)
+- 클래스 : 객체를 설명해 놓은 것 (객체의 설계도)
+- 인스턴스 : 클래스를 메모리에 만들어서 사용하도록 하는 의미
+
+객체 = 사람
+속성(attribute, field)  = 변수 : 팔, 다리, 머리, 눈, 코, 입, 이름, 키, 나이, 주민번호, 주소, 학번, 성적, 성격...
+-> 수치, 값으로 표현을 한다,
+
+메소드(method) = 함수 : 기능의 프로그램 처리, 동작하는 것, 속성의 값을 변경하는 기능
+
+class Calculator:
+    def __init__(self): # self : 자기자신을 지정
+        self.result = 0
+        
+    def adder(self,num):
+        self.result +=num
+        return self.result
+        
+# 클래스 사용하기 : 즉, 인스턴스를 다르게 해서 사용하면 메모리가 다르기 때문에 각각 다른것에서 사용하는 것처럼 효과를 줄 수 있다. 
+        
+<<홍길동>> 사용 
+cal1 = Calculator() # 인스턴스 만들기, 클래스를 사용할 수 있도록
+print(cal1.adder(3)) 
+print(cal1.adder(4)) # 누적값이 나온다.
+print(cal1.adder(2)) 
+
+
+<<박찬호>> 사용
+cal2 = Calculator() # 인스턴스만 다르게 사용한다.
+print(cal2.adder(5)) 
+print(cal2.adder(5)) # 누적값이 나온다.
+print(cal2.adder(10))
+class myClass :
+	pass # 함수, 클래스에서 아무 작업하지 않을 때 사용
+    
+class Person :
+    name = '홍길동'
+    age = 20
+    
+    def myPrint(self): # self: 자기자신의 클래스를 의미  (java, c -> this)
+        print('이름은 {}' .format(self.name))
+        print('나이는 {}' .format(self.age))
+
+# 클래스를 기반으로 인스턴스 생성
+p1 = Person()        
+p1.myPrint()
+
+class Person :
+    name = '홍길동'
+    age = 20
+    
+    def myName(self): 
+        print('이름은 {}' .format(self.name))
+    def myAge(self):
+        print('나이는 {}' .format(self.age))
+
+
+p2 = Person()
+p2.myName()
+p2.myAge()
+
+# 값을 인스턴스 했을 때, 클래스 안에 선언되어 있는 변수값을 다른값으로 대체해서 사용하는 것이 가능하다.
+
+p3 = Person()
+p3.name='박찬호'
+p3.age=30
+p3.myName()
+p3.myAge()
+
+# 클래스 장점 : 재사용성 ★★(인스턴스화)
+
+# 클래스내에 속성은 아니지만 인스턴스에서 속성을 추가하여 사용하는 것이 가능하다.
+
+p3.job = "프로그래머"
+print("직업은",p3.job)
+
+# 값을 클래스 내에서 정하지 않고 인스터스화 할 때 값을 적용하고 싶다면?
+
+class Person:
+    def __init__(self): # __init__ 클래스를 인스턴스화 할 때 무조건 처음에 사용하는 값, init 생성자는 항상 초기화 시킨다.
+        self.info="" # 초기화 하기
+    def showinfo(self,name,age):
+        self.info += "이름 : "+name+","+"나이 : "+str(age)+"\n"
+
+man = Person() # init 생성자 실행
+man.showinfo('최유진',26)
+man.showinfo('구동매',25)
+print(man.info)
+
+woman = Person()
+woman.showinfo("고애신",20)
+woman.showinfo("이양화",21)
+print(woman.info)
+
+I = Person()
+I.showinfo('문종현',27)
+print(I.info)
+
+# 클래스 내 변수를 사용하려면 반드시 self를 사용한다.
+
+name = "제임스"
+class myName:
+    def mySet(self, setname):
+        self.name=setname
+    def myPrint(self):
+        print(name) # 바깥쪽 변수를 사용한다.
+        print(self.name) # self 클래스 내에 변수를 읽는다.
+        
+p1 = myName()
+p1.mySet("홍길동")
+p1.myPrint()
+
+# 인스턴스 실행 할 때 init에 변수를 지정해서 사용하면, 인스턴스 사용시 변수를 넣어서 사용한다.
+
+class Employee:
+    
+    empCount = 0 # 초기화 바깥쪽에서 변수를 생성 하고 , init에서 사용시, 글로벌로 지정된다.
+    def __init__(self,name,salary):
+        self.name = name
+        self.salary = salary
+        Employee.empCount += 1 # 클래스이름.변수, 글로벌 변수가 된다.
+    def displayCount(self):
+        print('전체 종업원수는 %d' %Employee.empCount) # 클래스를 사용한다라는 것이니까, 재귀를 생각하면 된다.
+    def displatEmployees(self):
+        print("이름 : ",self.name,", 급여 : ",self.salary)
+
+emp1 = Employee("홍길동",1000)
+emp1.displayCount()
+emp1.displatEmployees()
+
+emp2 = Employee("제임스",2000)
+emp2.displayCount() # 카운트가 늘어 난것을 확인 할수 있다. 즉, 인스턴스는 다르지만 글로벌 변수처럼 되서 count가 된다.
+emp2.displatEmployees()
+
+## 비교하기
+
+class Employee:
+    
+    empCount = 0 
+    def __init__(self,name,salary):
+        self.name = name
+        self.salary = salary
+        self.empCount += 1 # self로 바꾼다.
+    def displayCount(self): 
+        print('전체 종업원수는 %d' %self.empCount) # self로 바꾼다. 
+    def displatEmployees(self):
+        print("이름 : ",self.name,", 급여 : ",self.salary)
+
+emp1 = Employee("홍길동",1000)
+emp1.displayCount()
+emp1.displatEmployees()
+
+emp2 = Employee("제임스",2000)
+emp2.displayCount() # 자기자신의 instance만 count하기 때문에 1로 나오게 된다.
+emp2.displatEmployees()
+
+
+class Employee:
+    pass
+
+emp1 = Employee()
+emp2 = Employee()
+
+print(id(emp1)) # 인스턴스 선언에 따라 주소값이 다른것을 확인 할 수 있다.
+print(id(emp2))
+
+# __class__ : 클래스 정보 확인
+
+print(emp1.__class__)
+print(emp2.__class__)
+print(id(emp1.__class__))
+print(id(emp2.__class__))
+print(id(Employee))
+
+
+# 클래스 변수 선언
+Employee.name="홍길동"
+emp1.name # 클래스 안에는 로직이 없지만 변수를 밖에서 선언함으로써 값이 생성된다.
+emp2.name
+
+
+# 인스턴스 변수
+
+emp1.name = "박찬호" # 클래스 변수를 만들었기 때문에 값을 바꾸는 것도 가능하다. / 인스턴스 변수로 사용
+emp1.name
+
+emp1.salary=2000 # 클래스에 없지만 선언 가능 즉, 인스턴스변수이다.
+emp1.salary
+
+emp2.salary # 인스턴스 변수가 선언되지 않았기 때문에 오류가 발생한다.
+
+
+[문제 187] 생성자에 이름, 핸드폰번호, 메일, 주소 변수를 생성합니다. 
+print_info 메소드를 생성한 후  출력하는 Contact 클래스를 생성하세요.
+인스턴스는 set_contact 함수를 이용해서 만드시고 이름, 핸드폰번호,메일, 주소는 입력값으로 받아서 출력하세요.
+
+이름을 입력하세요 : 홍길동
+
+핸드폰번호를 입력하세요 : 010-1000-1004
+
+메일을 입력하세요 : hong@aaa.com
+
+주소를 입력하세요 : 서울시 강남구 삼성로
+
+이름 : 홍길동 
+핸드폰번호 : 010-1000-1004 
+메일 : hong@aaa.com 
+주소 : 서울시 강남구 삼성로
+
+
+class Contact:
+    def __init__(self):
+        self.name=''
+        self.pnum=''
+        self.mail=''
+        self.address=''
+        
+    def set_contact(self):
+        self.name=input('이름을 입력하세요 :')
+        self.pnum=input('핸드폰 번호를 입력하세요 :')
+        self.mail=input('메일을 입력하세요 :')
+        self.address=input('주소를 입력하세요 :')
+        
+    def print_info(self):
+        print("이름 : ",self.name)
+        print("핸드폰번호 : ",self.pnum)
+        print("메일 : ",self.mail)
+        print("주소 : ",self.address)
+        
+## 답
+        
+class Contact:
+    def __init__(self,name, pn, email, addr):
+        self.name = name
+        self.pn = pn
+        self.email = email
+        self.addr = addr
+
+    def print_info(self):
+        print("이름 : {} ".format(self.name))
+        print("핸드폰번호 : {} ".format(self.pn))
+        print("메일 : {} ".format(self.email))
+        print("주소 : {} ".format(self.addr))
+
+
+def set_contact():
+    name = input("이름을 입력하세요 : ")
+    pn = input("핸드폰번호를 입력하세요 : ")
+    email = input("메일을 입력하세요 : ")
+    addr = input("주소를 입력하세요 : ")
+    conIns = Contact(name, pn, email, addr) # 인스턴스 생성후
+    conIns.print_info() # 프린트 하기 
+
+set_contact()
+
+[문제188] Contact 클래스 이용해서 입력 들어 온 값들을 c:/data/contact.db 에
+	저장해서 관리하세요.
+
+class Contact:
+    
+    import sqlite3 # 전체 변수 선언, 테이블 생성
+    
+    def __init__(self,name, pn, email, addr):
+        self.name = name
+        self.pn = pn
+        self.email = email
+        self.addr = addr
+
+    def print_info(self):
+        print("이름 : {} ".format(self.name))
+        print("핸드폰번호 : {} ".format(self.pn))
+        print("메일 : {} ".format(self.email))
+        print("주소 : {} ".format(self.addr))
+   
+    def insert(self):
+        self.conn = sqlite3.connect("c:/data/contact.db")
+        self.c = self.conn.cursor()
+        self.c.execute("create table emp6(name text, phone text, email text, addr text)")
+        self.c.execute("insert into emp6(name,phone,email,addr) values(?,?,?,?)",(self.name,self.pn,self.email,self.addr))
+
+    def commit(self):
+        self.conn.commit()
+       
+    def rollback(self):
+        self.conn.rollback()
+    def close(self):
+        self.c.close()
+        self.conn.close()
+
+def set_contact():
+    name = input("이름을 입력하세요 : ")
+    pn = input("핸드폰번호를 입력하세요 : ")
+    email = input("메일을 입력하세요 : ")
+    addr = input("주소를 입력하세요 : ")
+    conIns = contact(name, phone, email, addr) 
+    conIns.print_info()
+    conIns.insert()
+    conIns.commit()
+    conIns.close()
+    
+    
+set_contact()
+
+c.execute('select * from emp5')
+c.fetchall()
+    
+import sys
+sys.path 
+sys.path.append('c:\\data')
+
+import contact
+
+#★★ self.c.excute('create table if not exists contact(name text, pn text, mail text, addr text)) : 존재하지 않으면 생성
+
+
+
+
+
+	
