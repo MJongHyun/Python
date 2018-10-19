@@ -1,0 +1,255 @@
+import math
+kNN (k Nearest Neighbors)
+
+거리 유사도 측정
+유클리드거리 (Euclidean distance)를 사용
+
+토마토 단맛 6 아삭한맛 4 
+
+재료 단맛 아삭한맛 음식종류  토마토 와의 거리
+--------------------------------------------------------------
+포도   8    5       과일     math.sqrt((6-8)**2+(4-5)**2) : 2.2
+콩     3    7       채소     math.sqrt((6-3)**2+(4-7)**2) : 4.2
+견과   3    6       단백질   math.sqrt((6-3)**2+(4-6)**2) : 3.6
+오렌지 7    3       과일     math.sqrt((6-7)**2+(4-3)**2) : 1.4
+
+k=1
+오렌지 토마토 거리는 1.4로 가까운 이웃하여 과일로 분류한다.
+
+k=3
+오렌지,포도,땅콩 세가지 사이에 다수결로 정한다.
+과일 2/3이기 때문에 과일로 분류한다.
+
+[문제196] knn 프로그램을 작성하세요.
+        
+      pointlist[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+       
+
+        <수행>
+        knn([2,1],2,pointlist)
+
+        <결과>
+	[(1, 1), (2, 0)]
+    
+pointlist=[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+point=[2,1]
+k=2
+
+def knn(point,pointlist,k):
+    
+    import math
+    from operator import itemgetter
+    
+    g={}
+    for i in range(0,len(pointlist)):
+        g[i]=(math.sqrt((point[0]-pointlist[i][0])**2+(point[1]-pointlist[i][1])**2)) # 최소거리 계산
+    
+    g1=sorted(g.items(),reverse=False,key=itemgetter(1)) # 거리에 따른 오름차순정리
+    
+    kn=[] # k갯수 만큼 값 넣기
+
+    for i in range(0,k):
+        kn.append(g1[i][0])
+        
+    result=[]
+    
+    for i in kn:
+        result.append(pointlist[i])
+    
+    return result
+        
+knn(point,pointlist,k)       
+    
+# 앞자리 가 1이면 A, 2이면 B이다.
+
+def knn1(point,pointlist,k):
+    
+    import math
+    from operator import itemgetter
+    
+    g={}
+    for i in range(0,len(pointlist)):
+        g[i]=(math.sqrt((point[0]-pointlist[i][0])**2+(point[1]-pointlist[i][1])**2)) # 최소거리 계산
+    
+    g1=sorted(g.items(),reverse=False,key=itemgetter(1)) # 거리에 따른 오름차순 정
+
+    kn=[]
+
+    for i in range(0,k):
+        kn.append(g1[i][0])
+        
+    result=[]
+    
+    for i in kn:
+        result.append(pointlist[i])
+    
+    cn=[]
+    
+    for i in range(0,len(result)):
+       cn.append(result[i][0])
+   
+    if cn.count(1)>cn.count(2):
+        return 'A'
+    elif cn.count(1)<cn.count(2):
+        return 'B'
+    elif cn.count(1)==cn.count(2):
+        if result[0][0]==1:
+            return 'A'
+        else:
+            return 'B'
+    
+knn1(point,pointlist,k)         
+
+"""
+[문제196] knn 프로그램을 작성하세요.
+        
+      pointlist[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+       
+
+        <수행>
+        knn([2,1],pointlist,2)
+
+        <결과>
+	[(1, 1), (2, 0)]
+
+
+
+import numpy as np
+import operator
+from math import sqrt
+
+point = [2,1]
+k = 2
+pointlist=[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+
+
+def knn(point, lists, k):
+    
+    dic={}
+    
+    for p in lists:
+        
+        d = dist(point, p)
+        
+        dic[p]=d
+    
+  
+    res = []
+    sorted_dic = sorted(dic.items(), key=operator.itemgetter(1))  
+    
+      
+    for key in sorted_dic:
+        if len(res) < k:
+            
+            res.append(key[0])
+            
+    return res
+
+ 
+def dist(x, y):
+    x = np.array(x)
+    y = np.array(y)
+    
+    return  sqrt(sum(pow(x - y,2)))
+
+knn(point,pointlist,k)
+
+"""
+        
+        
+[문제196] knn 프로그램을 작성하세요.      
+    
+
+      pointlist[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+       
+
+        <수행>
+        knn([2,1],pointlist,2)
+
+        <결과>
+	[(1, 1), (2, 0)]
+
+
+import numpy as np
+from math import sqrt
+
+pointlist=[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+
+p_lst=np.array(pointlist)
+p=np.array([2,1])
+
+hap=np.sum((p_lst-p)**2,axis=1)
+t=np.sqrt(hap)
+k=3
+dab=[]
+cn=t.argsort()[:k]
+for i in cn:
+    dab.append(p_lst[i])
+dab        
+
+# index 활용 numpy
+
+a = [4,3,5,7,6,8]
+indices=[0,1,4]
+
+np.take(a,indices) # 인덱스에 있는 값 추출 a[indices]
+
+# numpy로 KNN 만들기
+
+lst1=[2,1]
+lst2=[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
+
+point1 = np.array(lst1)
+point2 = np.array(lst2)
+
+distance=np.sqrt(np.sum(pow(point1-point2,2),axis=1))
+indices=distance.argsort()[:3] # 3개만 뽑기
+nn=np.take(lst2,indices,axis=0) #axis 의 값의 따라 값을 추출한다. 축생각을 해야한다.
+
+from collections import Counter
+c=Counter(nn[:,0]) # 갯수를 샌다
+freq=c.most_common(1)[0][0] #value값만 추출
+nn[nn[:,0]==freq]
+
+[문제197] 키, 몸무게에 따른 성별을 분류해주세요.
+
+키, 몸무게 데이터
+[[158, 64],
+[170, 86],
+[183, 84],
+[191, 80],
+[155, 49],
+[163, 59],
+[180, 67],
+[158, 54],
+[170, 67]]
+
+성별 레벨
+['male', 'male', 'male', 'male', 'female', 'female', 'female', 'female', 'female']
+
+
+[155, 70] 성별을 분류하세요. k=3
+'female'
+
+k=3
+level=np.array(['male', 'male', 'male', 'male', 'female', 'female', 'female', 'female', 'female'])
+lst1=np.array([[158, 64],[170, 86],[183, 84],[191, 80],[155, 49],[163, 59],[180, 67],[158, 54],[170, 67]])
+lst2=np.array([155, 70])
+
+distances=np.sqrt(np.sum(pow(lst1-lst2,2),axis=1))
+index=distances.argsort()[:3]
+cn=np.take(level,index,axis=0)
+C=Counter(cn)
+freq=C.most_common(1)
+freq[0][0]
+
+# knn 모듈
+
+x_train=np.array([[158, 64],[170, 86],[183, 84],[191, 80],[155, 49],[163, 59],[180, 67],[158, 54],[170, 67]])
+label=np.array(['male', 'male', 'male', 'male', 'female', 'female', 'female', 'female', 'female'])
+from sklearn.neighbors import KNeighborsClassifier
+clf = KNeighborsClassifier(n_neighbors=3)
+clf.fit(x_train,label)
+clf.predict(np.array([155,70]).reshape(1,-1))[0] # reshape(1,2) 2차원 배열로 만들어야 하므로 -1이 이미 2랑 같다.
+clf.predict(np.array([[155,70]]))[0] # 2차원 배열이니까 값을 집어넣어야 하므로 [[]] 로 해야한다.
+

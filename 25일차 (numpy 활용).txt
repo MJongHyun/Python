@@ -1,0 +1,302 @@
+# Numpy - 과학계산을 위한 라이프러리로 다차원 배열을 처리하는데 필요한 기능을 제공한다.
+# 만약 install이 되지 않는다면 prompt에서 pip install numpy 후 실행
+import numpy as np
+
+# numpy 배열은 동일한 타입의 값들을 갖는다.
+# 배열의 차원을 rank라고 한다.
+
+numpy 배열을 생성
+- 파이썬의 리스트를 사용하는 방법
+
+z1 = np.array([1,2,3])
+print(z1)
+type(z1) #numpy.ndarray : 다차원 배열을 의미한다.
+z1.dtype # 운영체제형 , 2^31, 4G
+z1.shape # 차원을 보여준다.(3,)- 1차원은 개수정보만 나온다.
+
+
+z2=np.array([[1,2,3],[4,5,6]]) # matrix
+print(z2)
+type(z2)
+z2.dtype
+z2.shape # 차원을 보여준다.(2행,3열)
+
+# z3=np.array([[1],[2],[3]])
+# z3.shape # (3,1) 여기선 3행 1열로 나온다.
+
+lst = [[1,2,3],[4,5,6],[7,8,9]] 
+
+z3=np.array(lst)
+z3.shape
+
+# slicing 연습 항상
+ 
+z3[0,] # 1행 전체를 의미 (인덱스가 0)
+z3[1] # 2행 결과 나온다.
+z3[2]
+z3[:,0] # 1열
+z3[:,1] # 2열
+z3[:,2] # 3열
+z3[0:2,0] # 2행 1열 (0:2 는 0~1 까지 의미와 같다.)
+z3[1:,1:] # 2~3행 2~3열 
+z3[1:,:1] # 2~3행 1열
+z3[0:2,0:2] # 1~2행 1~2열
+
+# 인덱싱 - numpy 배열 n에 대해서 n[[row1,row2],[col1,col2]]는 n[row1,co1] , b[row2,col2] 와 같다.
+
+lst = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+
+n = np.array(lst)
+n[0,1] # 1행 2열
+n[2,3] # 3행 4열
+n[[0,2],[1,3]] # 위의 두값을 찾아내는 방법 
+
+# 부울린 인덱싱(True, False) <boolean indexing>
+
+lst = [[1,2,3],[4,5,6],[7,8,9]]
+n = np.array(lst)
+b = np.array([[False,True,False],[True,False,True],[False,True,False]])
+n[b] # True에 해당하는 값으로 나온다.
+b= (n%2==0) # 짝수를 만드는 값
+n[b] # n에 있는 값들 중 짝수인 값을 추출한다.
+n[n%2==0] # 일반적인 방법
+
+- numpy에서 제공하는 함수를 사용해서 만드는 방법 
+# zeros() 함수는 배열에 모두 0을 넣은 함수
+np.zeros((3,3))
+
+# ones()함수는 배열에 모두 1을 넣은 함수 
+np.ones((4,4))
+
+# full() 함수는 사용자가 지정한 값을 넣는 함수
+np.full((3,3),2) # 2의 값이 3 by 3 으로 만들어 진다.
+
+# eye() 함수는 대각선으로 1이고 나머지는 0인 2차원 배열 생성
+np.eye(3)
+np.eye(4)
+
+# range(n) 함수는 0~n-1까지의 숫자를 생성하는 함수
+np.array(range(20)) # 0~19까지 생성함, 1차원 배열 생성
+
+# 다차원 배열로 만드는 방법
+z=np.array(range(20)).reshape(4,5)
+z.reshape(20,) # 원래대로 돌려놓기 
+
+# reshape : 차원을 변형하는 함수
+
+# numpy 연산
+
+x=np.array([1,2,3])
+y=np.array([4,5,6])
+
+x[0] + y[0]
+x[1] + y[1]
+x[2] + y[2]
+x+y # x와 y가 같은 배열이기 떄문에 같은 인덱스 값끼리 더하게 된다.
+np.add(x,y) # 위의 결과와 같다.
+
+x-y # 빼기
+np.subtract(x,y)
+
+x*y # 같은 방끼리의 곱
+np.multiply(x,y)
+
+x/y # 나누기
+np.divide(x,y)
+
+lst1=[[1,2],[3,4]]
+lst2=[[5,6],[7,8]]
+x = np.array(lst1)
+y = np.array(lst2)
+x[0,0]+y[0,0]
+x[0][0]+y[0][0]
+(x+y)[0][0]
+(x+y)[0,0]
+
+# 행렬의 곱
+np.dot(x,y)
+
+x = np.array([[1,2],[3,4]])
+np.sum(x) # 전체 합
+np.sum(x,axis=0) # 열을 기준으로 더한다.
+np.sum(x,axis=1) # 행을 기준으로 더한다.
+
+np.mean(x) # 전체 평균
+np.mean(x,axis=0) # 열기준의 평균
+np.mean(x,axis=1) # 행기준의 평균
+
+np.var(x) # 전체 분산
+np.var(x,axis=0) # 열기준의 분산
+np.var(x,axis=1) # 행기준의 분산
+
+np.std(x) # 전체 표준편차 
+np.std(x,axis=0) # 열기준의 표준편차
+np.std(x,axis=1) # 행기준의 표준편차
+
+np.max(x) # 최대값
+np.max(x,axis=0) # 열기준의 최대값
+np.max(x,axis=1) # 행기준의 최대값
+
+np.min(x) # 최소값
+np.min(x,axis=0) # 열기준의 최소값 
+np.min(x,axis=1) # 행기준의 최대값
+
+# 최소원소의 색인값 - 원소의 순서는 단일 배열로 바꾸어서 인덱스 값을 추출하게 된다.
+np.argmin(x)
+np.argmin(x,axis=0) # 1행 1열을 말하는 것이 아니라 행을 기준으로 0 , 1 을 따져서 값이 나온다.
+np.argmin(x,axis=1)
+
+# 최대원소의 색인값
+np.argmax(x)
+np.argmax(x,axis=0)
+np.argmax(x,axis=1)
+
+# 누적합
+np.cumsum(x)
+np.cumsum(x,axis=0) # 열기준으로 누적
+np.cumsum(x,axis=1) # 행기준으로 누
+
+# 누적곱
+np.cumprod(x)
+np.cumprod(x,axis=0)
+np.cumprod(x,axis=1)
+
+# 전체곱
+np.prod(x)
+np.prod(x,axis=0)
+np.prod(x,axis=1)
+
+# numpy 자료형 - int, float, bool, complex
+- 정수형 (integer) <int8, int16 int32 int64>
+                    2**7  2**15 2**31 2**63
+
+- 실수형 (float) <float16, float32, float64>
+
+- 복소수 (complex) : 부동소숫점으로 표시하는 복소수 <complex64, complex128>
+
+x = np.float32(1.0)
+print(x)
+print(type(x))
+x.dtype
+
+z1 = np.arange(5)
+z1.dtype # int32
+
+z2 = np.arange(5, dtype='f')
+z2.dtype # float 32
+
+np.arange(3,10, dtype='f') # 시작점 끝점, 3,10-1 실수형
+np.arange(2,3,0.2) # 시작, 끝, 증가율
+
+arr=np.arange(10)
+arr.reshape(5,2)
+arr.reshape((5,2),order='C') # 행우선
+arr.reshape((5,2),order='F') # 열우선
+
+arr = np.arange(10).reshape((5,2),order='F')
+
+# 2차원 배열을 1차원 배열로 평탄화
+arr.flatten() 
+arr.flatten('C')  # 행우선으로 추출
+arr.flatten('F')  # 열우선으로 추출
+
+arr.ravel() # flatten과 같다
+arr.ravel('C')
+arr.ravel('F')
+
+arr1 = np.array([[1,2,3],[4,5,6]])
+arr2 = np.array([[7,8,9],[10,11,12]])
+
+# 배열 합치기
+np.concatenate([arr1,arr2],axis=0) # 열로 합친다.
+np.concatenate([arr1,arr2],axis=1) # 행으로 합친다.
+
+np.hstack((arr1,arr2)) # horison 행기준
+np.vstack((arr1,arr2)) # vertical 열기준
+
+# 분리할 떈 slicing한다.
+
+- numpy 브로드캐스트(broadcast) : 자동계산
+
+x=np.array([[1,2],[3,4]])
+y=10
+x+y
+x*y
+x-y
+
+w = np.array([10,20])
+x*w # 행,열에 맞춰서 하나씩 곱해진다
+
+# 난수값 표현하기 : 0 ~ 1사이에 균일한 확률분포로 실수 난수를 생성하는 함수
+
+np.random.rand(10) # 0~1 사이의 수 10개를 추출
+np.random.rand(3,5) # 3행 5열 
+
+# randn : 기댓값이 0이고 표준편차가 1인 표준 정규분포를 나타내는 난수를 생성 
+np.random.randn(3,5)
+
+# randint : 균일한 분포의 정수 난수 
+np.random.randint(10,size=10) # 0~10 사이의 수 , size가 갯수
+np.random.randint(10,20,size=10) # 10~19 
+np.random.randint(10,20,size=(3,5)) # 3행 5열 배열로 생성
+
+arr = np.arange(3)
+arr.repeat(2) # 반복
+arr.repeat([2,3,4]) # 0은 2번 1은 3번 2는 4번 반복
+
+arr = np.random.randint(10,20,size=(2,5))
+arr.repeat(2)
+arr.repeat(2,axis=0) # 행/열을 만든다
+arr.repeat(2,axis=1)
+np.tile(arr,2) # 덩어리 채 반복 , arr자체 반복
+
+np.unique([11,11,2,3,2,12,12]) # 유일한 값들만 추출한다. unique/ 중복된 값이 없어진다 
+u = np.array(['a','b','a','a','b','c'])
+index, count = np.unique(u, return_counts=True) # 유일한 값들과 몇개가 있었는지 나오게된다. / 빈도수
+print(index)
+print(count)
+
+u = np.array([[1,0,0],[1,0,0],[2,3,4]])
+np.unique(u)
+np.unique(u, axis=0) # 중복이 없는 행들을 추출
+np.unique(u, axis=1) # 모호성발생, 주의
+
+# 개수가 동일한 경우에만 사용
+
+data1 = np.arange(0,20,2)
+data2 = np.arange(0,30,3)
+np.maximum(data1,data2) # 각각의 요소를 비교하여 최대 값을 추출
+np.minimum(data1,data2) # 각각의 요소를 비교하여 최소 값을 추출
+np.add(data1,data2)
+
+np.union1d(data1,data2) # 합집합
+np.intersect1d(data1,data2) # 교집합
+np.setdiff1d(data1,data2) # 차집합 data1-data2
+np.setdiff1d(data2,data1)
+
+arr = np.array([5,4,1,3,2])
+
+ix=arr.argsort() # 오름차순으로 값이 있는 인덱스를 추출한다.
+arr.argsort()[::] # 오름차순 
+arr[ix]
+
+ix=arr.argsort()[::-1] # 내림차순
+arr[ix]
+
+# numnpy 값을 pandas로 수정하기
+
+lst=[[1,2,3],[4,5,6],[7,8,9]]
+arr = np.array(lst)
+
+import pandas as pd
+
+df=pd.DataFrame(arr)
+df.index
+df.columns
+
+df.loc[0:1] # 인덱스 이름 
+df.loc[1,[0,1]] # 1행 1~2열 값 출력
+df.ix[0:2,[0,1]] # 3행 1~2열 값 출력
+df.iloc[1,[0,1]] # 인덱스 숫자
+
+

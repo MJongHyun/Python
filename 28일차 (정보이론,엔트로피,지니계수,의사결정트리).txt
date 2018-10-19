@@ -1,0 +1,215 @@
+﻿# 정보이론 (information theory)
+# information - degree of surprise 놀람의 정도 
+
+# 엔트로피(entropy) : 무질서, 열역학의 제 2법칙, entropy는 정보량의 평균
+
+- Σp * log2p (로그 밑 2)
+
+# 예시 ) 테니스 
+
+import pandas as pd
+tree=pd.read_csv('c:/data/tree.csv')
+
+테니스유무  아니요  예
+습도           
+높음       4  3
+보통       1  6
+
+import numpy as np
+
+#엔트로피 (전체)
+- 9/14 * np.log2(9/14) - 5/14 * np.log2(5/14)
+ 0.9402859586706311
+ 
+ #엔트로피 (높음)
+ - 3/7 * np.log2(3/7) - 4/7 * np.log2(4/7)
+0.9852281360342515
+ 
+ # 엔트로피 (보통)
+ - 6/7 * np.log2(6/7) - 1/7 * np.log2(1/7)
+ 0.5916727785823275
+ 
+# 정보이득 = 전체엔트로피 - 7/14 * 엔트로피(높음) - 7/14 * 엔트로피(보통)
+ 
+0.94-(1/2)*0.98-(1/2)*0.59
+0.15499999999999997
+
+# 모든 변수에 관한 정보이득 값을 계산하고 가장 높은 정보이득값을 가진 변수를 선택한다. 
+# 정보이득의 갑이 클수록 놀람의 정도가 크다.
+
+# 2. 바람, 테니스 유무
+
+x = np.array(tree['바람'])
+y = np.array(tree['테니스유무'])
+z = pd.crosstab(x,y, rownames=['바람'], colnames=['테니스유무'])
+
+#엔트로피 (전체)
+- 8/14 * np.log2(8/14) - 6/14 * np.log2(6/14)
+ 0.9852281360342515
+ 
+ #엔트로피 (강함)
+ - 3/6 * np.log2(3/6) - 3/6 * np.log2(3/6)
+ 1.0
+ 
+ # 엔트로피 (약함)
+ - 2/8 * np.log2(2/8) - 6/8 * np.log2(6/8)
+0.81
+
+# 정보이득 = 전체엔트로피 - 8/14 * 엔트로피(강함) - 6/14 * 엔트로피(약함)
+ 0.99 - 6/14 - 8/14*0.81
+ 0.09857142857142853
+ 
+ 
+ 
+ # 축구 예 ) 브라질 대 중국 , 브라질 대 프랑스 
+
+-np.log(0.99) = 0.01005033585350145
+-np.log(0.01) =  4.605170185988091
+
+0.99 * -np.log(0.99) + 0.01 * -np.log(0.01) # 99 대 1
+0.056001534354847345
+
+0.5 * -np.log(0.5) + 0.5 * -np.log(0.5) # 50 대 50 
+ 0.6931471805599453
+ 
+0.05 < 0.69 더크므로 브라질 대 프랑스가 누가 이기냐에 따라 더 놀람이 더 크다.
+
+# 지니계수
+
+테니스유무  아니요  예
+습도           
+높음       4  3
+보통       1  6
+
+# 습도의 지니계수
+
+1 - Σp²
+
+# 높음의 지니계수
+1-pow(3/7,2)-pow(4/7,2)
+0.489795918367347
+
+# 낮음의 지니계수
+1-pow(6/7,2)-pow(1/7,2)
+0.24489795918367355
+
+# 지니계수 계산
+
+(7/14) * 0.49 + (7/14) * 0.24
+0.365
+
+# 바람의 지니계수
+테니스유무  아니요  예
+바람           
+강함       3  3
+약함       2  6
+
+# 강함의 지니계수
+1-pow(3/6,2)-pow(3/6,2)
+0.5
+
+# 약함의 지니계수
+1-pow(2/8,2)-pow(6/8,2)
+0.375
+
+# 지니계수 계산
+(6/14)*0.5+(8/14)*0.375
+0.42857142857142855
+ 
+모든 변수에 관해 지니 기대 값을 계산하고 최소 기대값을 가진 변수를 최적변수로 선택한다.
+# 바람 습도 중 습도가 낮으므로 습도를 선택
+
+# 카이제곱, 자유도 1
+    습도 = 2.8 # 각각의 값들을 읽어서 작은값을 선택하면 된다. p값 0.09
+    바람 = 0.94 # p값 0.4 이상
+
+# 카이제곱의 P 값을 구한다. (가장 작은값을 구해서)    
+
+# 예시 
+# 붓꽃의 꽃잎(petal), 꽃받침('sepal')의 폭, 길이를 측정하여 품종을 예측
+# 붓꽃의 품종은 150종류 이상있고 크게 3가지로 분류된다.
+# setosa, versicolor, virginica 
+
+iris = pd.read_csv('c:/data/iris.csv')
+iris.head()
+x = iris.drop('Name',axis=1)
+y = iris['Name']
+
+from sklearn.model_selection import train_test_split # test_size에 맞게 갯수를 나눈다.
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.2)
+len (y_train) 
+len (y_test)
+
+from sklearn.tree import DecisionTreeClassifier # 의사결정트리
+classifier = DecisionTreeClassifier()
+classifier.fit(x_train,y_train) # train 습득 
+y_pred=classifier.predict(x_test) # 학습 확인
+# 테스트와 비교
+y_pred
+y_test
+
+from sklearn.metrics import classification_report # 예측값 확인 할수 있게 크로스 테이블을 만들어 준다.
+print(classification_report(y_test,y_pred))
+
+from pandas import Series, DataFrame
+
+A=DataFrame([5.1,3.8,1.5,0.3])
+
+classifier.predict(A.T)
+classifier.predict([[5.1,3.8,1.5,0.3]])
+
+
+5.9,3.0,4.2,1.5,Iris-versicolor
+classifier.predict([[5.9,3.0,4.2,1.5]])
+6.3,2.8,5.1,1.5,Iris-virginica
+classifier.predict([[6.3,2.8,5.1,1.5]])
+
+Iris-virginica
+classifier.predict([[6.7,3.1,5.6,2.4]])
+
+DataFrame([[6.7,3.1,5.6,2.4]])
+
+# %로 확인
+
+classifier.score(x_train,y_train) # 학습 데이터셋 정확도 
+classifier.score(x_test,y_test) # 검증용 데이터셋 정확도
+
+
+cn=0
+for i in x_test.index:
+    if i in x_train.index:
+        cn=cn+1
+
+for i in y_test.index:
+    if i in y_train.index:
+        cn=cn+1
+
+DataFrame([np.array(x_train)[0,:]])
+
+y=[]
+for i in range(0,len(x_test)):
+    if classifier.predict(DataFrame([np.array(x_test)[i,:]]))[0]!=np.array(y_test)[i]:
+        a=DataFrame([np.array(x_test)[i,:]])
+        y.append(a)
+
+classifier.predict([[4.9,2.4,3.3,1.0]])
+classifier.predict([[5.9,2,4.8,1.8]])
+
+# 값 비교 pandas, numpy 활용
+
+label = classifier.predict(iris.ix[:,:4]) # True / False 
+iris[pd.Series(label) != iris.ix[:,4]]
+label[pd.Series(label) != iris.ix[:,4]]
+
+# 전체 값으로 fit
+classifier.fit(iris.ix[:,:4],iris.ix[:,4])
+pred=classifier.predict(iris.ix[:,:4])
+
+Series(pred)==iris.ix[:,4]
+
+
+
+
+
+
+
