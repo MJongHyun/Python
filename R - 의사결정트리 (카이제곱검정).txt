@@ -1,0 +1,288 @@
+# R을 통한 의사결정 트리 
+
+iris<-read.csv('c:/data/iris.csv')
+str(iris) # 구조확인
+class(iris) # dataframe
+
+# 의사결정트리는 범주형으로 하는 것이 좋다.
+
+summary(iris) # 각각 열들의 최소, 최대, 4분형, 평균
+
+# 정규화 함수 : 단위를 맞추기 위해 사용
+
+normalize<- function(x){
+  return ((x-min(x))/(max(x)-min(x)))
+}
+
+normalize(c(1,2,3,4,5))
+normalize(c(10,20,30,40,50))
+
+iris_n<-as.data.frame(lapply(iris[1:4],normalize)) # 정규화 작업
+
+table(iris$Name) # 빈도수 확인
+
+# 트레이닝 set , test set 나누기 - sample 뽑기
+
+set.seed(1234) # 매번 똑같은 값만 나오게 고정시키기
+iris_sample<-sample(2,nrow(iris),replace=TRUE,prob=c(0.7,0.3)) # sample(만들갯수,총갯수), replace=TRUE <복원추출> 
+# 예시 sample(3,nrow(iris),replace=TRUE,prob=c(0.6,0.3,0.1)) 
+iris_training <- iris[iris_sample==1,1:5] # 1~5열까지 샘플 1인 값을 추출 [행, 열]
+iris_test <- iris[iris_sample==2,1:5]
+nrow(iris_training)
+nrow(iris_test)
+table(iris_training$Name)
+table(iris_test$Name)
+
+install.packages('tree')
+library(tree)
+
+help(tree)
+# step1 : tree형성 (Growing Trees) 독립변수들로 키워나가는 작업을 한다. 너무 많이 키워나가면 과적합이 발생한다.
+
+# tree(종속변수~독립변수) ex> tree(종속변수,x1+x2+,x3+x4,data=변수)
+treemodel<-tree(Name~. , data=iris_training) # 전체를 하겠다
+treemodel
+
+plot(treemodel)
+text(treemodel)
+
+# step2 : tree 가지치기(pruning tree) 과적합을 해결하기 위해서 가지치기를 한다.
+# cv (cost complexity parameter) 복잡도 계수의 값이 최소가 되는 노드 수를 선택, k : cv 값 size: 노드 수 
+cv <- cv.tree(treemodel,FUN=prune.misclass)
+plot(cv)
+
+'""$`size`   #노드의 수, 5를 선택하면 과적합이 발생한다. 3을 선택하면 0이 발생, 2을 선택하면 30, 1을 선택하면 38이다.
+[1] 5 3 2 1
+
+$dev
+[1]  9  9 34 75
+
+$k
+[1] -Inf    0   30   38
+
+$method
+[1] "misclass"
+
+attr(,"class")
+[1] "prune"         "tree.sequence" ""'
+
+step3: 최종모형
+
+p<-prune.misclass(treemodel,best=3)
+plot(p)
+text(p)
+
+tree_pred <- predict(p,iris_test,type="class") # 예측값
+actual<-iris_test$Name # 실제값
+expect<-tree_pred
+
+data.frame(actual,expect)
+
+install.packages('caret') # 교차표 생성
+library(caret) # 오분류 교차표를 만들어 준다.
+
+confusionMatrix(expect,actual) # 기대, 실제
+
+# Iris-versicolor 오분류 예측/결과 = Iris-virginica 오분류 발생 (열로 따진다.)
+
+'''
+Reference
+Prediction        Iris-setosa Iris-versicolor Iris-virginica
+Iris-setosa              10               0              0
+Iris-versicolor           0              12              2
+Iris-virginica            0               0             14
+'''
+
+# 종류별로 80% 씩 뽑기 (균등하게 뽑기)
+
+str(iris)
+levels(iris$Name) # factor형 level 확인
+table(iris$Name)
+
+iris_idx<-createDataPartition(iris$Name,p=0.8,list=FALSE) # list=FALSE로 해서 FAcTOR형으로 뽑히게 한다.
+train <- iris[iris_idx,]
+str(train)
+nrow(train)
+table(train$Name)
+summary(train)
+
+test<-iris[-iris_idx,] # iris_idx가 아닌 값이 test로 나오게 한다
+str(test)
+nrow(test)
+table(test$Name)
+summary(test)
+
+treemodel<-tree(Name~. , data=train)
+plot(treemodel)
+text(treemodel)
+
+cv <- cv.tree(treemodel,FUN=prune.misclass)
+plot(cv)
+p<-prune.misclass(treemodel,best=3)
+plot(p)
+text(p)
+
+tree_pred <- predict(p,test[1:4],type="class") # 예측값, 독립변수의 값만 넣어서 잘 분리 됬는지 확인
+actual<-test$Name # 실제값
+expect<-tree_pred
+
+data.frame(actual,expect)
+
+install.packages('caret') # 교차표 생성
+library(caret) # 오분류 교차표를 만들어 준다.
+
+confusionMatrix(expect,actual) # 기대, 실제
+
+"""
+Reference
+Prediction        Iris-setosa Iris-versicolor Iris-virginica
+Iris-setosa              10               0              0
+Iris-versicolor           0               9              2
+Iris-virginica            0               1              8
+"""
+
+library(rpart)
+
+iris_rpart <- rpart(Name~.,data=train,control=rpart.control(minsplit=2)) # 최소 split 2개 
+iris_rpart
+"""
+n= 120 
+
+node), split, n, loss, yval, (yprob)
+* denotes terminal node
+
+1) root 120 80 Iris-setosa (0.33333333 0.33333333 0.33333333)  
+  2) PetalLength< 2.6 40  0 Iris-setosa (1.00000000 0.00000000 0.00000000) *
+  3) PetalLength>=2.6 80 40 Iris-versicolor (0.00000000 0.50000000 0.50000000)  
+   6) PetalWidth< 1.65 41  2 Iris-versicolor (0.00000000 0.95121951 0.04878049)  
+    12) PetalLength< 4.95 38  0 Iris-versicolor (0.00000000 1.00000000 0.00000000) *
+    13) PetalLength>=4.95 3  1 Iris-virginica (0.00000000 0.33333333 0.66666667)  
+      26) SepalWidth>=2.65 1  0 Iris-versicolor (0.00000000 1.00000000 0.00000000) *
+      27) SepalWidth< 2.65 2  0 Iris-virginica (0.00000000 0.00000000 1.00000000) *
+   7) PetalWidth>=1.65 39  1 Iris-virginica (0.00000000 0.02564103 0.97435897) *
+"""
+
+install.packages('rpart.plot')
+library(rpart.plot)
+rpart.plot(iris_rpart)
+
+iris_rpart$cptable # 가지치기하기 위해 테이블을 만들어 준다.
+# complexity parameter <CP> : 복잡도 계수
+
+"""
+    CP    nsplit rel error  xerror       xstd
+1 0.5000      0    1.0000  1.2125 0.05389757
+2 0.4625      1    0.5000  0.7250 0.06842727
+3 0.0125      2    0.0375  0.0875 0.03209280
+4 0.0100      4    0.0125  0.0875 0.03209280 
+"""
+# nsplit이 가장 작은 값은 4이지만 너무 많기 때문에 cp가 0,0125 인 값을 선택
+iris_prune<-prune(iris_rpart,cp=0.0125)
+rpart.plot(iris_prune)
+
+# 예측하기
+expect<-predict(iris_prune,test[1:4],type="class")
+actual<-test$Name
+
+confusionMatrix(expect,actual)
+"""
+Confusion Matrix and Statistics
+
+                  Reference
+Prediction        Iris-setosa Iris-versicolor Iris-virginica # 분류, 오분류, 오분류
+Iris-setosa              10               0              0
+Iris-versicolor           0               9              2
+Iris-virginica            0               1              8
+
+Overall Statistics
+
+Accuracy : 0.9             
+95% CI : (0.7347, 0.9789)
+No Information Rate : 0.3333          
+P-Value [Acc > NIR] : 1.665e-10       
+
+Kappa : 0.85            
+Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+Class: Iris-setosa Class: Iris-versicolor Class: Iris-virginica
+Sensitivity                      1.0000                 0.9000                0.8000
+Specificity                      1.0000                 0.9000                0.9500
+Pos Pred Value                   1.0000                 0.8182                0.8889
+Neg Pred Value                   1.0000                 0.9474                0.9048
+Prevalence                       0.3333                 0.3333                0.3333
+Detection Rate                   0.3333                 0.3000                0.2667
+Detection Prevalence             0.3333                 0.3667                0.3000
+Balanced Accuracy                1.0000                 0.9000                0.8750
+"""
+
+install.packages('rattle') # 다른 그래프모형 만들기, 알고리즘에 따라 다름
+library(rattle)
+rpart <- rpart(Name~.,data=iris,method='class')
+
+"""
+n= 150 
+
+node), split, n, loss, yval, (yprob)
+* denotes terminal node
+
+1) root 150 100 Iris-setosa (0.33333333 0.33333333 0.33333333)  
+  2) PetalLength< 2.45 50   0 Iris-setosa (1.00000000 0.00000000 0.00000000) *
+  3) PetalLength>=2.45 100  50 Iris-versicolor (0.00000000 0.50000000 0.50000000)  
+    6) PetalWidth< 1.75 54   5 Iris-versicolor (0.00000000 0.90740741 0.09259259) *
+    7) PetalWidth>=1.75 46   1 Iris-virginica (0.00000000 0.02173913 0.97826087) *
+"""
+
+fancyRpartPlot(rpart, main="iris")
+
+actual<-test$Name
+confusionMatrix(expect,actual)
+rpart<-rpart(Name~.,data=iris,method="class")
+fancyRpartPlot(rpart,main='iris')
+
+
+# 가지치기를 하지 않아도 바로 의사결정트리를 하는 방법, p-value를 이용한다, 단 독립변수는 30개 이하까지만 지원한다 (카이제곱)
+install.packages('party')
+library(party)
+
+partymodel<-ctree(Name~.,data=train) # ctree ★ party 라이브러리를 쓰면 의사결정나무시 사용
+plot(partymodel)
+
+expect<-predict(partymodel,test[1:4])
+actual<-test$Name
+confusionMatrix(expect,actual)
+"""
+Confusion Matrix and Statistics
+
+                 Reference
+Prediction        Iris-setosa Iris-versicolor Iris-virginica
+  Iris-setosa              10               0              0
+  Iris-versicolor           0               9              2
+  Iris-virginica            0               1              8
+
+Overall Statistics
+                                          
+               Accuracy : 0.9             
+                 95% CI : (0.7347, 0.9789)
+    No Information Rate : 0.3333          
+    P-Value [Acc > NIR] : 1.665e-10       
+                                          
+                  Kappa : 0.85            
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Iris-setosa Class: Iris-versicolor Class: Iris-virginica
+Sensitivity                      1.0000                 0.9000                0.8000
+Specificity                      1.0000                 0.9000                0.9500
+Pos Pred Value                   1.0000                 0.8182                0.8889
+Neg Pred Value                   1.0000                 0.9474                0.9048
+Prevalence                       0.3333                 0.3333                0.3333
+Detection Rate                   0.3333                 0.3000                0.2667
+Detection Prevalence             0.3333                 0.3667                0.3000
+Balanced Accuracy                1.0000                 0.9000                0.8750
+"""
+
+
+

@@ -1,0 +1,380 @@
+# 신용모델
+
+default
+      yes : 대출금 상환 안함
+      no  : 대출금 상환
+      
+checking_balance : 예금계좌
+saving_balance : 적금계좌
+
+대출시청자의 예금계좌 적금계좌의 예금정도를 확인해서 예금액이 많을수록 대출이 안전하다고 
+가정할 수 있다.
+
+
+```{r}
+credit <- read.csv('c:/data/credit.csv')
+credit
+str(credit)
+```
+
+```{r}
+
+table(credit$checking_balance) # 예금계좌
+table(credit$savings_balance) # 적금계좌
+
+summary(credit$months_loan_duration) # 4개월~72개월 까지 대출기간 가능 
+summary(credit$amount) # 돈(마르크)
+
+# 상환하는 고객의 수 상환을 하지 않는 고객의 수
+
+table(credit$default) # no 700 yes 300
+
+# 30프로는 너무 많기 때문에 변수를 지정해서 값을 정해야 한다,
+
+prop.table(table(credit$default)) # 변수 확률로 확인
+
+set.seed(12345) # 미리정해진 순열로 임의의 수를 설정하고 분석을 반복해도 똑같은 수를 얻게하려고 하는 방법
+
+train_idx <- sample(2,nrow(credit),prob=c(0.9,0.1),replace=TRUE) # 복원추출
+train_idx
+
+credit_train <- credit[train_idx==1,]
+credit_test <- credit[train_idx==2,]
+
+prop.table(table(credit_train$default)) # 잘 분류가 되었는지 확인
+prop.table(table(credit_test$default))
+
+
+
+```
+# 의사결정트리 알고리즘 중 c5.0 알고리즘을 적용해서 예측모델을 생성하기
+
+```{r}
+install.packages('C50')
+library(C50)
+length(credit) # 컬럼의 갯수
+
+credit_model=C5.0(credit_train[,-17],credit_train[,17]) # 독립변수, 종속변수
+credit_model
+summary(credit_model)
+
+Evaluation on training data (901 cases):
+
+	    Decision Tree   
+	  ----------------  
+	  Size      Errors  
+
+	    66  125(13.9%)   <<
+
+
+	   (a)   (b)    <-classified as
+	  ----  ----
+	   610    23#오류    (a): class no # 상환
+	   102#오류   166    (b): class yes # 상환 x
+
+""""
+	Attribute usage:
+
+	100.00%	checking_balance
+	 60.16%	credit_history
+	 53.16%	months_loan_duration
+	 49.39%	savings_balance
+	 30.85%	job
+	 25.86%	other_credit
+	 17.76%	dependents
+	  9.66%	existing_loans_count
+	  7.21%	percent_of_income
+	  6.66%	employment_duration
+	  5.77%	phone
+	  5.55%	amount
+	  3.77%	years_at_residence
+	  3.44%	age
+	  3.33%	purpose
+	  1.66%	housing
+""""
+```
+
+```{r}
+# 크로스 table 만들기
+credit_result <- predict(credit_model,credit_test[,-17])
+
+library(gmodels)
+
+CrossTable(credit_test[,17],credit_result)
+
+# yes인데 no 가 나와 문제가 크다.
+
+
+
+
+```
+
+# 반복횟수를 통해 오류 줄이기
+
+```{r}
+
+credit_model=C5.0(credit_train[,-17],credit_train[,17],trials = 10) # 의사결정나무를 정할 때 좋은                                                                       값을 뽑기 위해 하는 방법
+credit_model
+#Number of boosting iterations: 10 - 부스팅기법, 좋은 학습을 유도 
+summary(credit_model)
+
+	   (a)   (b)    <-classified as
+	  ----  ----
+	   628     5    (a): class no
+	    32   236    (b): class yes
+
+credit_result<-predict(credit_model,credit_test[,-17])
+
+CrossTable(credit_test[,17],credit_result)
+
+
+
+```
+# 앙상블 기법
+
+- 다양한 전문가로 팀을 만드는 유사한 원칙을 사용하는 메타학습 접근법을 앙상블이라고 한다.
+- 앙상블 기법은 다수의 약한 학습기를 합해 강한 하나의 학습기로 만드는 개념을 기반으로 한다.
+
+
+
+                                              -> model1
+                                              -> model2
+  훈련데이터 -> 할당함수(allocation function) -> model3 -> 조합(Combination Function) -> 앙상블 모델
+                                              -> model4
+
+
+bagging (배깅) boostrap aggregating
+트레이닝 데이터를 반복 추출하여 표본을 여러개 만든 후에 각 표본에 맞는 분류 모델을 표본 수 만큼 생성한 후, 각각 분류 모델을 앙상블 하는 방법
+
+```{r}
+install.packages('ipred')
+library(ipred)
+
+mybag <- bagging(default~.,data=credit_train,nbagg=25) # 25개를 만들어서 
+credit_pred<-predict(mybag,credit_test[,-17])
+table(credit_pred,credit_test$default)
+table(credit_pred) # 해석하기 힘들땐 각각 값을 확인해서 넣는다.
+
+credit_pred no yes
+        no  59  12
+        yes  8  20
+
+summary(mybag)
+
+```
+
+# 연관규칙 (연관성분석) <association analysis>
+
+대량의 데이터에 숨겨진 항목간의 연관규칙을 찾아내는 기법으로서 장바구니분석(market basket analysis)이라고 한다.
+실제 연관성분석 월마트, 아마존닷컴 등 여러기업에서 다양한 마케팅 활동에 활용하고 있으며 더 나아가 사회네트워크 분석에도 활용할 수 있다.
+
+시리얼과 우유와의 관계를 알아내는 대표적인 기계학습방법
+
+support (지지도) : 전체 거래(transaction) 중 연관성 규칙을 구성하는 항목들이 포함된 거래의 비율
+
+              x에 대한 거래갯수
+support(x) = ------------------
+               전체거래건수
+
+
+confidence (신뢰도) : 조건이 발생했을 때 결과가 동시에 일어날 확률을 의미하며, 신뢰도가 1에 가까울수록 의미있는 연관성
+                      을 가지고 있다. #조건부확률
+                
+confidence(x->y) <조건 -> 결과> : x를 구매할 때 y를 구매, x란 단어를 사용하였을 때, y란 단어가 나온다.
+
+                      support(x,y)
+confidence(x->y) = --------------------
+                      support(x)
+
+s(x->y) = n(xΛY)/N
+c(x->y) = n(xΛY)/n(x)
+
+s(우유 -> 시리얼) : 우유와 시리얼을 동시에 구매할 확률
+c(우유 -> 시리얼) : 우유를 구매 할 때 시리얼도 같이 구매할 조건부 확률
+
+거래번호 구매물품
+-----------------
+1         우유,버터,시리얼
+2         우유,시리얼
+3         우유,빵
+4         버터,맥주,오징어
+
+전체 구매물품에서 우유와 시리얼이 동시에 구매할 확률은? 2/4 50%
+우유를 샀을 때 시리얼을 살 조건부 확률은? 2/3 66%
+시리얼을 샀을 때 우유를 살 조건부 확률은? 1 100%
+
+우유 -> 시리얼(50%, 66.6%)
+시리얼 -> 우유 (50%, 100%)
+
+lift(향상도) : 지지도와 신뢰도를 동시에 고려하는 값
+
+예) 시리얼 -> 우유
+
+lift(시리얼,우유) = 신뢰도(시리얼->우유)/지지도(우유) <전체중 우유> 1/(3/4) = 1.3333 <향상도>
+
+★ 항상 3가지 필요, suport, confidence, lift
+
+# 빈도수가 가장 높은 값을 기준으로 하여 다른 아이템의 값을 넣어서 사용한다.
+
+
+거래도 아이템
+1      A C D
+2      B C E 
+3      A B c E
+4      B E
+
+각각 빈도수
+
+아이템 지지도
+A         2
+B         3
+C         3
+D         1
+E         3
+
+가장 낮은 값은 제거 
+
+지지도가 2이상인 것만 추출하여 다시정리
+
+아이템 지지도
+A         2 
+B         3
+C         3
+E         3
+
+아이템 목록 : 지지도 1 제외
+A B     1
+A C     2
+A E     1
+B C     2  
+B E     3
+C E     2
+
+지지도가 1인값 제거
+
+A C     2
+B C     2  
+B E     3
+C E     2
+
+아이템 목록 , 지지도
+
+B C E          2개
+
+
+# apriori(아프리오리) algorithm
+집합의 크기가 1인 경우부터 차례로 늘려가면서 처리한다.
+k 개인 빈도 높은 항목을 구했다면 그 다음에는 k+1인 항목의 집합을 계산한다.
+그래서 총 최대 갯수를 가진 빈도항목까지 반복한다.
+
+```{r}
+install.packages('arules')
+library(arules)
+
+buylist <- list(c("우유","버터","시리얼"),c("우유","시리얼"),c("우유","빵"),c("버터","맥주","오징어"))
+
+buylist<- as(buylist,"transactions") #{} 형태, python dictionary, 테이터가 보이지 않는다.
+buylist<- as(buylist,"matrix")
+inspect(buylist) # 트랜잭션으로 한 후 실행
+
+buyresult<-apriori(buylist)
+inspect(buyresult)
+
+inspect(subset(buyresult,subset=support>=0.5)) 
+# left hand side
+# right hand side
+
+inspect(subset(buyresult,subset=lhs %in% c('버터','시리얼')))
+inspect(subset(buyresult,subset=lhs %ain% c('버터','시리얼'))) # 공통적으로 가지고 있는 값만 출력
+inspect(subset(buyresult,subset=lhs %oin% c('버터','시리얼'))) # 버터 혼자, 시리얼 혼자, 그리고 두개 같이 있는 값
+inspect(subset(buyresult,subset=lhs %pin% c('버터','시리얼'))) # 둘 중 하나는 무조건 포함되어 있는 경우
+
+itemFrequencyPlot(buylist) 막대 그래프, 빈도수
+itemFrequencyPlot(buylist,support=0.2) 0.2이상인 값만 출력
+
+```
+
+    lhs              rhs      support confidence lift     count
+[1]  {빵}          => {우유}   0.25    1          1.333333 1    
+[2]  {맥주}        => {오징어} 0.25    1          4.000000 1    
+[3]  {오징어}      => {맥주}   0.25    1          4.000000 1    
+[4]  {맥주}        => {버터}   0.25    1          2.000000 1    
+[5]  {오징어}      => {버터}   0.25    1          2.000000 1    
+[6]  {시리얼}      => {우유}   0.50    1          1.333333 2    
+[7]  {맥주,오징어} => {버터}   0.25    1          2.000000 1    
+[8]  {맥주,버터}   => {오징어} 0.25    1          4.000000 1    
+[9]  {버터,오징어} => {맥주}   0.25    1          4.000000 1    
+[10] {버터,시리얼} => {우유}   0.25    1          1.333333 1    
+[11] {버터,우유}   => {시리얼} 0.25    1          2.000000 1    
+> 
+# 연습하기
+
+```{r}
+build<-read.csv('c:/data/building.csv',header=T,stringsAsFactors = FALSE)
+build[is.na(build)]<-0
+build<-build[-1]
+trans<-as.matrix(build)
+rules<-apriori(trans,parameter = list(supp=0.2,conf=0.6)) # 제한을해서 생성을 하는 것도 가능하다.
+inspect(rules)
+```
+
+#그래프 모양 나타내기
+```{r}
+install.packages('arulesViz')
+library(arulesViz)
+plot(rules,method='graph')
+plot(rules,method='grouped')
+```
+# 연습
+```{r}
+bo<-inspect(subset(rules,subset=lhs %in% c('보습학원')))
+p<-inspect(subset(rules,subset=rhs %in% '편의점' & confidence>0.7))
+p<-subset(rules,subset=rhs %in% '편의점' & confidence>0.7)
+
+plot(p,method='graph')
+plot(p,method='grouped')
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      
+
+
+
+
+
+
+
+
+
+
+

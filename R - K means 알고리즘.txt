@@ -1,0 +1,63 @@
+# 군집합 - 데이터 클러스터(cluster, 유사한 아이템의 그룹)으로 자동 분리하는 비지도 학습의 머신러닝이다. 
+           (unsupervised learning)
+           
+         - 군집화는 데이터 안에서 발견되는 자연스런 그룹에 대한 통찰력을 제공
+         - 클러스터 안에 있는 아이템들은 서로 아주 비슷해야 하지만 클러스터 밖에 있는 아이템들과는 아주 달라야 한다.
+         - 자율분류로 언급되는 것은 레이블이 없는 예시를 분류하기 때문이다.
+         
+# 군집합의 활용범위
+
+         - 마케팅 캠페인을 위해 유사한 인구통계나 구매 패턴을 가진 그룹으로 고객을 세분화
+         - 알고있는 클러스터 밖의 사용패턴을 찾아 무단 네트워크 침입과 같은 이상 행동을 탐지
+         - 유사한 값을 갖는 특징을 적은 개수의 동질적인 범주로 그룹핑해 초대형 데이터셋을 단순화 할 수 있다.
+         
+# KNN          
+# K-Means Algorithm - n개의 예시를 k개의 클러스터 중 하나의 할당하는데 이때 k는 사전에 결정되는 수
+                    - 클러스터 내의 차이를 최소화하고 클러스터 간의 차이는 최대화한다.
+                    
+# 적당한 k값은 ? k = sqrt(n/2)
+
+```{r}
+
+c<-c(3,4,1,5,7,9,5,4,6,8,4,5,9,8,7,8,6,7,2,1)
+row <- c("A","B","C","D","E","F","G","H","I","J")
+col <- c("X","Y")
+
+data <- matrix(c, nrow=10, ncol=2, byrow=TRUE, dimnames=list(row,col))
+plot(data)
+library(stats)
+km<-kmeans(data,2)
+km
+km$centers # 두개의 그룹의 위치 정보가 나온다.
+km$cluster # 클러스터 확인
+
+total<-cbind(data,km$cluster)
+
+plot(total[,c(1,2)])
+points(km$centers[,1],km$centers[,2],pch=3,cex=1.5,lwd=2) # 각각 포인트 찍기
+
+```
+# 연습 
+```{r}
+
+academy <- read.csv('c:/data/academy.csv')
+academy2 <- academy[,c(3,4)] # 영어, 수학점수로만 k-means 하기
+plot(academy2)
+km<-kmeans(academy2,4)
+points(km$centers[,1],km$centers[,2],pch=3,cex=1.5,lwd=2)
+km$centers       
+km$cluster
+
+
+
+```
+# 각각의 구역 나누기
+```{r}
+install.packages('factoextra')
+library(factoextra)
+
+fviz_cluster(km,data=academy2,stand=F,elipse.type='t')
+
+```
+
+              
