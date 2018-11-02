@@ -1,0 +1,249 @@
+[문제199] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
+
+import pandas as pd
+
+ins=pd.read_csv('c:/data/insurance.csv')
+
+y=ins['charges']
+x=ins.ix[:,:-1]
+
+from sklearn.linear_model import LogisticRegression
+import statsmodels.api as sm
+
+dummy_gender=pd.get_dummies(x.sex,prefix='gender')
+dummy_region=pd.get_dummies(x.region,prefix='region')
+
+data['smoker']=data.smoker.map({'no':0,'yes':1})
+data=x.join(dummy_gender)
+data=data.join(dummy_region)
+
+data.columns
+data
+
+del data['region']
+del data['sex']
+
+data.isnull().sum()
+
+from scipy import stats
+stats.linregress(data.ix[:,0],y)
+stats.linregress(data.ix[:,1],y)
+stats.linregress(data.ix[:,2],y)
+stats.linregress(data.ix[:,3],y)
+stats.linregress(data.ix[:,4],y)
+stats.linregress(data.ix[:,5],y)
+stats.linregress(data.ix[:,6],y)
+stats.linregress(data.ix[:,7],y)
+stats.linregress(data.ix[:,8],y)
+stats.linregress(data.ix[:,9],y)
+
+# 제일큰 slope 
+##
+
+df = pd.read_csv('c:/data/insurance.csv')
+df.head()
+dummy_sex = pd.get_dummies(df['sex'],prefix='sex')
+dummy_smoker = pd.get_dummies(df['smoker'],prefix='smoker')
+
+col = ['age','bmi','children','charges']
+data=dummy_smoker.join(dummy_sex)
+data=data.join(df[col])
+data
+
+import statsmodels.formula.api as smf
+lm = smf.ols(formula='charges ~ age+smoker_yes+sex_male+bmi+children',data=data).fit()
+print(lm.params)
+
+
+
+'''
+[문제199] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
+
+ins<-read.csv('c:/data/insurance.csv',header=T)
+ins
+
+coef(lm(charges~age, data=ins))
+coef(lm(charges~sex, data=ins))
+coef(lm(charges~bmi, data=ins))
+coef(lm(charges~children, data=ins))
+coef(lm(charges~smoker, data=ins))
+coef(lm(charges~region, data=ins))
+coef(lm(charges~age, data=ins))
+
+# smoker-yes
+coef(lm(charges~age+sex+bmi+children+smoker+region, data=ins))
+
+cor(ins[c('age','bmi','children','charges')]) # 한번에 상관분석비교
+# 단 상관분석 할때에도 숫자로 바꿔야한다.
+
+# 상관계수 시각화 하는방법
+
+install.packages('psych')
+library('psych')
+pairs.panels(ins[c('age','bmi','children','charges')])
+
+ins_model = lm(charges~.,data=ins)
+# 회귀계수가 높을 수록 영향을 많이준다.
+
+http://rfriend.tistory.com/57 # R 더미함수
+
+# 가중치
+
+ins$bmi30 <- ifelse(ins$bmi>=30,1,0)
+ins_model2 = lm(charges~age+children+bmi+sex+smoker+region+bmi30,data=ins)
+ins_model2
+'''
+
+인공지능 <- 머신러닝 <- 신경망(딥러닝)
+
+# 신경망
+
+퍼셉트론(perceptron)
+- 인공뉴런(인공적으로 만든 신경세포)
+- 1957년 만든 알고리즘
+- 프랑크로젠블라트가 퍼셉트론 알고리즘을 고안했다.
+- 퍼셉트론은 딥러닝(신경망)의 기원
+- 다수의 신호를 입력받아서 하나의 신호로 출력한다.
+- 신호의 흐름을 표현할 때 두가지값을 갖는다.
+- 0 신호가 흐르지 않는다.
+- 1 신호가 흐른다.
+
+퍼셉트론 동작
+
+x : 입력값(입력신호)
+w : weight(가중치)
+Θ : theta (세타, 임계값)
+y : 출력값
+
+y = 0 : w1*x1 + w2*x2 <= Θ
+y = 1 : w1*x1 + w2*x2 >  Θ
+
+w1*x1 + w2*x2 값이 Θ(임계값) 이하일 때는 0을 출력하고, 임계값봐다 클때는 1을 출력한다.
+
+회귀계수가 weight와 같다.
+
+# 논리회로 - 컴퓨터는 두가지 디지털 값 0,1을 입력해서 하나의 값을 출력하는 회로가 모여 만들어지는데 
+            이 회로를 gate(케이트)라고 한다.
+            
+AND 게이트  
+x1   x2   y
+------------
+0    0    0
+0    1    0
+1    0    0
+1    1    1
+
+AND게이트를 퍼셉트론으로 표현
+
+w1 = 0.5 w2 = 0.5 Θ = 0.7
+
+AND(0,0)=0
+AND(0,1)=0
+AND(1,0)=0
+AND(1,1)=1
+
+def AND(x1,x2):
+    w1 = 0.5
+    w2 = 0.5
+    theta = 0.7
+    result = w1*x1+w2*x2
+    if result <=  theta :
+        return 0
+    elif result > theta:
+        return 1 
+
+AND게이트를 퍼셉트론으로 표현
+
+
+# OR 게이트 퍼셉트론 표현 ?
+
+x1   x2   y
+------------
+0    0    0
+0    1    1
+1    0    1
+1    1    1
+
+
+w1 = 0.5 w2 = 0.5 Θ = 0.7
+
+OR(0,0)=0
+OR(0,1)=1
+OR(1,0)=1
+OR(1,1)=1
+
+def OR(x1,x2):
+    w1 = 0.5
+    w2 = 0.5
+    theta = 0.4 # 그대로 할경우 값이 나오지 않으므로 임계값을 변환하거나 weight 값을 변환해야한다.
+    result = w1*x1+w2*x2
+    if result <=  theta :
+        return 0
+    elif result > theta:
+        return 1 
+
+# NAND (NOT AND) 게이트
+
+x1   x2   y
+------------
+0    0    1
+0    1    1
+1    0    1
+1    1    0
+
+def NAND(x1,x2):
+    w1 = -0.5
+    w2 = -0.5
+    theta = -0.7 
+    result = w1*x1+w2*x2
+    if result <=  theta :
+        return 0
+    elif result > theta:
+        return 1 
+
+# XOR (eXclusive OR) 게이트 : 배타적 논리합
+
+x1   x2   y
+------------
+0    0    0
+0    1    1
+1    0    1
+1    1    0
+
+x1 과 x2 중 어느 한쪽이 1일 때만 1을 출력 배타적논리회로
+
+퍼셉트론은 XOR 게이트를 구현할 수 없다.
+
+직선 하나로는 XOR게이트의 출력을 구분 할 수 없다.
+퍼셉트론 (단층퍼셉트론)은 직선 하나로 나눈 영역만 표현할 수 있는 한계가 있다.
+
+민스키가 기존 퍼셉트론의 문제점을 지적했는데 XOR분류를 못한다는 문제점을 지적하고 인공지능의 겨울기가 시작되었다.
+
+# 다층 퍼셉트론
+
+x1   x2   or   NAND  and(or and NAND) 
+--------------------------------
+0    0    0     1     0
+0    1    1     1     1
+1    0    1     1     1
+1    1    1     0     0
+
+선형 : 직선의 영역을 선형영역
+비선형 : 곡선의 영역을 비선형 영역 
+
+다층퍼셉트론(Multi layer perceptron)
+단층퍼셉트론은 XOR 게이트를 표현할 수 없었다.
+즉, 단층퍼셉트론은 비선형 영역을 분리 할 수 없다.
+기존 (OR,NAND,AND) 게이트를 조합하여 층을 쌓으면 XOR게이트를 구현 할 수 있다.
+
+XOR(0,0) = 0
+XOR(0,1) = 1
+XOR(1,0) = 1
+XOR(1,1) = 0
+
+def XOR(x1,x2):
+    s1 = OR(x1,x2)
+    s2 = NAND(x1,x2)
+    y = AND(s1,s2)
+    return y
+    

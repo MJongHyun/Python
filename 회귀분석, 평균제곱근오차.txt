@@ -1,0 +1,413 @@
+# 회귀분석(Regression) - 독립변수(X)와 종속변수(Y)의 관계식을 구하는 방법
+                      - 독립변수(영향을 주는 변수)가 한단위 증가할 때 종속변수 (형향을 받는 변수)가 얼마나 영향을 받는지 분석하는 방법
+                      - 회귀식, 회귀계수
+                      
+단순회귀 분석 : 독립변수가 1개인 회귀모형
+예) 기업의 광고집행액(X)를 이용하여 그 기업의 매출액(Y)을 예측하는 모형
+다중회귀 분석: 독립변수가 2개 이상인 회귀모형
+예) 학생의 학원수 (X1)과 하루 평균학습시간(X2)를 이용하여 그 학생의 성적(Y)를 예측하는 모형
+
+- 회귀분석은 대상 변수들은 양적자료 (등간,비율),
+
+기울기 
+
+X : 독립변수
+Y : 종속변수 
+
+X값에 따라 Y값이 달라진다.
+
+y값의 증가량
+------------ 
+x값의 증가량
+
+회귀식 
+
+y=ax+b
+a = 회귀계수, 기울기
+b = y의 절편
+        (x-x평균)*(y-y평균)의 합     cov(x,y)
+a = ---------------------------- = ---------
+        (x-x평균)제곱의 합           var(x)
+        
+
+b=y의평균 - x의 기울기 * x의평균
+
+x = [2, 4, 6, 8]
+y = [71, 83, 91, 97]
+
+import numpy as np
+import pandas as pd
+
+a=sum((x-np.mean(x))*(y-np.mean(y)))/z
+
+z=0
+
+for i in x-np.mean(x):
+    z=z+int(i)**2
+    print(z)
+
+b=np.mean(y)-a*np.mean(x)
+
+a=4.3
+b=64
+
+# 3시간 공부하면?
+
+c = a*3+b
+c
+
+from scipy import stats
+import math
+
+df=pd.concat([pd.DataFrame(x),pd.DataFrame(y)],axis=1)
+df.columns='x','y'
+
+slope, intercept, r_value, p_value, stdder = stats.linregress(x,y)
+
+# 3시간 공부하면?
+
+C=slope*3+intercept
+C
+
+def regression(x,y,key):
+    import numpy as np
+    z=0    
+    for i in x-np.mean(x):
+        z=z+int(i)**2
+    a=sum((x-np.mean(x))*(y-np.mean(y)))/z
+    b=np.mean(y)-a*np.mean(x)
+    
+    return a*key+b
+    
+
+
+regression(x,y,3)    
+
+# 선생님 방법
+
+import numpy as np
+x=np.array([2,4,6,8])
+y=np.array([71,83,91,97])
+x_mean = np.mean(x)
+y_mean = np.mean(y)
+
+denominator = sum([(i-x_mean)**2 for i in x]) # list 내장객체로 가능, 분모
+
+def func(x,x_m,y,y_m):
+    s=0
+    for i in range(len(x)):
+       s+=(x[i]-x_m)*(y[i]-y_m)
+       
+    return s
+
+numerator = func(x,x_mean,y,y_mean) # 분자
+
+a = numerator/denominator
+b = y_mean - a*x_mean
+
+print('기울기 :', a)
+print('절편 :',b)
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.scatter(x,y)
+plt.plot(x, a*x+b, c='red')
+
+# 오차
+
+print('실제값 : ',y)
+print('예측값 : ',a*x+b)
+print('오차 :',y-(a*x+b)) # 오차를 줄이는 것이 목표 ★★
+
+# 평균제곱근오차 (root mean square error) rmse
+주어진 선의 오차를 평가하는 오차평가 알고리즘 
+
+오차 = 실제값 - 예측값
+                    Σ(실제값 - 예측값)²
+평균제곱오차(mse) =  -----------------
+                        n
+
+평균제곱근오차(rmse) = 루트(평균제곱오차)
+
+import math
+
+mse = sum([i**2 for i in y-(a*x+b)])/len(y)
+rmse = math.sqrt(mse)
+
+mse
+rmse
+
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+rms = sqrt(mean_squared_error(y, a*x+b))
+rms
+sqrt(mean_squared_error(y, a*x+b)
+
+
+# 로지스틱 회귀 분석 - 결과가 범주형일 때 사용한다. 
+# 맞다 틀리다를 확인, 즉, 실제값과 예측값을 확인 하기 위해 ROC , AUC 를 사용한다.
+
+logistic regression - 분류를 하는데 있어서 가장 흔한 경우는 이분법을 기준으로 분류하는 경우
+
+예) 특정고객이 물건을 구매할지(1) 안할것인지(0)
+    어떤 기업이 부도가 날 것인지(1) 안날것인지(0)
+    내일 비가 올것인지(1) 안올것인지(0)
+
+- 적용분야 : 기업의 부도예측, 주가, 환율, 금리 등의 UP/DOWN 예측
+
+
+
+
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+
+iris=pd.read_csv('c:/data/iris.csv')
+x = iris.ix[:,:-1] # iris값 빼고 생성
+y = iris['Name']
+
+logreg=LogisticRegression()
+logreg.fit(x,y)
+
+new_observation = [[5.1,3.5,1.4,0.2]] # 어떤값의 붓꽃으로 나오는지 예측
+logreg.predict(new_observation) 
+
+new_observation = [[6.9,3.2,5.7,2.3]]
+logreg.predict(new_observation) 
+
+new_observation = [[4.9,2.4,3.3,1.0]]
+logreg.predict(new_observation) 
+
+# 연습
+
+titanic=pd.read_csv('c:/data/titanic.csv')
+titanic.isnull().sum()
+titanic['gender']=titanic.gender.map({'female':0,'male':1})
+titanic[titanic['age'].isnull()].age
+titanic.age.fillna(titanic.age.median(),inplace=True)
+
+# 더미함수 
+embarked_dummy = pd.get_dummies(titanic.embarked,prefix="embarked")
+
+titanic_1=pd.concat([titanic,embarked_dummy],axis=1)
+titanic_1.isnull().sum()
+
+del titanic_1['embarked']
+titanic_1.columns
+
+del titanic_1['cabin']
+del titanic_1['name']
+del titanic_1['ticket']
+
+a=titanic_1.ix[:,1:]
+b=titanic_1['survived']
+
+logreg.fit(a,b)
+
+a.columns
+
+titanic_1.head()
+
+new_ob=[[3,1,23,3,5,2,0,0,1]]
+logreg.predict(new_ob)
+
+
+a1=['pclass','age','gender']
+
+x1=titanic_1[a1]
+logreg.fit(x1,b)
+
+new_ob1=[[2,21.0,1]]
+logreg.predict(new_ob1) # 0
+titanic_1.ix[861,:] # 0 
+
+# statsmodels : 검정 및 추정 (test and estimation)
+                회귀분석 (regression analysis)
+                시계열분석 (time-series analysis)
+
+# 성별(gender), 나이(age), 객실등급(pclass), 요금(fare)이 생존에 어느 정도의 영향을 미치는가?
+
+import pandas as pd
+import statsmodels.api as sm
+df.columns
+df=titanic
+df['gender']=df.gender.map({'female':0,'male':1})
+pclass_dummy=pd.get_dummies(df.pclass,prefix='pclass') # 명목형이므로 더미 준다.
+
+
+
+# 분류할 수 있는 컬럼들은 더미컬럼으로 만든다.
+df = pd.read_csv('c:/data/titanic.csv')
+cols = ['survived','age','fare']
+pclass 1,2,3의 들어 갈 경우 => pclass_1(0/1),pclass_2(0/1),pclass_3(0/1)
+dummy_pclass=pd.get_dummies(df.pclass,prefix='pclass')
+dummy_gender=pd.get_dummies(df['gender'],prefix='gender')
+
+data=df[cols].join(dummy_pclass)
+data=data.join(dummy_gender)
+
+# NA값이 잇을경우 불가능하다.
+
+data.isnull().sum()
+
+data1 = data.copy() # 새로운값 copy
+id(data1) # id값이 다르다.
+id(data)
+
+# 1 age값을 모두 버리고 사용
+# 2 버리지 말고 평균
+
+
+# 평균 넣을 방법: round(np.mean(data['age']))
+
+data1['age'].fillna(data1['age'].median(skipna=True),inplace=True)
+data1.isnull().sum()
+train_cols=data1.columns[1:]
+logit = sm.Logit(data1['survived'],data1.ix[:,1:])
+result = logit.fit()
+result.summary2()
+
+'''
+                         Results: Logit
+=================================================================
+Model:              Logit            Pseudo R-squared: 0.321     
+Dependent Variable: survived         AIC:              817.3956  
+Date:               2018-10-30 15:36 BIC:              846.1497  
+No. Observations:   891              Log-Likelihood:   -402.70   
+Df Model:           5                LL-Null:          -593.33   
+Df Residuals:       885              LLR p-value:      3.2405e-80
+Converged:          1.0000           Scale:            1.0000    
+No. Iterations:     6.0000                                       
+-----------------------------------------------------------------
+                   Coef.  Std.Err.    z    P>|z|   [0.025  0.975]
+-----------------------------------------------------------------
+age               -0.0329   0.0074 -4.4271 0.0000 -0.0475 -0.0183
+fare               0.0008   0.0021  0.3611 0.7180 -0.0034  0.0049
+pclass_1           1.5328      nan     nan    nan     nan     nan
+pclass_2           0.4622      nan     nan    nan     nan     nan
+pclass_3          -0.7497      nan     nan    nan     nan     nan
+gender_female      1.9249      nan     nan    nan     nan     nan
+gender_male       -0.6798      nan     nan    nan     nan     nan
+=================================================================
+'''
+
+coef : 회귀계수 
+가장 높은값 gender_female : 생존에 가장 영향을 준값 이다.
+            pclass_1 : 1등급
+      
+# 값이 만족스럽지 않을 때 가중치를 사용한다.
+       
+
+### 가중치 넣기 ###
+
+# 가중치 설정 : 동일한 값을 설정
+data1['intercept'] = 1.0
+train_cols=data1.columns[1:]
+logit = sm.Logit(data1['survived'],data1.ix[:,1:])  # 목적변수
+result = logit.fit()
+result.summary2()
+
+"""
+                               Results: Logit
+============================================================================
+Model:                   Logit               Pseudo R-squared:    0.321     
+Dependent Variable:      survived            AIC:                 817.3956  
+Date:                    2018-10-30 15:44    BIC:                 846.1497  
+No. Observations:        891                 Log-Likelihood:      -402.70   
+Df Model:                5                   LL-Null:             -593.33   
+Df Residuals:            885                 LLR p-value:         3.2405e-80
+Converged:               1.0000              Scale:               1.0000    
+No. Iterations:          10.0000                                            
+----------------------------------------------------------------------------
+               Coef.    Std.Err.      z    P>|z|      [0.025       0.975]   
+----------------------------------------------------------------------------
+age           -0.0329       0.0074 -4.4271 0.0000       -0.0475      -0.0183
+fare           0.0008       0.0021  0.3611 0.7180       -0.0034       0.0049
+pclass_1       1.3064          nan     nan    nan           nan          nan
+pclass_2       0.2358          nan     nan    nan           nan          nan
+pclass_3      -0.9761          nan     nan    nan           nan          nan
+gender_female  1.5854 2952743.2140  0.0000 1.0000 -5787268.7698 5787271.9405
+gender_male   -1.0194 2952743.2140 -0.0000 1.0000 -5787271.3745 5787269.3358
+intercept      0.5660          nan     nan    nan           nan          nan
+============================================================================
+
+"""
+gender_female  1.5854
+pclass_1       1.3064 
+
+#### 설명변수 ####
+
+data1['predict'] = result.predict(data1[train_cols]) # 예측한 값을 넣는다.
+data1[data1['predict']>=0.9].gender_male
+
+### R ###
+
+"""
+help(cars)
+str(cars)
+speed : 차속도 (단위mi/h)
+dist : 제동거리 (단위feet)
+lmresult<-lm(dist ~ speed, data=cars)
+summary(lmresult)
+
+coef(lmresult)
+
+plot(cars$speed,cars$dist)
+abline(lmresult)
+
+speed <- c(50,60,70,80,90,100)
+df <- data.frame(speed)
+
+# 점 추정
+point_estimation <- predict(lmresult,df)
+cbind(df,point_estimation)
+
+# 구간 추정
+interval_estimation <- predict(lmresult,df,interval='confidence',level=0.95)
+cbind(df,interval_estimation)
+
+# fit : 점추정 , lwr : 구간의 최소값, upr : 구간의 최대값
+
+60mi/h 속도인 경우 제동거리를 예측하면 
+점추정 : 218.3654 feet 
+구간추정 : 180.8489 feet ~ 255.8820 feet 사이일 확률이 95%이다.
+
+
+
+""""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

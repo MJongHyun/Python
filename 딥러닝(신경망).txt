@@ -1,0 +1,337 @@
+
+bias(편향) - 가중치와 편향을 도입한 퍼셉트론 식
+Θ를 -b 치환하면 
+
+y  = a1x1 + a2x2 + b
+
+y = 0 w1*x1 + w2*x2 <= Θ
+y = 1 w1*x1 + w2*x2  > Θ
+
+- 치환
+
+y = 0 w1*x1 + w2*x2 + b <= 0
+y = 1 w1*x1 + w2*x2 + b >  0
+
+import numpy as np
+
+x = np.array([0,1])
+w = np.array([0.5,0.5])
+b = -0.7
+
+sum(x*w)+b
+
+def OR(x1,x2):
+ 
+    import numpy as np
+    x = np.array([x1,x2])
+    w = np.array([0.5,0.5])
+    b= -0.2
+    result = np.sum(x*w) + b
+    if result <=  0 :
+        return 0
+    elif result > 0:
+        return 1  
+    
+def AND(x1,x2):
+ 
+    import numpy as np
+    x = np.array([x1,x2])
+    w = np.array([0.5,0.5])
+    b= -0.7
+    result = np.sum(x*w) + b
+    if result <=  0 :
+        return 0
+    elif result > 0:
+        return 1
+
+def MAND(x1,x2):
+ 
+    import numpy as np
+    x = np.array([x1,x2])
+    w = np.array([-0.5,-0.5])
+    b= 0.7
+    result = np.sum(x*w) + b
+    if result <=  0 :
+        return 0
+    elif result > 0:
+        return 1      
+    
+def XOR(x1,x2):
+    s1 = OR(x1,x2)
+    s2 = NAND (x1,x2)
+    y = AND(s1,s2)
+    return y    
+    
+# 인공신경망 (ANN, Articicial Neural Network)
+
+인간의 뇌구조를 모방하여 모델링한 수학적 모델이다.
+
+신경세포(neuron 뉴런)
+뉴런의 입력은 다수이고, 출력은 하나이며, 여러 신경세포로 부터 전달되어 온 신호들은 합산되어 출력된다.
+합산된 값이 설정값(threshold) 이상이면 출력신호가 생기고 이하이면 출력신호가 없다.
+
+세포체 (cell body) : 노드(node)
+synapse : weight(가중치)
+수상돌기 (denrites) : 입력(input)
+축삭(axon) : 출력(output)
+
+input -----> neuron ------> output
+               ^
+               |
+               |
+               |
+               |
+              bias
+        
+        
+affine sum # x값
+
+        weight w 
+input x ---------> sum(σ) -------> y output
+                    ^
+                    |
+                    |
+                    |
+                    |
+                bias b              
+
+σ = w*x+b
+x = 0.6 w=3 b=1
+
+σ = 0.6 * 3 + 1 =2.8
+
+# 활성화 함수 (activation function)
+
+- synapse는 전달된 전기신호가 최소한의 자극값을 초과하면 활성화되어 다음 뉴런으로 전기신호를 전달한다.
+- 활성화 함수는 이것을 모방하여 값이 작을 때는 출력값을 작은 값으로 막고 일정한 값을 초과하면 출력값이 급격히 커지는 함수를
+  이용한다.
+- 신경망에서는 전달받은 데이터를 가중치를 고려해서 합산하고 그 값을 활성화 함수를 적용해 다음층에 전달한다.
+
+        weight w 
+input x ---------> σ|f(σ) -------> y output
+                    ^
+                    |
+                    |
+                    |
+                    |
+                bias b              
+
+σ = w*x+b
+f(σ) = f(w*x+b)
+
+# 예제
+계단함수 - 임계값을 경계로 출력이 바뀌는 함수, 입력이 0을 넘으면 1을 출력하고, 그 외에는 0을 출력하는 함수 
+
+def step_function(x):
+    
+    if x>0:
+        return 1
+    else:
+        return 0 
+    
+import numpy as np
+step_function(1)
+step_function(-1)
+step_function(100)
+step_function(np.array([1,2])) # error
+
+x = np.array([-1.0,1.0,2.0])
+y = x>0
+y.astype(np.int) # astype 자료형 변환 method : bool-> int (True = 1, False = 0)
+                 # True : 1, False : 0 
+                 
+def step_function(x):
+    y = x>0
+    return y.astype(np.int)
+
+step_function(np.array([-1.0,1.0,2.0]))
+
+def step_function(x):
+    return np.array(x>0, dtype=np.int)
+
+step_function(np.array([-1.0,1.0,2.0]))
+
+import matplotlib.pylab as plt
+x = np.arange(-5.0,5.0,0.1)
+y = step_function(x)
+plt.plot(x,y)
+
+
+A = np.array([[1,2],[3,4],[5,6]])
+A.shape
+
+B = np.array([7,8])
+B.shape
+
+np.dot(A,B)
+
+# sigmoid(시그모이드) - 신경망에서는 활성화 함수로 시그모이드 함수를 이용하여 신호를 변환하고 그 변환된 신호를 다음 뉴런에 
+                        전달 하는 함수이다.
+
+e^-x e는 자연상수 2.7182... 
+np.exp(-x) # affine sum
+
+def sigmoid(x): # 0 아님 1 
+    return 1/(1+np.exp(-x))
+
+sigmoid(1)
+sigmoid(-1)
+sigmoid(100)
+sigmoid(-100)
+
+sigmoid(1000)
+sigmoid(10000)
+
+x = np.arange(-5.0,5.0,0.1)
+y = sigmoid(x)
+plt.plot(x,y)
+plt.ylim(-0.1,1.1)
+plt.show()
+
+# 계단 함수는 0과 1중 하나의 값만 전달
+# 시그모이드 함수는 0과 1사이의 실수값을 전달
+# 시그모이드 함수는 곡선
+# 계단함수는 계단처럼 구부러진 직선
+
+단층 퍼셉티콘 - 계단, 다층 퍼셉티콘 - 시그모이드
+
+# 선형함수는 직선 하나만 표현
+# 신경망에서는 활성함수로 비선형함수를 사용해야한다.
+# 비선형함수를 사용해야 은닉층을 표현할 수 있다.
+
+# ★★ ReLU(Rectified Linear Unit)
+입력이 0을 넘으면 그 입력값으로 그대로 출력하고 0이하면 0을 출력한다.
+
+x : x>0 
+0 : x<=0
+
+def relu(x):
+    if x>0:
+        return x
+    elif x<=0:
+        return 0
+    
+relu(0)
+relu(-1)
+relu(100)    
+relu(np.array([-1.0,1.0,2.0]))
+
+np.maximum(0,1) # 두 입력 값 중 큰 값을 선택해 반환하는 함수
+
+def relu(x): # 하나씩 값이 들어가서 값을 수행 할 수 있다.
+    return np.maximum(0,x)
+
+relu(np.array([-1.0,1.0,2.0]))
+
+x = np.arange(-5.0,5.0,0.1)
+y = relu(x)
+plt.plot(x,y)
+plt.ylim(-0.1,6)
+plt.show()
+
+import numpy as np
+
+a = np.array([1,2,3,4])
+
+np.ndim(a) # 배열의 차원을 나타내는 함수
+a.shape # 배열의 모양
+
+3행 2열
+1 2 
+3 4
+5 6 
+x=np.array([[1,2],[3,4],[5,6]])
+np.ndim(x)
+x.shape
+
+x      y  z(행렬의 내적 계산)
+1 2   5 6 
+3 4   7 8
+
+x = np.array([[1,2],[3,4]])
+y = np.array([[5,6],[7,8]])
+
+# 행렬의 곱, 내적의 곱
+
+x.shape
+y.shape
+
+np.dot(x,y)
+
+x          y
+1 2 3      1 2
+4 5 6      3 4
+           5 6  
+           
+           
+x = np.array([[1,2,3],[4,5,6]])           
+y = np.array([[1,2],[3,4],[3,6]])           
+
+np.dot(x,y)           
+
+x = np.array([[1,2],[3,4],[5,6]])                      
+y = np.array([7,8])           
+np.dot(x,y)           
+           
+x = np.array([1,2])           
+w = np.array([[1,3,5],[2,4,6]])           
+y = np.dot(x,w)           
+          
+x = np.array([1.0,0.5]) # 입력층
+w1 = np.array([[0.1,0.3,0.5],[0.2,0.4,0.6]]) # 은닉층
+b1 = np.array([0.1,0.2,0.3]) # bias
+a1 = np.dot(x,w1) + b1 # affir sum
+ 
+z1 = sigmoid(a1)
+z1
+plt.plot(a1,z1)
+
+# 또 가중치 부여
+z1 # 입력값
+w2 = np.array([[0.1,0.4],[0.2,0.5],[0.3,0.6]])
+b2 = np.array([0.1,0.2])
+
+a2 = np.dot(z1,w2)+b2
+z2 = sigmoid(a2)
+
+w3 = np.array([[0.1,0.3],[0.2,0.4]])
+b3 = np.array([0.1,0.2])
+a3 = np.dot(z2,w3)+b3
+
+# 은닉층 2개, (입력층, 출력층 제외) 3층 신경망이라고 부른다.
+# 출력층에도 활성화 함수가 존재 한다.
+
+# 항등함수 : 입력을 그대로 출력한다. 입력 = 출력
+
+def identify_function(x):
+    return x
+
+y = identify_function(a3)
+
+# softmax function : 지수값으로 출력
+
+a = np.array([0.3,2.9,4.0])
+exp_a = np.exp(a) # 지수함수 화 한다. 분류를 하기 위해서 (값을 크게 해서 한번에 분류하기 위해서 사용)
+sum_exp_a = np.sum(exp_a)
+
+exp_a/sum_exp_a # 퍼센테이지로 분류
+
+# softmax 함수
+
+def softmax(a):
+    exp_a = np.exp(a)
+    sum_exp_a = np.sum(exp_a)
+    return exp_a/sum_exp_a
+
+# softmax의 문제점 : 너무커지면 inf 발생
+
+a = np.array([100,1000,10000])    
+softmax(a)
+
+# 지수값이 너무 크기 때문에 해결 방법
+
+def softmax(a):
+    m = np.max(a)
+    exp_a = np.exp(a-m)
+    sum_exp_a = np.sum(exp_a)
+    return exp_a/sum_exp_a
