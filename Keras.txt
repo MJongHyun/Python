@@ -1,0 +1,202 @@
+# Keras 
+# http://www.vision.caltech.edu/Image_Datasets/Caltech101/
+
+# 이미지 수집
+
+from PIL import Image
+import os,glob
+import numpy as np
+from sklearn.model_selection import train_test_split # train model 과 test model 을 쉽게 나누게 하는 함수
+
+caltech_dir = "c:/101_ObjectCategories"
+categories = ["chair","camera","butterfly","elephant","flamingo"] # 폴더이름을 분류이름으로 지정
+nb_classes = len(categories) # 분류해야될 갯수
+
+image_w = 64 # 이미지 크기
+image_h = 64
+pixels = image_w*image_h*3
+
+x = []
+y = []
+
+for idx, cat in enumerate(categories):
+    label = [0 for i in range(nb_classes)]
+    label[idx] = 1 # 해당되는 값 분류  ex ) [0,0,0,0,1]
+    image_dir = caltech_dir+"/"+cat # directory 설정
+    files = glob.glob(image_dir+'/*.jpg') # 파일경로에 있는 jpg 모두 가져온다.
+    for i, j in enumerate(files):
+        img = Image.open(j)
+        img = img.convert("RGB")
+        img = img.resize((image_w,image_h))
+        data = np.asarray(img) 
+        x.append(data)
+        y.append(label)
+        if i % 10 == 0:
+            print(i,"\n",data)
+ 
+x_train[0].shape
+    
+x = np.array(x)
+y = np.array(y)
+
+# train set 과 test_set 만들기
+
+x_train, x_test, y_train, y_test = train_test_split(x,y) # 자동으로 갯수를 나눠줌
+xy = (x_train,x_test,y_train,y_test)
+np.save("c:/101_ObjectCategories/5obj.npy",xy) # numpy 배열 저장
+print(len(y))
+
+# keras 설치  pip install keras
+
+from keras.models import Sequential
+from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Activation, Dropout, Flatten, Dense #Dense : 은닉층에 내보내는 수 
+import numpy as np 
+
+categories = ["chair","camera","butterfly","elephant","flamingo"] 
+nb_class = len(categories)
+
+image_w = 64
+image_h = 64
+
+x_train, x_test, y_train, y_test = np.load('c:/101_ObjectCategories/5obj.npy')
+
+# 0 과 1 범주내로 학습 시키기 위해서 255로 나눈다 (데이터 정규화)
+
+x_train = x_train.astype('float')/255
+x_test = x_test.astype('float')/255
+
+x_train.shape
+
+model = Sequential()
+model.add(Convolution2D(32,3,3,border_mode='same',input_shape=x_train.shape[1:])) # filter 갯수, 행, 열, 입력값과 동일하게 만든다. padding을 한다.
+                                                                                  # input_shape = 입력값 64*64*3
+model.add(Activation('relu')) # 활성화 함수 사용
+model.add(MaxPooling2D(pool_size=(2,2))) # 사이즈 지정
+model.add(Dropout(0.25))  # 25% out , 가지치기 , 필요없는 값을 제거, 필수는 아니다.
+
+# 2번째 층 만들기
+
+model.add(Convolution2D(64,3,3,border_mode='same'))
+model.add(Activation('relu'))
+model.add(Convolution2D(64,3,3))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten()) # fully connectly 하기위해 펼친다.
+model.add(Dense(512))
+model.add(Activation('relu'))
+model.add(Dropout(0.5)) # 512 개 중 반절 제거
+model.add(Dense(nb_class)) # 마지막 클래스 갯수, 값이 나올 값들
+
+# cross entropy 확률 값 cost로 보여주기
+
+model.add(Activation('softmax')) # 출력층 softmax : 확률값으로 표현
+model.compile(loss='binary_crossentropy',optimizer='rmsprop',metrics=['accuracy'])
+
+# 학습 시키기
+model.fit(x_train,y_train,batch_size=32,nb_epoch=50) # batch_size : 한번에 몇개 처리할껀지 수행, 학습 횟수
+
+score = model.evaluate(x_test,y_test) # predict 예측값 설정
+print('loss = ',score[0])
+print('accuracy = ',score[1])
+
+# 검증 하는 방법
+
+import sys, os
+from PIL import Image
+import numpy as np
+import glob
+
+
+image_size=64
+categories = ["chair","camera","butterfly","elephant","flamingo"] 
+nb_class = len(categories)
+
+X = []
+files = glob.glob('c:/101_ObjectCategories/sample_1.jpg')
+
+for i,f in enumerate(files):
+    img = Image.open(f)
+    img = img.convert('RGB')
+    img = img.resize((image_size,image_size))
+    data = np.asarray(img)
+    X.append(data)
+    
+    
+X=np.array(X)
+
+# 예측하기
+np.argmax(model.predict(X)) #인덱스 번호가 나온다.
+
+# 한번도 하지 학습을 하지 않은 사진을 넣기 
+
+Y = []
+files = glob.glob('c:/101_ObjectCategories/sample_*.jpg')
+
+for i,f in enumerate(files):
+    img = Image.open(f)
+    img = img.convert('RGB')
+    img = img.resize((image_size,image_size))
+    data = np.asarray(img)
+    Y.append(data)
+    
+Y=np.array(Y)
+
+# 예측하기
+np.argmax(model.predict(Y)) #인덱스 번호가 나온다.
+
+# HTML로 예측하기
+html = ""
+pre = model.predict(X)
+for i, p in enumerate(pre):
+    y = p.argmax()
+    print("입력:", files[i])
+    print("분류 이름:", categories[y])
+    html += """
+        <h3>입력:{0}</h3>
+        <div>
+          <p><img src="{1}" width=300></p>
+          <p>분류 이름:{2}</p>
+         </div>
+    """.format(os.path.basename(files[i]),
+               files[i], categories[y])
+# 리포트 저장하기 --- (※5)
+html = "<html><body style='text-align:center;'>" + \
+    "<style> p { margin:0; padding:0; } </style>" + \
+    html + "</body></html>"
+with open("c:/101_ObjectCategories/result.html", "w") as f:
+    f.write(html)
+
+# 어떤 이미지 떄매 분류가 안됬는지 확인 하는 방법, error라는 디렉토리를 생성해서 사용한다.
+    
+pre = model.predict(x_test)
+for i,v in enumerate(pre):
+    pre_ans = v.argmax()
+    ans = y_test[i].argmax()
+    dat = x_test[i]
+    if ans == pre_ans: continue
+    print("[NG]", categories[pre_ans], "!=", categories[ans])
+    print(v)
+    fname = "c:/101_ObjectCategories/error/" + str(i) + "-" + categories[pre_ans] + \
+        "-ne-" + categories[ans] + ".png"
+    dat *= 256
+    img = Image.fromarray(np.uint8(dat))
+    img.save(fname)
+score = model.evaluate(x_test, y_test)
+print('loss=', score[0])
+print('accuracy=', score[1])    
+    
+# dropout : 과적합을 막기 위해서 사용, 50%정도 자르는것이 원칙
+
+# 모델을 저장하기
+
+from keras.models import load_model
+
+model.save('c:/101_ObjectCategories/5obj-model.h5')
+model_1 = load_model('c:/101_ObjectCategories/5obj-model.h5')
+
+# 모델을 통한 예측
+
+np.argmax(model_1.predict(X))
+

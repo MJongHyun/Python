@@ -1,0 +1,289 @@
+[문제] zoo data set을 이용해서 분류프로그램을 만드세요.
+
+# http://archive.ics.uci.edu/ml/datasets/zoo
+#   1. animal name:     (deleted)
+#   2. hair     Boolean"
+#   3. feathers     Boolean"
+#   4. eggs     Boolean"
+#   5. milk     Boolean"
+#   6. airborne     Boolean"
+#   7. aquatic      Boolean"
+#   8. predator     Boolean"
+#   9. toothed      Boolean"
+#  10. backbone     Boolean"
+#  11. breathes     Boolean"
+#  12. venomous     Boolean"
+#  13. fins     Boolean"
+#  14. legs     Numeric (set of values: {0",2,4,5,6,8})
+#  15. tail     Boolean"
+#  16. domestic     Boolean"
+#  17. catsize      Boolean"
+#  18. type     Numeric (integer values in range [0",6])
+#      1 : 포유류, 2 : 조류, 3 : 파충류, 4 : 어류, 5 : 양서류, 6 : 곤충/거미류, 7 : 무척추동물
+
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+
+zoo = pd.read_csv('c:/data/zoo_data.txt',delimiter=',',header=None)
+
+zoo_data = zoo.ix[:,1:]
+test = np.array(zoo_data)
+
+x_data = test[:,0:-1]
+y_data = test[:,[-1]]
+
+# multi classfication (softmax classifier)  # 확률값으로 표현 ★★
+
+x = tf.placeholder(tf.float32,[None,16])
+y = tf.placeholder(tf.int32,[None,1]) 
+
+y_one_hot = tf.one_hot(y,7)
+y_one_hot = tf.reshape(y_one_hot,[-1,7])
+
+w = tf.Variable(tf.random_normal([16,7]),name='weight') 
+b = tf.Variable(tf.random_normal([7]),name='bias')
+
+logits = tf.matmul(x,w) + b 
+hypothesis = tf.nn.softmax(logits) # 확률로 만들어준다. 높은값에 해당하는 값을 뽑아주기 위해서
+
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels = y_one_hot)) # 확률값 만들어주기
+train = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost) 
+
+prediction = tf.argmax(hypothesis,1) 
+
+correct_prediction = tf.equal(prediction,tf.argmax(y_one_hot,1)) 
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(2001):
+    sess.run(train,feed_dict={x:x_data,y:y_data})
+    if step % 100 == 0 : 
+        loss,acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('step:',step)
+        print('loss:',loss) # count
+        print('Acc:', acc) # 예측값 평균
+
+a = sess.run(hypothesis,feed_dict={x:[[0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0]]})
+print(a,sess.run(tf.argmax(a,1)))
+
+##### 선생님 답 #####
+
+import tensorflow as tf
+import numpy as np
+
+# usecols : 필요한 column만 불러오게 하는 method
+xy=np.loadtxt('c:/data/zoo_data.txt',delimiter=',',usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17),dtype=np.float32)
+
+x_data = xy[:,0:-1]
+y_data = xy[:,[-1]]
+
+# 인덱스가 0부터 시작하기 떄문에 값을 헷갈리지 않게 하기 위해 1을 뺀다
+#      0 : 포유류, 1 : 조류, 2 : 파충류, 3 : 어류, 4 : 양서류, 5 : 곤충/거미류, 6 : 무척추동물
+y_data = y_data -1
+
+print(x_data.shape,y_data.shape)
+
+nb_classes = 7 # 클래스의 갯수 설정
+
+x = tf.placeholder(tf.float32,[None,16])
+y = tf.placeholder(tf.int32,[None,1])
+
+y_one_hot = tf.one_hot(y,nb_classes)
+y_one_hot = tf.reshape(y_one_hot,[-1,nb_classes]) # 전체중 별도의 7개 열 생성
+
+w = tf.Variable(tf.random_normal([16,nb_classes],seed=0),name='weight')
+b= tf.Variable(tf.random_normal([nb_classes],seed=0),name='bias')
+
+logits = tf.matmul(x,w)+b
+
+hypothesis = tf.nn.softmax(logits)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits,labels = y_one_hot))
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
+
+prediction = tf.argmax(hypothesis,1)
+correct_prediction = tf.equal(prediction, tf.argmax(y_one_hot,1))
+
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(2001):
+    sess.run(optimizer,feed_dict={x:x_data,y:y_data})
+    if step % 100 ==0:
+        loss, acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('Step:{:5}\t Loss:{:.3f}\nAcc:{:.2%}'.format(step,loss,acc))
+        
+# Step:{:5} 5칸을 만들어서 오른쪽을 기준으로 칸을 만든다. .3f 소수 3자리까지, 2% .00퍼센트까지
+        
+pred = sess.run(prediction,feed_dict={x:x_data})
+
+#  예측값과 값이 맞는지 확인 하는 방법
+# y_data.flatten() : 값을 1행 값으로 바꿔준다.
+# zip : for문에서 뒤에 값을 묶어서 다른값을 추출하려고 할 때 사용
+
+for p,y in zip(pred,y_data.flatten()):
+    print("[{}] Prediction : {} True Y:{}" .format(p==int(y),p,int(y)))
+
+# 값 비교해보기 
+# 0 : 포유류, 1 : 조류, 2 : 파충류, 3 : 어류, 4 : 양서류, 5 : 곤충/거미류, 6 : 무척추동물    
+worm=[0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0]
+wren=[0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0]
+
+zoo_hypothesis = sess.run(hypothesis,feed_dict={x:[worm]})
+print(zoo_hypothesis,sess.run(tf.argmax(zoo_hypothesis,1)))
+
+zoo_hypothesis = sess.run(hypothesis,feed_dict={x:[wren]})
+print(zoo_hypothesis,sess.run(tf.argmax(zoo_hypothesis,1)))
+
+# flatten 연습
+
+a = np.arange(12)
+b = a.reshape(3,4)
+a.reshape(3,-1) # -1 은 행이 고정되어있기 때문에 무조건 값이 나오게 한다. # 열에 -1을 넣어도 마찬가지 이다.
+
+a.reshape(2,2,-1)
+a.reshape(2,-1,2)
+a.flatten()
+
+[문제] bmi.csv 내용을 신경망을 이용해서 분류해 보세요.
+
+#BMI
+# BMI = 몸무게 / (키(m)*키(m))
+# 18.5 이상 25미만이면 표준
+#label : thin(저체중), normal(정상), fat(비만)
+
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+
+bmi = pd.read_csv('c:/data/bmi.csv')
+test=np.array(bmi)
+
+
+x_data=test[:,0:-1]
+y_data=test[:,[-1]]
+
+y_data[y_data=='fat']=0
+y_data[y_data=='normal']=1
+y_data[y_data=='thin']=2
+
+# 정규화
+
+x_data[:,[0]]=(x_data[:,[0]]-np.mean(x_data[:,0]))/np.std(x_data[:,0])
+x_data[:,[1]]=(x_data[:,[1]]-np.mean(x_data[:,1]))/np.std(x_data[:,1])
+
+
+x = tf.placeholder(tf.float32,[None,2])
+y = tf.placeholder(tf.int32,[None,1])
+
+y_one_hot = tf.one_hot(y,3)
+y_one_hot = tf.reshape(y_one_hot,[-1,3]) 
+
+w = tf.Variable(tf.random_normal([2,3],seed=0),name='weight')
+b = tf.Variable(tf.random_normal([3],seed=0),name='bias')
+
+logits = tf.matmul(x,w)+b
+
+hypothesis = tf.nn.softmax(logits)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits,labels = y_one_hot))
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.3).minimize(cost)
+
+prediction = tf.argmax(hypothesis,1)
+correct_prediction = tf.equal(prediction, tf.argmax(y_one_hot,1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(10001):
+    sess.run(optimizer,feed_dict={x:x_data,y:y_data})
+    if step % 1000 ==0:
+        loss, acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('Step:{:5}\t Loss:{:.3f}\nAcc:{:.2%}'.format(step,loss,acc))
+
+pred = sess.run(prediction,feed_dict={x:x_data})
+
+for p,y in zip(pred,y_data.flatten()):
+    print("[{}] Prediction : {} True Y:{}" .format(p==int(y),p,int(y)))
+    
+####
+    
+[문제] bmi.csv 내용을 신경망을 이용해서 분류해 보세요.
+
+#BMI
+# BMI = 몸무게 / (키(m)*키(m))
+# 18.5 이상 25미만이면 표준
+#label : thin(저체중), normal(정상), fat(비만)
+
+import tensorflow as tf
+import numpy as np
+import csv
+import pandas as pd
+import array
+
+bmi = pd.read_csv("c:/data/bmi.csv")
+bmi
+bmi_arr = np.array(bmi)
+
+x_data = bmi_arr[:,0:-1]
+y_data = bmi_arr[:,[-1]]
+
+x_data[:,[0]] = (x_data[:,[0]] - np.mean(x_data[:,[0]])) / np.std(x_data[:,[0]])
+x_data[:,[1]] = (x_data[:,[1]] - np.mean(x_data[:,[1]])) / np.std(x_data[:,[1]])
+
+y_data[y_data=='thin'] = 0
+y_data[y_data=='normal'] = 1
+y_data[y_data=='fat'] = 2
+
+# 0: thin, 1: normal, 2:fat 으로 변환
+
+y_data
+
+print(x_data.shape,y_data.shape)
+
+nb_classes = 3
+
+x = tf.placeholder(tf.float32,[None,2])
+y = tf.placeholder(tf.int32,[None,1])
+
+y_one_hot = tf.one_hot(y,nb_classes)
+y_one_hot = tf.reshape(y_one_hot,[-1,nb_classes])
+
+w = tf.Variable(tf.random_normal([2,nb_classes],seed=0),name="weight")
+b = tf.Variable(tf.random_normal([nb_classes],seed=0),name="bias")
+
+logits = tf.matmul(x,w) +b
+
+hypothesis = tf.nn.softmax(logits)
+
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits,labels=y_one_hot))
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.5).minimize(cost)
+
+prediction = tf.argmax(hypothesis,1)    
+
+correct_prediction = tf.equal(prediction,tf.argmax(y_one_hot,1))    
+
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))    
+
+sess = tf.Session()    
+
+sess.run(tf.global_variables_initializer())    
+
+for step in range(2001):
+    sess.run(optimizer,feed_dict={x:x_data,y:y_data})
+    if step % 100 == 0:
+        loss,acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print("Step : {:5}\tLoss : {:.3f}\tAcc : {:.2%}".format(step,loss,acc))
+
+pred = sess.run(prediction, feed_dict={x:x_data})
+for p,y in zip(pred,y_data.flatten()):
+    print("[{}] Prediction : {} True Y : {}".format(p==int(y),p,int(y)))
+
+mbi_hypothesis = sess.run(hypothesis, feed_dict={x:[[140,45]]})
+print(mbi_hypothesis, sess.run(tf.argmax(mbi_hypothesis,1)))
+
+mbi_hypothesis = sess.run(hypothesis, feed_dict={x:[[145,72]]})
+print(mbi_hypothesis, sess.run(tf.argmax(mbi_hypothesis,1)))

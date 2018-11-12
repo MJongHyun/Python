@@ -1,0 +1,355 @@
+CNN (Convolution Neural Network) - 합성곱 신경망
+
+convolution 층과 pooling 층을 포함하는 신경망 
+
+기존신경망과 차이는 ?
+기존방법 : affine -> Relu
+CNN     : Conv -> Relu -> Pooling
+
+합성곱 계층 
+feature map을 만들고 그 feature map을 선명하게 해주는 층
+합성곱 연산 : 이미지 3차원 (세로,가로,색상) data의 형상을 유지하면서 연산하는 작업
+
+1 2 3 0               2 0 1
+0 1 2 3  Θ(활성곱)    0 1 2    =    15 16          대응되는 곱을 한다. 줄여낸다. 필터를 통해서  4개 로 줄인다.
+3 0 1 2               1 0 2         6  15         stride 칸을 움직이다.
+2 3 0 1
+
+
+입력 (4,4)            필터(3,3)      계산값(2,2)  
+
+
+입력-필터                   4 - 3
+-------- + 1   = 결과값   -------- +1   =  2
+stride                       1
+
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
+
+sess = tf.InteractiveSession() # run 없이 바로 결과를 나오게 하는 Session, 대화형 처리작업
+image = np.array([[[[1],[2],[3]],
+                 [[4],[5],[6]],
+                 [[7],[8],[9]]]], dtype=np.float32)
+
+image.shape
+
+
+print(image.shape) # 면처럼 나오게된다. (1, 3, 3, 1)
+(1,3,3,1) 1: 이미지 갯수 3: 행(높이) 3:열(너비) 1: 색(채널)
+
+plt.imshow(image.reshape(3,3),cmap='Greys') # cmap(colormap)
+
+weight = tf.constant([[[[1.]],[[1.]]],
+                      [[[1,]],[[1.]]]], dtype=np.float32)
+
+
+print(weight.shape)
+(2,2,1,1)  :  행,열,색,필터수 # image의 색값(4번째)과 weight 색값(3번째)이  일치해야한다.
+
+conv2d=tf.nn.conv2d(image,weight,strides=[1,1,1,1],padding='VALID')
+conv2d_img = conv2d.eval() # 계산값 
+conv2d_img
+print(conv2d_img.shape)
+(1, 2, 2, 1)
+
+conv2d_img = np.swapaxes(conv2d_img,0,3) # 축을 바꾼다.(전치행렬)
+conv2d_img.shape
+# 방향을 바꿔서 같은 사진의 데이터를 더 모은다.
+
+# emumerate : 인덱스 값을 같이 보여준다.
+
+# 필터를 거쳐 값이 줄어든것을 볼 수 있다/
+for i , one_img in enumerate(conv2d_img):
+    print(one_img.reshape(2,2))
+    plt.subplot(1,2,i+1),plt.imshow(one_img.reshape(2,2),cmap='Greys')
+
+a = np.arange(15).reshape(3,5)
+a.T # 축이 바뀐다.
+np.transpose(a)
+np.swapaxes(a,0,1) # 0을 기준으로 90도 (5,3)으로 바뀜
+np.dot(a.T,a) # 행렬의 곱
+np.dot(np.transpose(a),a)
+np.dot(np.swapaxes(a,0,1),a)
+
+b = np.arange(24).reshape(2,3,4) # 3행 4열 행렬 2면
+b
+b.T # 3행 2열 행렬 4면 (4,3,2)
+b.T.shape
+np.transpose(b) # 축이 바뀐다. 
+np.swapaxes(b,0,1) # (3,2,4) # 2행 4열 3면 # 1번쨰 2번쨰 바뀜 0: 시작
+np.swapaxes(b,0,2) # (4,3,2) # 3행 2열 4면 # 1번쨰 3번째 바뀜 2: 끝값
+
+# 테두리 그리기
+# SAME : stride(1,1) 일 때만 가능하고 원본이미지와 동일한 활성화 곱을 만들려면 사용
+
+conv2d=tf.nn.conv2d(image,weight,strides=[1,1,1,1],padding='SAME') # VALID 필터링에 맞게 사용 #SAME은 테두리를 만든다
+conv2d_img = conv2d.eval() # 계산값 
+conv2d_img
+print(conv2d_img.shape)
+
+conv2d_img = np.swapaxes(conv2d_img,0,3) 
+conv2d_img.shape
+for i , one_img in enumerate(conv2d_img):
+    print(one_img.reshape(3,3))
+    plt.subplot(1,2,i+1),plt.imshow(one_img.reshape(3,3),cmap='Greys')
+    
+# 그 색상 그대로 표현하기 위해서 relu를 사용한다.
+
+image = np.array([[[[4],[3]],
+                   [[2],[1]]]],dtype=np.float32) 
+
+pool = tf.nn.max_pool(image,ksize=[1,2,2,1],strides=[1,1,1,1],padding='VALID')
+pool.eval() # 값이 최대인 값만 추출  2x2 에서 2x2 stride 했으므로.
+array([[[[4.]]]], dtype=float32)
+ 
+## 시뮬 레이션
+
+import tensorflow as tf
+import random
+import matplotlib.pyplot as plt
+
+from tensorflow.examples.tutorials.mnist import input_data
+
+tf.set_random_seed(777)  # reproducibility
+
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
+# Check out https://www.tensorflow.org/get_started/mnist/beginners for
+# more information about the mnist dataset
+#img = mnist.train.images[0].reshape(28,28)
+#plt.imshow(img,cmap="gray")
+# hyper parameters
+learning_rate = 0.001
+training_epochs = 15
+batch_size = 100
+
+# input place holders
+X = tf.placeholder(tf.float32, [None, 784])
+X_img = tf.reshape(X, [-1, 28, 28, 1])   # img 28x28x1 (black/white) 세로(높이)x가로(너비)
+Y = tf.placeholder(tf.float32, [None, 10])
+
+# L1 ImgIn shape=(?, 28, 28, 1) (n개 , 28,28, 색은1)
+W1 = tf.Variable(tf.random_normal([3, 3, 1, 32], stddev=0.01)) #필터크기(3,3,색, 필터수)
+
+#    Conv     -> (?, 28, 28, 32)
+#    Pool     -> (?, 14, 14, 32)
+L1 = tf.nn.conv2d(X_img, W1, strides=[1, 1, 1, 1], padding='SAME')
+L1 = tf.nn.relu(L1)
+L1 = tf.nn.max_pool(L1, ksize=[1, 2, 2, 1],strides=[1, 2, 2, 1], padding='SAME')
+'''
+Tensor("Conv2D:0", shape=(?, 28, 28, 32), dtype=float32)
+Tensor("Relu:0", shape=(?, 28, 28, 32), dtype=float32)
+Tensor("MaxPool:0", shape=(?, 14, 14, 32), dtype=float32)
+'''
+
+# L2 ImgIn shape=(?, 14, 14, 32)
+W2 = tf.Variable(tf.random_normal([3, 3, 32, 64], stddev=0.01)) # 3,3,32,64(필터수,이미지수)
+#    Conv      ->(?, 14, 14, 64)
+#    Pool      ->(?, 7, 7, 64)
+L2 = tf.nn.conv2d(L1, W2, strides=[1, 1, 1, 1], padding='SAME')
+L2 = tf.nn.relu(L2)
+L2 = tf.nn.max_pool(L2, ksize=[1, 2, 2, 1],strides=[1, 2, 2, 1], padding='SAME')
+L2_flat = tf.reshape(L2, [-1, 7 * 7 * 64])
+
+'''
+Tensor("Conv2D_1:0", shape=(?, 14, 14, 64), dtype=float32)
+Tensor("Relu_1:0", shape=(?, 14, 14, 64), dtype=float32)
+Tensor("MaxPool_1:0", shape=(?, 7, 7, 64), dtype=float32)
+Tensor("Reshape_1:0", shape=(?, 3136), dtype=float32)
+'''
+# fully connected layer
+# Final FC 7x7x64 inputs -> 10 outputs
+W3 = tf.get_variable("W3", shape=[7 * 7 * 64, 10], initializer=tf.contrib.layers.xavier_initializer())
+# 변수이름 , 초기화 
+b = tf.Variable(tf.random_normal([10]))
+logits = tf.matmul(L2_flat, W3) + b # 행렬의 곱 실행 
+
+# define cost/loss & optimizer
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+    logits=logits, labels=Y))
+cost
+#AdamOptimizer : 경사하강법을 다른 방법으로 만든 것 , 단 데이터 셋마다 차이가 있기 때문에 찾아야한다.
+
+optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+optimizer
+
+# initialize
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+# train my model
+print('Learning started. It takes sometime.')
+for epoch in range(training_epochs): # 학습횟수 
+    avg_cost = 0
+    total_batch = int(mnist.train.num_examples / batch_size)
+
+    for i in range(total_batch): # 부분적으로만 수행 
+        batch_xs, batch_ys = mnist.train.next_batch(batch_size)
+        feed_dict = {X: batch_xs, Y: batch_ys}
+        c, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
+        avg_cost += c / total_batch
+
+    print('Epoch:', '%04d' % (epoch + 1), 'cost =', '{:.9f}'.format(avg_cost))
+
+print('Learning Finished!')
+
+# Test model and check accuracy
+correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(Y, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print('Accuracy:', sess.run(accuracy, feed_dict={
+      X: mnist.test.images, Y: mnist.test.labels}))
+
+# Get one and predict
+r = random.randint(0, mnist.test.num_examples - 1)
+print("Label: ", sess.run(tf.argmax(mnist.test.labels[r:r + 1], 1)))
+print("Prediction: ", sess.run(
+    tf.argmax(logits, 1), feed_dict={X: mnist.test.images[r:r + 1]}))
+
+plt.imshow(mnist.test.images[r:r + 1].reshape(28, 28), cmap='Greys', interpolation='nearest')
+plt.show()
+
+[문제] 0부터 143까지의 원소로 이루어진 12x12 행렬을 만들고 4x4필터(단위행렬)를 이용해서 합성곱을 수행하세요. 
+단, 스트라이드는 1입니다.
+
+x_data=np.arange(144).reshape(12,12)
+y_data=np.eye(4,4)
+
+np.cumsum(x_data[0:4,0:4] * y_data)[-1]
+
+f=[]
+a=0
+b=4   
+c=0
+d=4
+
+while 1 :
+    ab=np.cumsum(x_data[a:b,c:d] * y_data)[-1]
+    a=a+1
+    b=b+1
+    f.append(ab)
+    if a>8:
+        a=0
+        b=4
+        c=c+1
+        d=d+1
+    if c>8:
+        break
+    
+total=np.array(f).reshape(9,-1)
+end=total.T    
+
+# 합성곱 계층 : feature map을 만들고 그 feature map을 선명하게 해주는 층
+# 합성곱 연산 : 이미지 3차원(세로,가로,색상) 데이터의 형상을 유지하면서 연산하는 작업
+# 합성곱 : 입력데이터에 필터를 적용 한것이 합성곱연산이다.
+
+a = np.arange(144).reshape(12,12)
+filter = np.eye(4,4)
+
+result = []
+for r in range(len(a)-3):
+    for c in range(len(a)-3):
+      result.append(np.sum(a[r:r+4,c:c+4]*filter))
+
+result=np.array(result).reshape(9,9)
+print(result)    
+
+(12-4)/1+1
+
+# 패딩 padding : 합성곱 연산을 수행하기 전에 입력 데이터 주변을 특정값으로 채워 늘리는 것을 말한다.
+  이유? 패딩을 하지 않을 경우 데이터의 공간 크기는 합성곱 계층을 지날 때 마다 작아지게 되므로 가장자리 
+        정보들이 사라지게 되는 문제가 발생하기 때문에 패딩을 사용한다.
+
+a = np.arange(16).reshape(4,4)
+a_pad = np.pad(a,pad_width=1,mode='constant',constant_values=0)
+
+# pad_width : 각 값의 주변에 넓이 1씩 채움,  mode : constant 상수 의미, constant_value=0 0으로 채운다.
+
+# 오른쪽과 아래만 채울경우
+
+[(top,botton),[(left,right)]]
+np.pad(a,[(1,1),(1,1)],mode='constant',constant_values=0) # 기본값
+
+np.pad(a,[(0,1),(0,1)],mode='constant',constant_values=0)# 오른쪽과 아래만 채울경우
+
+[문제] 0부터 15까지 원소로 이루어진 4x4 행렬을 만들고 0부터 8까지 의 원소로 루어진 3x3 필터를
+      이용 해서 합성곱하는데 제로 패딩을 이용해서 출력결과를 4x4 로 출력하세요.
+      
+a = np.arange(16).reshape(4,4)
+b = np.arange(9).reshape(3,3)
+
+result=[]
+
+for i in range(0,len(a)-2):
+    for j in range(0,len(a)-2):
+        result.append(np.sum(a[i:i+3,j:j+3]*b))
+
+result=np.array(result).reshape(2,2)
+
+end=np.pad(result,pad_width=1,mode='constant',constant_values=0)
+
+# 입력(H,W), 필터크기(FH,FW), 출력크기(OH,OW) , 패딩값 구하기
+스트라이드 : S, 패딩 : P
+    
+       H + 2P - FH
+OH = ---------------- + 1
+           S
+           
+    (OH - 1)*S - H + FH       
+P = -------------------
+            2
+            
+            
+P = ((4-1)*1 - 4 + 3)/2             
+
+# 이미지 값 넣기
+
+pip install Image
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+# 이미지 불러오기 , 숫자를 불러올 때는 역슬래쉬 //
+img = Image.open('C:/data/소/살치살/살치살92.jpg')
+plt.imshow(img)
+
+# RGB 형식으로 만들기
+
+img_pixel=np.array(img)
+
+def rgb_gray(image):
+    r,g,b = image[:,:,0], image[:,:,1], image[:,:,2]
+    gray = 0.2989*r + 0.5870*g + 0.1140*b # 필요한 값에 가중치를 준다.
+    return gray
+
+plt.imshow(rgb_gray(img_pixel),cmap='gray')
+
+# 저장
+
+img_pixel_gray = rgb_gray(img_pixel)
+plt.imsave('c://data//gray1.png',img_pixel_gray)
+
+def convolution(image,filter,stride,bias):
+    col = int((len(image[0])-len(filter[0]))/stride+1)
+    row = int((len(image)-len(filter))/stride+1)
+    filter_col = len(filter[0])
+    filter_row = len(filter)
+    convolution_list = []
+    for i in range(row):
+        for j in range(col):
+            convolution_list.append(np.sum(image[i:i + filter_row,j:j+filter_col]*filter))
+    return np.array(convolution_list).reshape(row,col)
+        
+filter=np.array([[[255,255,255],[0,0,0],[255,255,255]],
+                 [[0,0,0],[0,0,0],[0,0,0]],
+                 [[255,255,255],[0,0,0],[255,255,255]]])
+    
+filter_gray = rgb_gray(filter)
+plt.imshow(filter_gray,cmap='gray')
+
+result=convolution(img_pixel,filter_gray,1,0)
+result=convolution(img_pixel_gray,filter_gray,1,0)
+plt.imshow(result,cmap='gray')
+plt.imsave('c:\\data\\result.png',result)
