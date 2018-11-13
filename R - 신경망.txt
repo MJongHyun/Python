@@ -1,0 +1,123 @@
+# 콘트리트의 내구력 모델
+
+공학 분야에서 건물의 내구성에 대한 정확한 추정이 매우 중요하다
+이 추정은 건물,교량,철도를 건축하는데 사용되는 자재를 다루는 안전한 지침을 제정하기 위해 필요하다.
+
+콘크리트의 내구력 추정은 매우 중요하다.
+모든 건축현장에서 사용된다고 하더라도, 복합적으로 상호작용하는 매우 다양한 구성요소 때문에 콘크리트 성능은 다양하다.
+
+concrete <- read.csv("c:/data/concrete.csv")
+
+str(concrete)
+
+# cement : 콘크리트 총량, 입방미터당 킬로그램
+# slag : 시멘트
+# ash : 분(시멘트)
+# water : 물
+# superplasticizer : 고성능 감수재 (콘크리트 강도를 높이는 첨가제)
+# coarse 
+# fineagg
+# aging time : 숙성시간
+# strength : 압축 내구력
+#
+
+# 정규화 함수
+normalize <- function(x){
+  return ((x-min(x))/(max(x)-min(x)))
+}
+
+# 전체데이터 프레임에 정규화 적용
+concrete_norm <- as.data.frame(lapply(concrete,normalize))
+concrete_norm
+
+# 확인
+summary(concrete$strength)
+summary(concrete_norm$strength)
+
+# 훈련, 테스트 데이터 생성 , length : 컬럼 갯수, NROW 전체갯수
+
+concrete_train <- concrete_norm[1:773,]
+concrete_test <- concrete_norm[774:1030,]
+
+# 데이터 모델을 훈련
+install.packages('neuralnet')
+library(neuralnet)
+
+?neuralnet
+# 학습
+concrete_model <- neuralnet(formula = strength ~ cement+slag+ash+water+superplastic+coarseagg+fineagg+age, data=concrete_train)
+# 시각화
+plot(concrete_model)
+# 모델결과
+model_results <- compute(concrete_model,concrete_test[1:8])
+
+# 강도예측
+predicted_strength <- model_results$net.result
+
+# 예측값과 실제값 간의 상관관계
+cor(predicted_strength,concrete_test$strength)
+
+# 은닉뉴런 # hidden 층을 5개 2개로 나눔
+concrete_model2 <- neuralnet(formula = strength ~ cement+slag+ash+water+superplastic+coarseagg+fineagg+age, data=concrete_train, hidden=c(5,2))
+neuralnet(formula = strength~slag+ash+water,data=concrete_train,hidden=c(5,2)) # 몇개만 넣어놓고 실행하기
+
+
+plot(concrete_model2)
+
+# 모델결과
+model_results2 <- compute(concrete_model2,concrete_test[1:8])
+
+# 강도예측
+predicted_strength2 <- model_results2$net.result
+
+# 예측값과 실제값 간의 상관관계 , 예측률 상
+cor(predicted_strength2,concrete_test$strength)
+
+# 신경망 : 분류
+
+library(nnet)
+
+iris <- read.csv('c:/data/iris.csv')
+str(iris)
+
+# one hot encoding
+iris <- cbind(iris,class.ind(iris$Name))
+
+# train, test data 나누기
+
+set.seed(12345) # 값 고정
+idx<-sample(2,nrow(iris),prob=c(0.8,0.2),replace=TRUE)
+iris_train<-iris[idx==1,]
+iris_test<-iris[idx==2,]
+
+prop.table(table(iris_train$Name)) # 종류별 어느정도 있는지 확인
+
+iris_model<-nnet(Name ~ SepalLength+SepalWidth+PetalWidth,data=iris_train,size=10)
+iris_pred<-predict(iris_model,iris_test[,c(1:4)],type='class')
+
+# 나온값 비교
+
+table(iris_pred,iris_test$Name)
+
+iris_pred == iris_test['Name']
+
+# 시각화 하기
+install.packages('devtools')
+library(devtools)
+library(reshape2)
+
+# source_url : url 안에 있는 함수를 불러온다.
+
+source_url('https://gist.githubusercontent.com/Peque/41a9e20d6687f2f3108d/raw/85e14f3a292e126f1454864427e3a189c2fe33f3/nnet_plot_update.r')
+plot.nnet(iris_model)
+
+help(nnet)
+
+# factor 형으로 되어있다면 one_hot encoding을 굳이 할 이유가 없다.
+
+# softmax 사용
+iris_model <- nnet(x=iris_train[,c(1:4)],y=iris_train[,c(6:8)],data=iris_train,size=10,softmax=TRUE)
+# train 값 결과값
+
+plot.nnet(iris_model)
+
