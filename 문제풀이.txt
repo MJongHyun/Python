@@ -45,7 +45,7 @@ result_10=-(x+y)*(y-x)
 result_11=y*x*y
 result_12=y**x+x**x
 
-[문제_2] v_str 변수에 이 문자열을 입력하세요. 
+[문제2] v_str 변수에 이 문자열을 입력하세요. 
 
 v_str = "시간은 멈추지 않습니다. 하루를 유익하게 살아야합니다."
 
@@ -284,7 +284,7 @@ while i<9:
         i=i+1
         print('%d*%d=%d'%(x,i,x*i))
 
-[문제30] 1부터 100까지의 3의 배수를 출력, 합을 구하세요. while문을 이용하세요.
+[문제31] 1부터 100까지의 3의 배수를 출력, 합을 구하세요. while문을 이용하세요.
 
 i=0
 sum=0
@@ -311,7 +311,7 @@ while 1:
         print('3의 배수: %d' %i)
         sum=sum+i
 
-[문제31] 조건이 없는 상태에서 1부터 10까지 3,5를 제외한 합을 구하세요.
+[문제32] 조건이 없는 상태에서 1부터 10까지 3,5를 제외한 합을 구하세요.
 continue문, break문을 이용하세요.
 
 i=0
@@ -327,7 +327,7 @@ while 1:
        print('합 : %d' %sum)
        break
 
-[문제32] 리스트 변수에 18,2,3,1,4,5,7,8,9,10,11,15,16 값이 들어 있습니다. 짝수만 합을 구하세요.
+[문제33] 리스트 변수에 18,2,3,1,4,5,7,8,9,10,11,15,16 값이 들어 있습니다. 짝수만 합을 구하세요.
 
 a=[18,2,3,1,4,5,7,8,9,10,11,15,16]
 i=-1
@@ -342,7 +342,7 @@ while 1:
         print('리스트 안에 있는 짝수의 합: %d' %sum)
         break
     
-[문제33] 구구단을 생성하세요
+[문제34] 구구단을 생성하세요
 
 i=1
 while i<9:
@@ -353,7 +353,7 @@ while i<9:
         j=j+1
         print('%d*%d=%d' %(i,j,i*j))
 
-[문제34] 리스트 변수에 12,3,21,4,5,7,33,2,18,9,10,31,15,16 값이 들어 있습니다. 최대값을 구하세요.
+[문제35] 리스트 변수에 12,3,21,4,5,7,33,2,18,9,10,31,15,16 값이 들어 있습니다. 최대값을 구하세요.
 
 a=[12,3,21,4,5,7,33,2,18,9,10,31,15,16]
 
@@ -370,7 +370,7 @@ print(max)
 
 
 
-[문제35] 리스트 변수에 12,3,21,4,5,7,33,2,18,9,10,31,15,16 값이 들어 있습니다. 최소값을 구하세요.
+[문제36] 리스트 변수에 12,3,21,4,5,7,33,2,18,9,10,31,15,16 값이 들어 있습니다. 최소값을 구하세요.
 
 a=[12,3,21,4,5,7,33,2,18,9,10,31,15,16]
 
@@ -384,7 +384,7 @@ while i<=len(a)-1:
     i=i+1
 print(min)
 
-[문제36] 학생들의 점수가 90,55,63,78,80 점이 있습니다.
+[문제37] 학생들의 점수가 90,55,63,78,80 점이 있습니다.
 60점 이상이면 합격, 60점 미만이면 불합격 출력해 주세요.
 
 a=[90,55,63,78,80]
@@ -395,7 +395,7 @@ for i in a:
     else:
         print(i,'불합격')
 
-[문제37] 1부터 100까지 합을 구하세요.(for 이용)
+[문제38] 1부터 100까지 합을 구하세요.(for 이용)
 
 sum=0
 for i in range(1,101):
@@ -403,7 +403,7 @@ for i in range(1,101):
     
 print(sum)
 
-[문제38] 1부터 10까지 출력하세요. 단 4, 8은 제외(for 이용)
+[문제39] 1부터 10까지 출력하세요. 단 4, 8은 제외(for 이용)
 
 sum=0
 for i in range(1,11):
@@ -413,7 +413,7 @@ for i in range(1,11):
 
 print(sum)
 
-[문제39] 화면과 같이 출력하세요.(for 이용)
+[문제40] 화면과 같이 출력하세요.(for 이용)
 
 가로의 숫자를 입력하세요 : 5
 세로의 숫자를 입력하세요 : 5
@@ -435,14 +435,14 @@ for i in range(1,a+1):
 for i in range(1,a+1):
     print('\0★\0'*b,end='\n')
 
-[문제40] 구구단을 출력하세요.(for 이용)
+[문제41] 구구단을 출력하세요.(for 이용)
 
 for i in range(2,10):
     print('----%d단----' %i)
     for j in range(1,10):
         print(i,'*',j,'=',i*j)
 
-[문제41] 구구단을 만드세요. 
+[문제42] 구구단을 만드세요. 
 
 2단에서 9단까지만 입력하세요, [0은 구구단 전부를 출력합니다.]: 
     
@@ -459,7 +459,7 @@ elif 2<=dan<=9:
          for j in range(1,10):
              print(i,'*',j,'=',i*j)
 
-[문제42]lst 변수에 a,b,c,d값이 있습니다. for문을 이용하여 아래화면과 같이 출력하세요.
+[문제43]lst 변수에 a,b,c,d값이 있습니다. for문을 이용하여 아래화면과 같이 출력하세요.
 
 
 0번 a값이 있습니다.
@@ -476,7 +476,7 @@ for i in range(0,len(lst)):
 for i,name in enumerate(lst):
 	print('{}번 {}값이 있습니다.'.format(i,name))
 
-[문제43] 1부터 9까지 x 리스트 변수에 입력하세요.
+[문제44] 1부터 9까지 x 리스트 변수에 입력하세요.
          y변수는 x 변수의 값을 2곱한 값으로 입력해주세요.
 
 x=list(range(1,10))
@@ -486,7 +486,7 @@ for i in range(0,len(x)):
     y.append(x[i]*2) # append 하면 바로 추가된다. 
 
 
-[문제44] apple, banana, orange 리스트 변수에 값을 입력하시고
+[문제45] apple, banana, orange 리스트 변수에 값을 입력하시고
          이 값들의 길이를 출력해주세요.
          
 x=['apple','banana','orange']
@@ -497,7 +497,7 @@ for i in x:
 for i,long in enumerate(x):
     print('%s의 길이 : %s' %(long,len(x[i])))
     
-[문제45] 변수에 아래와 같이 들어 있습니다. 아래처럼 결과를 출력하세요.
+[문제46] 변수에 아래와 같이 들어 있습니다. 아래처럼 결과를 출력하세요.
 
 lst1 = [1,2,3]
 lst2 = [4,5,6]
@@ -515,7 +515,7 @@ for i in lst1:
         lst3.append(i*j)
 print(lst3)
 
-[문제46] 1부터 100 까지 값중에 짝수만x변수에 입력해 주세요
+[문제47] 1부터 100 까지 값중에 짝수만x변수에 입력해 주세요
 
 x=[]
 for i in range(1,101):
@@ -525,7 +525,7 @@ for i in range(1,101):
 z=[i for i in range(1,101) if i%2==0] # if문도 추가가 가능하다.
      
 
-[문제47] 튜플변수에 사과, 귤, 오렌지, 배, 포도, 바나나, 자몽, 키위, 딸기, 블루베리, 망고를 입력하시고 
+[문제48] 튜플변수에 사과, 귤, 오렌지, 배, 포도, 바나나, 자몽, 키위, 딸기, 블루베리, 망고를 입력하시고 
 과일이름중에 세글자 이상인 과일만  fruit_lst변수에 입력해주세요.
 
 a=('사과','귤','오렌지','배','포도','바나나','자몽','키위','딸기','블루베리','망고')
@@ -538,7 +538,7 @@ for i in a:
 fruit_lst=[i for i in a if len(i)>=3]        
 
 
-[문제48] 과일판매 현황을 dictionary 변수로 생성하세요. 과일 이름을 키로 하고 수량은 값으로 표현한후
+[문제49] 과일판매 현황을 dictionary 변수로 생성하세요. 과일 이름을 키로 하고 수량은 값으로 표현한후
 과일이름만 대문자로 출력해주세요.
 
    
@@ -563,7 +563,7 @@ for i,v in sale.items(): # items는 키와 값을 모두 불러와야 하므로 변수를 2개 지�
 [i.upper() for i in sale.keys()]
 [[i.upper(),v] for i,v in sale.items()] # i,v 둘다 값을 불러야 하기 떄문에 [[]] 괄호를 두번해야 한다.
 
-[문제49] 함수에 두 개의 숫자를 입력 값으로 받아서 값을 비교 하는 프로그램을 작성하세요.
+[문제50] 함수에 두 개의 숫자를 입력 값으로 받아서 값을 비교 하는 프로그램을 작성하세요.
 
 def num_compare(a,b):
     if a>b:
@@ -577,12 +577,12 @@ num_compare(1,2)
 num_compare(10,5)
 num_compare(5,5)
 
-[문제50] 두 인수값을 받아서 합찬 값을 리턴해주는 sum함수를 생성하세요.
+[문제51] 두 인수값을 받아서 합찬 값을 리턴해주는 sum함수를 생성하세요.
 
 def sum(x,y):
     return x+y
 
-[문제51] 다음과 같은 함수를 만드시오.
+[문제52] 다음과 같은 함수를 만드시오.
 cal("sum",1,2,3,4,5) - 15
 cal("multiply",1,2,3,4,5) - 120
 
@@ -604,7 +604,7 @@ def cal(name,*x):
 cal("sum",1,2,3,4,5)
 cal("multiply",1,2,3,4,5)
 
-[문제52] 여러 숫자를 인수값으로 받아서 합과 평균을 출력하는 aggF함수를 생성하세요.
+[문제53] 여러 숫자를 인수값으로 받아서 합과 평균을 출력하는 aggF함수를 생성하세요.
 
 aggF(1,2,3,4,5,6,7,8,9,10)
   
@@ -626,7 +626,7 @@ def aggF(*x):
     print('합 : %s\n평균 : %0.2f' %(sum,sum/len(x)))
     return sum,sum/len(x)
 
-[문제53] 입력값을 누적해서 더하는 함수를 작성하세요.
+[문제54] 입력값을 누적해서 더하는 함수를 작성하세요.
 
 >>> print(add(2))
 2
@@ -644,7 +644,7 @@ add(2)
 add(8)
 
 
-[문제54] 아래와 같이 변수에 값이 들어 있습니다. 
+[문제55] 아래와 같이 변수에 값이 들어 있습니다. 
 exchang함수에 x변수에 값을 넣으면 y로 변환하는 함수를 만드세요.
 
 x = ["귀도","반","로섬"]
@@ -658,7 +658,7 @@ def exchang(x):
 
 exchang(x)
 
-[문제55]약수를 구하는 divisor 함수를 생성하세요.
+[문제56]약수를 구하는 divisor 함수를 생성하세요.
 
 1이상의 숫자를 입력하세요: 100
 [100, 50, 25, 20, 10, 5, 4, 2, 1]
@@ -684,51 +684,51 @@ def divisor(x):
             y.append(i)
     return y
 
-[문제56] 여러 값을 동일한 변수에 순차적으로 저장할수 있는 용도의 변수 타입과 부호는 ?
+[문제57] 여러 값을 동일한 변수에 순차적으로 저장할수 있는 용도의 변수 타입과 부호는 ?
 
 list []
 
-[문제57] x 리스트 변수에 1, 3, 5, 7, 9 를 입력하세요
+[문제58] x 리스트 변수에 1, 3, 5, 7, 9 를 입력하세요
   
 x=[1,3,5,7,9]
 
-[문제58] x 변수에 타입을 확인하세요.
+[문제59] x 변수에 타입을 확인하세요.
 
 type(x)
 
-[문제59] x변수에 첫번째값을 확인해주세요
+[문제60] x변수에 첫번째값을 확인해주세요
 
 x[0]
 
-[문제60] x변수에 제일뒤에 값을 확인해주세요
+[문제61] x변수에 제일뒤에 값을 확인해주세요
  
 x[-1]
 
-[문제61] x변수에 10를 제일 뒤에 추가해주세요.
+[문제62] x변수에 10를 제일 뒤에 추가해주세요.
 
 x.append(10)
 
-[문제62] x변수에 있는 값들중에 10을 삭제해주세요
+[문제63] x변수에 있는 값들중에 10을 삭제해주세요
 
 del x[-1]
 
-[문제63] x변수에 1번색인위치에 2를 입력하세요.
+[문제64] x변수에 1번색인위치에 2를 입력하세요.
 
 x.insert(1,2)
 
-[문제64] x변수에 1번색인값을 제거해주세요.
+[문제65] x변수에 1번색인값을 제거해주세요.
 
 del x[1]
 
-[문제65] x 변수에 첫번째 부터  세번째까지 값을 출력해주세요.
+[문제66] x 변수에 첫번째 부터  세번째까지 값을 출력해주세요.
    
 x[:3]
 
-[문제66] x 변수에 제일뒤에서 두개 값을 출력해주세요.
+[문제67] x 변수에 제일뒤에서 두개 값을 출력해주세요.
 
 x[-2:]
 
-[문제67] x 변수를 y변수에 대입한 후 y변수에 11을 추가한 후 x값도 확인 한 후 분석해주세요.
+[문제68] x 변수를 y변수에 대입한 후 y변수에 11을 추가한 후 x값도 확인 한 후 분석해주세요.
 
 y=x
 
@@ -736,40 +736,40 @@ y.append(11)
 
 #x에서 11이 추가되어 있다.
 
-[문제68] x변수를 z변수에 복사하지만 고유한 변수로 생성해주시고 z변수에 13을 추가 해주세요.
+[문제69] x변수를 z변수에 복사하지만 고유한 변수로 생성해주시고 z변수에 13을 추가 해주세요.
 
 z=x[:]
 
 z.append(13)
 
-[문제69] 
+[문제70] 
     x = [1,2,3]
     y = [4,5,6]
     y변수에 값을 x 변수에 넣어주세요.
 
     x.extend(y)
 
-[문제70] x 변수에 1번 인덱스의 값을 제거해주세요.
+[문제71] x 변수에 1번 인덱스의 값을 제거해주세요.
 
 del x[1]
 
-[문제71] x변수에 1번 부터 3번 인덱스를 제거해주세요.
+[문제72] x변수에 1번 부터 3번 인덱스를 제거해주세요.
 
 del x[1:4]  
 
-[문제72] 중첩리스트를 이용할때 첫번째 항목의 첫번째 항목의 값을 추출해주세요.
+[문제73] 중첩리스트를 이용할때 첫번째 항목의 첫번째 항목의 값을 추출해주세요.
 
 리스트이름[0][0] 
 
-[문제73] 리스트형과 비슷하지만 요소의 값을 변경 할 수 없는 타입과 부호는 ?
+[문제74] 리스트형과 비슷하지만 요소의 값을 변경 할 수 없는 타입과 부호는 ?
 
 tuple ()
 
-[문제74] 키, 값을 저장하는 데이터 타입과 부호는 ?
+[문제75] 키, 값을 저장하는 데이터 타입과 부호는 ?
 
 dict {}
     
-[문제75]  아래와 같은 내용을 변수에 입력해주세요. 변수이름은 dict
+[문제76]  아래와 같은 내용을 변수에 입력해주세요. 변수이름은 dict
 
            이름 : '홍길동'
            나이 : 30
@@ -777,31 +777,31 @@ dict {}
 
 dict={'이름':'홍길동','나이':30,'직업':'파이썬개발자'} 
 
-[문제76] dict변수 키를 출력하세요.
+[문제77] dict변수 키를 출력하세요.
     
 dict.keys()
 
-[문제77] dict변수 값을 출력하세요.
+[문제78] dict변수 값을 출력하세요.
 
 dict.values()
 
-[문제78] dict변수의 키, 값을 출력해주세요.
+[문제79] dict변수의 키, 값을 출력해주세요.
 
 dict.items() 
 
-[문제79] dict변수의 이름만 출력해주세요.
+[문제80] dict변수의 이름만 출력해주세요.
 
 dict.get('이름')
 
-[문제80] dict변수의 주소 = '서울' 추가해주세요.
+[문제81] dict변수의 주소 = '서울' 추가해주세요.
 
 dict['주소']='서울'
     
-[문제81]  dict변수의 나이값을 32 수정하세요.
+[문제82]  dict변수의 나이값을 32 수정하세요.
 
 dict['나이']=32
 
-[문제82] 최대공약수를 재귀함수로 구현해보세요.
+[문제83] 최대공약수를 재귀함수로 구현해보세요.
 
 def gcd(x,y):
     
@@ -823,7 +823,7 @@ def gcd(x,y):
 		return x
 	return gcdFn(y,x%y)
 
-[문제83] stddev(2,3,1,7) 표준편차를 구하세요. stddev함수를 생성하세요.
+[문제84] stddev(2,3,1,7) 표준편차를 구하세요. stddev함수를 생성하세요.
 
 평균 = 관측값의 합 / 데이터수
 편차 = 관측값 - 평균
@@ -869,7 +869,7 @@ stddev(2,3,1,7)
 
 	return math.sqrt(v)
 
-[문제84] stats 모듈에 평균, 분산, 표준편차함수를 사용할수 있는 프로그램을 생성하세요.
+[문제85] stats 모듈에 평균, 분산, 표준편차함수를 사용할수 있는 프로그램을 생성하세요.
 
 >>> import stats
 >>> stats.mean(1,2,3,4,5)
@@ -895,7 +895,7 @@ def stddev(*arg):
     v=variance(*arg)
     return math.sqrt(v)
 
-[문제85] 프로그램을 생성하세요.
+[문제86] 프로그램을 생성하세요.
 
 액수입력 : 362
 화폐단위를 입력하세요 : 100 50 1
@@ -936,7 +936,7 @@ def wanna1():
     for i in range(len(b)-1,-1,-1):
         print('%s원: %s개' %(int(z[i]),a[i]))
 
-[문제86] 숫자를 입력값으로 받은 후 짝수인지 홀수 인지를 출력한후 그 숫자값을 기준으로
+[문제87] 숫자를 입력값으로 받은 후 짝수인지 홀수 인지를 출력한후 그 숫자값을 기준으로
 짝수면 짝수형식의 증가값으로 10개 출력, 홀수면 홀수형식의 증가값으로 10개 출력합니다.
 만약에 숫자가 들어 오지 않으면 예외사항처리하세요.
 
@@ -1003,7 +1003,7 @@ invalid literal for int() with base 10: '이십'
         print(error)
         print("숫자를 입력하세요" .format(error))
 
-[문제87] 오늘이 무슨 요일인지 출력해주세요.
+[문제88] 오늘이 무슨 요일인지 출력해주세요.
 
 n=datetime.datetime.now().weekday()
 
@@ -1029,7 +1029,7 @@ days=['월요일','화요일','수요일','목요일','금요일','토요일','일요일']
 days[datetime.datetime.now().weekday()]
 
 
-[문제88] 함수에 인수값으로 현재날짜, 일수 정보를 입력 받아서 더한 정보를 return 하는 next_day함수를 생성하세요
+[문제89] 함수에 인수값으로 현재날짜, 일수 정보를 입력 받아서 더한 정보를 return 하는 next_day함수를 생성하세요
 
 def next_day(x,y):
 	a=datetime.timedelta(days=y)
@@ -1039,7 +1039,7 @@ print(next_day(datetime.date.today(),72))
 
 
 
-[문제89] 아래와 같은 결과가 출력될수 있도록 프로그램을 생성하세요
+[문제90] 아래와 같은 결과가 출력될수 있도록 프로그램을 생성하세요
 
 
 1에서 천만까지 짝수합, 홀수합 구합니다
@@ -1066,7 +1066,7 @@ def total():
     print('처리시간 millisecond(1/1000)',round(delta.total_seconds()*1000),'ms')
 
 
-[문제90] last_name, salary 출력
+[문제91] last_name, salary 출력
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1075,7 +1075,7 @@ for emp_list in emp_csv:
     print(emp_list[2],emp_list[7])
 file.close()
     
-[문제91] last_name, last_name 길이를 출력해주세요.
+[문제92] last_name, last_name 길이를 출력해주세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1084,7 +1084,7 @@ for emp_list in emp_csv:
     print(emp_list[2],len(emp_list[2]))
 file.close()    
 
-[문제92] employee_id, last_name, salary*12 달 곱한 값을 출력 해주세요.
+[문제93] employee_id, last_name, salary*12 달 곱한 값을 출력 해주세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1093,7 +1093,7 @@ for emp_list in emp_csv:
     print(emp_list[0],emp_list[2],float(emp_list[7])*12) # 값에 소수가 있을 수 있으므로 int 말고 float이 더 낫다.
 file.close()
     
-[문제93] last_name,commission_pct를 출력하는데 commission_pct값이 '' 이면 0으로 출력해주세요.
+[문제94] last_name,commission_pct를 출력하는데 commission_pct값이 '' 이면 0으로 출력해주세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1123,7 +1123,7 @@ file.close()
 
 #####
 
-[문제94] last_name을 대문자로 job_id 소문자로 출력해주세요
+[문제95] last_name을 대문자로 job_id 소문자로 출력해주세요
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
 next(emp_csv)  
@@ -1131,7 +1131,7 @@ for emp_list in emp_csv:
     print(emp_list[2].upper(),emp_list[6].lower())
 file.close()
 
-[문제95] last_name을 첫글자만 추출해서 소문자로 출력해주세요.
+[문제96] last_name을 첫글자만 추출해서 소문자로 출력해주세요.
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
 next(emp_csv)  
@@ -1139,7 +1139,7 @@ for emp_list in emp_csv:
     print(emp_list[2][0].lower())
 file.close()
     
-[문제96] last_name을 두번째 부터 마지막 까지만 추출해서 대문자로 출력해주세요.
+[문제97] last_name을 두번째 부터 마지막 까지만 추출해서 대문자로 출력해주세요.
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
 next(emp_csv)  
@@ -1147,17 +1147,17 @@ for emp_list in emp_csv:
     print(emp_list[2][1:].upper())
 file.close()
 
-[문제97] 이름을 입력하면 첫글자는 대문자 나머지는 소문자를 출력하는 initcap함수를 이용해서 이름을 출력하세요.
+[문제98] 이름을 입력하면 첫글자는 대문자 나머지는 소문자를 출력하는 initcap함수를 이용해서 이름을 출력하세요.
 
 def initcap(x):
     return x[0].upper()+x[1:].lower() 
 
-[문제98] 이름을 입력하면 제일 뒤에 있는 철자는 대문자 앞의 문자는 소문자로 출력하는 tailcap 함수를 생성하세요.
+[문제99] 이름을 입력하면 제일 뒤에 있는 철자는 대문자 앞의 문자는 소문자로 출력하는 tailcap 함수를 생성하세요.
 
 def tailcap(x):
     return x[0:len(x)-1].lower()+x[-1].upper() 
 
-[문제99] 이름과 급여를 출력하는데 급여를 출력할때에 0대신에 *을 출력하세요.
+[문제100] 이름과 급여를 출력하는데 급여를 출력할때에 0대신에 *을 출력하세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1166,7 +1166,7 @@ for emp_list in emp_csv:
 	print(emp_list[2],emp_list[7].replace('0','*'))
 file.close()
 
-[문제100] 이름, salary*12+ commission_pct 결과를 출력해주세요.
+[문제101] 이름, salary*12+ commission_pct 결과를 출력해주세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1179,7 +1179,7 @@ for emp_list in emp_csv:
         print(emp_list[2],float(emp_list[7])*12+float(emp_list[8]))
 file.close()
 
-[문제101] 이름, 입사한 요일(한글)을 출력해주세요.
+[문제102] 이름, 입사한 요일(한글)을 출력해주세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1215,7 +1215,7 @@ for emp_list in emp_csv:
     print(emp_list[2],days[b])
 file.close()
 
-[문제102] 이름, 입사한 날짜부터 오늘까지 총 몇일 근무했는지를 출력하세요.
+[문제103] 이름, 입사한 날짜부터 오늘까지 총 몇일 근무했는지를 출력하세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1226,7 +1226,7 @@ b=datetime.datetime.strptime(today,'%Y%m%d')
 for emp_list in emp_csv:
     print(emp_list[2],(b-datetime.datetime.strptime(emp_list[5],'%Y%m%d')).days) # days 날짜만 나오게 출력
 
-[문제103]오늘 부터 이번달 말일까지 몇일 남았는지 출력하세요.
+[문제104]오늘 부터 이번달 말일까지 몇일 남았는지 출력하세요.
 
 import datetime
 import calendar
@@ -1238,7 +1238,7 @@ from calendar import monthrange
 
 monthrange(2018,9)[1]-date.today().day
 
-[문제104] 사원번호가 100번 사원의 사원이름과 급여를 출력하세요.
+[문제105] 사원번호가 100번 사원의 사원이름과 급여를 출력하세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1248,7 +1248,7 @@ for emp_list in emp_csv:
         print(emp_list[2],emp_list[7])
 file.close()
 
-[문제105] 급여가 10000 이상인 사원들의 이름과 급여를 출력하세요.
+[문제106] 급여가 10000 이상인 사원들의 이름과 급여를 출력하세요.
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1258,7 +1258,7 @@ for emp_list in emp_csv:
         print(emp_list[2],emp_list[7])
 file.close()
 
-[문제106] 2001-01-13일에 입사한 사원의 이름과 입사일을 출력하세요
+[문제107] 2001-01-13일에 입사한 사원의 이름과 입사일을 출력하세요
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1268,7 +1268,7 @@ for emp_list in emp_csv:
         print(emp_list[2],emp_list[5])
 file.close()
 
-[문제107] 2002 년도에 입사한 사원들의 이름과 입사일을 출력하세요.
+[문제108] 2002 년도에 입사한 사원들의 이름과 입사일을 출력하세요.
 
 import datetime
 file=open("c:/data/emp.csv","r")
@@ -1279,7 +1279,7 @@ for emp_list in emp_csv:
         print(emp_list[2],emp_list[5])
 file.close
 
-[문제108] job이 ST_CLERK 이고 월급 3000 이상인 사원들의 이름과 job, 급여 출력하세요
+[문제109] job이 ST_CLERK 이고 월급 3000 이상인 사원들의 이름과 job, 급여 출력하세요
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1289,7 +1289,7 @@ for emp_list in emp_csv:
         print(emp_list[6],emp_list[7])
 file.close()
 
-[문제109] 급여가 2500 에서 3000 사이인 사원들의 이름과 급여를 출력하세요
+[문제110] 급여가 2500 에서 3000 사이인 사원들의 이름과 급여를 출력하세요
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1300,7 +1300,7 @@ for emp_list in emp_csv:
 file.close()
 
 
-[문제110] job AD_VP , AD_PRES 인 사원들의 이름과 월급과 직업을 출력하세요
+[문제111] job AD_VP , AD_PRES 인 사원들의 이름과 월급과 직업을 출력하세요
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1310,7 +1310,7 @@ for emp_list in emp_csv:
         print(emp_list[2],emp_list[6],emp_list[7])
 file.close()
 
-[문제111] 직업이 AD_VP , AD_PRES 이 아닌 사원들의 이름과 월급과 직업을  출력하세요
+[문제112] 직업이 AD_VP , AD_PRES 이 아닌 사원들의 이름과 월급과 직업을  출력하세요
 
 file=open("c:/data/emp.csv","r")
 emp_csv=csv.reader(file)
@@ -1323,7 +1323,7 @@ for emp_list in emp_csv:
 print(count)
 file.close()
 
-[문제112] 커미션이 null 인 사원의 이름, 급여, 커미션을 출력하세요.
+[문제113] 커미션이 null 인 사원의 이름, 급여, 커미션을 출력하세요.
           전체 인원수, 커미션 null의 수, 비율도 출력하세요.
 
 import csv
@@ -1340,7 +1340,7 @@ for emp_list in emp_csv:
 print('총인원 :',total,'커미션 Null 수 :',c_count,'비율 :',(c_count/total)*100)
 file.close()
 
-[문제113]커미션이 null 이 아닌 사원들의 이름,급여,커미션을 출력하세요.
+[문제114]커미션이 null 이 아닌 사원들의 이름,급여,커미션을 출력하세요.
 전체 인원수, 커미션 null의 수, 비율도 출력하세요.
 
 import csv
@@ -1358,7 +1358,7 @@ print('총인원 :',total,'커미션 Null이 아닌 수 :',c_count,'비율 :',(c_count/total
 file.close()
 
 
-[문제114] last_name의 첫번째 철자가 S 로 시작하는 사원들의 이름과 급여를 출력하세요.
+[문제115] last_name의 첫번째 철자가 S 로 시작하는 사원들의 이름과 급여를 출력하세요.
 전체 인원수, 조건의 수, 비율도 출력하세요.
 
 import csv
@@ -1375,7 +1375,7 @@ for emp_list in emp_csv:
 print('총인원 :',total,'조건의 수 :',c_count,'비율 :',(c_count/total)*100)
 file.close()            
 
-[문제115] last_name의 두번째 철자가 i 인 사원들의 이름과 월급을 출력하세요. 
+[문제116] last_name의 두번째 철자가 i 인 사원들의 이름과 월급을 출력하세요. 
 전체 인원수, 조건의 수, 비율도 출력하세요.
 
 import csv
@@ -1392,7 +1392,7 @@ for emp_list in emp_csv:
 print('총인원 :',total,'조건의 수 :',c_count,'비율 :',(c_count/total)*100)
 file.close()
 
-[문제116] 50번부서 사원들의 이름, 급여 출력하는데 이름을 오름차순으로 출력하세요.
+[문제117] 50번부서 사원들의 이름, 급여 출력하는데 이름을 오름차순으로 출력하세요.
 
 import csv
 from operator import itemgetter
@@ -1423,7 +1423,7 @@ emp_list_sorted=sorted(result,reverse=False,key=sort_check)
 emp_list_sorted=sorted(result,reverse=False,key=(lambda x:x[0]))
 
 
-[문제117] job이 ST_CLERK인 사원들의 이름과 입사일과 job을 출력하는데 가장 최근에 입사한 사원부터 출력하세요.
+[문제118] job이 ST_CLERK인 사원들의 이름과 입사일과 job을 출력하는데 가장 최근에 입사한 사원부터 출력하세요.
 
 import csv
 from operator import itemgetter
@@ -1447,7 +1447,7 @@ emp_sorted=sorted(result,reverse=True,key=sortcheck)
 for i in emp_sorted:
     print(i[2],i[5])
 
-[문제118] 부서별 급여의 총액을 구하세요.
+[문제119] 부서별 급여의 총액을 구하세요.
 
 file=open('c:/data/emp.csv','r')            
 emp_csv=csv.reader(file)
@@ -1491,7 +1491,7 @@ for k,v in dept_sum.items():
 
 file. close
 
-[문제119] 부서별 급여의 총액을 구하세요. 부서별로 오름차순 정렬하세요. 
+[문제120] 부서별 급여의 총액을 구하세요. 부서별로 오름차순 정렬하세요. 
 
 
 10 4400
@@ -1562,7 +1562,7 @@ for k,v in dept_sum_sort:
     else:
         print(k,v)
 
-[문제120] 단어, 알파벳을 입력값으로 넣어서 단어 안에 알파벳 수를 출력하세요
+[문제121] 단어, 알파벳을 입력값으로 넣어서 단어 안에 알파벳 수를 출력하세요
 
 <화면예>
 
@@ -1584,7 +1584,7 @@ def wordF(x,y):
             s=s+1
     return s
 
-[문제121] 단어를 입력값으로 넣어서 알파벳을 출력하는데 중복되는 알파벳은 하나만 출력하세요.
+[문제122] 단어를 입력값으로 넣어서 알파벳을 출력하는데 중복되는 알파벳은 하나만 출력하세요.
 
 alphaF('happy')
 ['h', 'a', 'p', 'y']
@@ -1604,7 +1604,7 @@ def alphaF(x):
             y.append(i)
     return y
            
-[문제122] 단어 철자의 빈도수를 출력하세요.
+[문제123] 단어 철자의 빈도수를 출력하세요.
 
 
 alphaF('intelligence')
@@ -1637,7 +1637,7 @@ def alphaF(x):
             a[i]=1
     print(a)
 
-[문제123] 아래와 같은 모양의 표를 생성하세요. 
+[문제124] 아래와 같은 모양의 표를 생성하세요. 
 
       PYTHON   R  SQL
 2014      60  90   50
@@ -1656,7 +1656,7 @@ df['SQL']=[50,75,80]
 df=DataFrame({'PYTHON':{2014:60,2015:80,2016:70},'R':{2014:90,2015:65,2016:75},'SQL':{2014:50,2015:75,2016:85}})
 df=DataFrame({'PYTHON':[60,80,70],'R':[90,65,75],'SQL':[50,75,85]},index=(2014,2015,2016))
 
-[문제124] 'PYTHON' 열을 선택하세요
+[문제125] 'PYTHON' 열을 선택하세요
 
 df['PYTHON']
 df.ix[:,0]
@@ -1664,49 +1664,49 @@ df.ix[:,'PYTHON']
 df.loc[:,'PYTHON']
 df.iloc[:,0]
 
-[문제125] '2014' 행 정보를 출력하세요.
+[문제126] '2014' 행 정보를 출력하세요.
 
 df.ix[2014,:]
 df.ix[2014]
 
-[문제126] 인덱스번호를 기준으로 1부터 2번까지 출력하세요.
+[문제127] 인덱스번호를 기준으로 1부터 2번까지 출력하세요.
 
 df[1:]
 
-[문제127] PYTHON의 값을 기준으로 60보다 큰값을 가지고 있는 행 정보를 출력하세요.
+[문제128] PYTHON의 값을 기준으로 60보다 큰값을 가지고 있는 행 정보를 출력하세요.
 
 df[df['PYTHON']>60]
 
-[문제128] PYTHON의 값을 기준으로 60 보다 큰값을 가지고 있는 PYTHON 정보만 출력하세요
+[문제129] PYTHON의 값을 기준으로 60 보다 큰값을 가지고 있는 PYTHON 정보만 출력하세요
 
 df.ix[df['PYTHON']>60,'PYTHON']
 df['PYTHON'][df['PYTHON']>60] # 열을 먼저 제한한 후 조건을 써도 가능하다.
 
-[문제129] '2015' 행값 중에 PYTHON 정보만 출력하세요
+[문제130] '2015' 행값 중에 PYTHON 정보만 출력하세요
 
 df.ix[2015,'PYTHON']
 
-[문제130] '2015' 행값 중에 PYTHON, R 정보 출력하세요 
+[문제131] '2015' 행값 중에 PYTHON, R 정보 출력하세요 
 
 df.ix[2015,['PYTHON','R']]
 
-[문제131] 'R' 열 정보를 출력하세요.
+[문제132] 'R' 열 정보를 출력하세요.
 
 df.ix[:,'R']
 
-[문제132]PYTHON 점수가 80 이상 또는 SQL 점수가 90 이상인 데이터 출력하세요.
+[문제133]PYTHON 점수가 80 이상 또는 SQL 점수가 90 이상인 데이터 출력하세요.
 
 df[(df['PYTHON']>=80) | (df['SQL']>=90)]
 
-[문제133] PYTHON 점수가 80 이상 이고 SQL 점수 90 이상인 데이터 출력하세요.
+[문제134] PYTHON 점수가 80 이상 이고 SQL 점수 90 이상인 데이터 출력하세요.
 
 df[(df['PYTHON']>=80) & (df['SQL']>=90)]
 
-[문제134] 직업이 ST_CLERK 인 사원의 LAST_NAME, SALARY, JOB_ID를 출력해주세요.
+[문제135] 직업이 ST_CLERK 인 사원의 LAST_NAME, SALARY, JOB_ID를 출력해주세요.
 
 emp.ix[emp['JOB_ID']=='ST_CLERK',['LAST_NAME','SALARY','JOB_ID']]
 
-[문제135] emp.csv 파일의 데이터를 판다스를 이용해서 읽어 들인 후 급여가 10000 이상인 사원들의 이름, 급여, 입사일을 출력해주세요.
+[문제136] emp.csv 파일의 데이터를 판다스를 이용해서 읽어 들인 후 급여가 10000 이상인 사원들의 이름, 급여, 입사일을 출력해주세요.
 
 import csv
 import pandas as pd
@@ -1716,7 +1716,7 @@ emp=pd.read_csv("c:/data/emp.csv")
 emp.ix[emp['SALARY']>=10000,['LAST_NAME','SALARY','HIRE_DATE']]
 emp.loc[emp['SALARY']>=10000,['LAST_NAME','SALARY','HIRE_DATE']]
 
-[문제136] 급여 10000 이상인 사원들의 이름과 급여, 입사일를 출력하세요. 급여를 기준으로 내림차순하세요.
+[문제137] 급여 10000 이상인 사원들의 이름과 급여, 입사일를 출력하세요. 급여를 기준으로 내림차순하세요.
 
 import csv
 import pandas as pd
@@ -1727,7 +1727,7 @@ m=emp.ix[emp['SALARY']>=10000,['LAST_NAME','SALARY','HIRE_DATE']]
 
 m.sort_values(by='SALARY',ascending=False)
 
-[문제136] 급여를 많이 받는 순으로 10위 까지를 구하세요. 
+[문제138] 급여를 많이 받는 순으로 10위 까지를 구하세요. 
 
 emp=pd.read_csv('c:/data/emp.csv')
 
@@ -1737,24 +1737,24 @@ emp[emp['SALARY'].rank(ascending=False, method='dense')<=10][['EMPLOYEE_ID','LAS
 emp['rank']=emp['SALARY'].rank(ascending=False,method='dense')
 emp[emp['rank']<=10].sort_values('rank')
 
-[문제137] 직업이 AD_VP, AD_PRES 인 사원들의 이름, 급여, 직업을 출력하세요.
+[문제139] 직업이 AD_VP, AD_PRES 인 사원들의 이름, 급여, 직업을 출력하세요.
 
 emp[emp['JOB_ID'].isin(['AD_VP','AD_PRES'])][['LAST_NAME','SALARY','JOB_ID']]
 
-[문제138] 직업이 AD_VP ,AD_PRES 아닌 사원들의 이름, 급여, 직업을 출력하세요.
+[문제140] 직업이 AD_VP ,AD_PRES 아닌 사원들의 이름, 급여, 직업을 출력하세요.
 
 emp[~emp['JOB_ID'].isin(['AD_VP','AD_PRES'])][['LAST_NAME','SALARY','JOB_ID']]
 
-[문제 139] 커미션이 null인 사원의 이름, 커미션을 출력하세요
+[문제141] 커미션이 null인 사원의 이름, 커미션을 출력하세요
 
 emp[emp['COMMISSION_PCT'].isnull()][['LAST_NAME','COMMISSION_PCT']]
 
-[문제 140] 커미션이 null아닌 사원의 이름, 커미션을 출력하세요
+[문제142] 커미션이 null아닌 사원의 이름, 커미션을 출력하세요
 
 emp[emp['COMMISSION_PCT'].notnull()][['LAST_NAME','COMMISSION_PCT']]
 emp[~emp['COMMISSION_PCT'].isnull()][['LAST_NAME','COMMISSION_PCT']]
 
-[문제141] last_name 첫글자가 S로 시작되는 사원들의 last_name을 출력하세요.
+[문제143] last_name 첫글자가 S로 시작되는 사원들의 last_name을 출력하세요.
 
 emp[emp['LAST_NAME'].apply(lambda x:x[0])=='S']['LAST_NAME']
 
@@ -1763,16 +1763,16 @@ def a(x):
         return x
 emp[emp['LAST_NAME'].apply(a).notnull()]['LAST_NAME']
 
-[문제142] last_name g로 끝나는 사원들의 이름, 급여 출력하세요.
+[문제144] last_name g로 끝나는 사원들의 이름, 급여 출력하세요.
 
 emp[emp['LAST_NAME'].apply(lambda x:x[-1])=='g']['LAST_NAME']
 
-[문제143] 110번 사원의 급여보다 많이 받는 사원들의 이름, 급여를 출력하세요.
+[문제145] 110번 사원의 급여보다 많이 받는 사원들의 이름, 급여를 출력하세요.
 
 a=emp[emp['EMPLOYEE_ID']==110]['SALARY']
 emp[emp['SALARY']>=int(a)][['LAST_NAME','SALARY']]
 
-[문제144] 관리자 사원의 이름, 입사일, 급여를 출력하세요.
+[문제146] 관리자 사원의 이름, 입사일, 급여를 출력하세요.
 
 emp[emp['EMPLOYEE_ID'].isin(emp['MANAGER_ID'])][['LAST_NAME','HIRE_DATE','SALARY']]
 
@@ -1806,7 +1806,7 @@ for j in range(0,len(a)):
 
 file.close()
 
-[문제145] 101번 사원의 관리자 이름, 입사일, 급여정보를 출력하세요.
+[문제147] 101번 사원의 관리자 이름, 입사일, 급여정보를 출력하세요.
 1. pandas를 이용해서 해결
 
 from pandas import Series,DataFrame
@@ -1845,7 +1845,7 @@ for i in range(0,len(list_emp)):
 
 file.close()   
 
-[문제146] 최고 급여, 최저 급여 출력하세요.
+[문제148] 최고 급여, 최저 급여 출력하세요.
 
 import csv
 
@@ -1879,7 +1879,7 @@ emp=pd.read_csv('c:/data/emp.csv')
 emp['SALARY'].max()
 emp['SALARY'].min()
 
-[문제147] 20번 부서 사원들의 급여 합을 구하세요.
+[문제149] 20번 부서 사원들의 급여 합을 구하세요.
 
 import csv
 
@@ -1900,7 +1900,7 @@ import numpy as np
 emp=pd.read_csv('c:/data/emp.csv')
 emp[emp['DEPARTMENT_ID']==20]['SALARY'].sum()
 
-[문제148] 부서번호를 입력하면 그 부서의 급여 총액을 구하는 함수를 생성하세요.
+[문제150] 부서번호를 입력하면 그 부서의 급여 총액을 구하는 함수를 생성하세요.
 
 dept_sum_sal()
 
@@ -1955,7 +1955,7 @@ def dept_sum_sal1():
         
 dept_sum_sal1()
 
-[문제149] 직업을 물어보게하고 직업을 입력하면 해당 직업의 최고 급여를 출력되게하는데 아무것도 입력하지 않으면 계속 물어보게하는
+[문제151] 직업을 물어보게하고 직업을 입력하면 해당 직업의 최고 급여를 출력되게하는데 아무것도 입력하지 않으면 계속 물어보게하는
 프로그램을 작성하세요.
 
 job_max_sal()
@@ -2030,7 +2030,7 @@ def job_max_sal1():
 
 job_max_sal1()
 
-[문제150]부서번호,급여를 기준으로 내림차순 정렬해서 아래 화면처럼 컬럼정보를 출력하세요.
+[문제152]부서번호,급여를 기준으로 내림차순 정렬해서 아래 화면처럼 컬럼정보를 출력하세요.
 
 
      deptno  empid         name      sal
@@ -2050,7 +2050,7 @@ emp=pd.read_csv('c:/data/emp_new.csv',names=['empid','name','job','mgr','hire_da
 
 emp[['deptno','empid','name','sal']].sort_values(by=['deptno','sal'],ascending=False)
 
-[문제151] index 번호 0부터 50까지 부서번호, 급여를 기준으로 내림차순 정렬한 후 아래결과처럼 출력하세요.
+[문제153] index 번호 0부터 50까지 부서번호, 급여를 기준으로 내림차순 정렬한 후 아래결과처럼 출력하세요.
 
 
     deptno  empid         name      sal
@@ -2069,7 +2069,7 @@ emp=pd.read_csv('c:/data/emp_new.csv',names=['empid','name','job','mgr','hire_da
 emp.ix[0:50][['empid','name','deptno','sal']].sort_values(by=['deptno','sal'],ascending=False)
 
 
-[문제152] 50번 부서 사원들의 정보를 급여를 기준으로 내림차순 정렬해서 해서 아래 화면처럼 컬럼정보를 출력하세요.
+[문제154] 50번 부서 사원들의 정보를 급여를 기준으로 내림차순 정렬해서 해서 아래 화면처럼 컬럼정보를 출력하세요.
 
    empid         name  deptno     sal
 21    121        Fripp    50.0  8200.0
@@ -2084,7 +2084,7 @@ emp=pd.read_csv('c:/data/emp_new.csv',names=['empid','name','job','mgr','hire_da
 
 emp[emp['deptno']==50][['empid','name','deptno','sal']].sort_values(by=['sal'],ascending=False)
 
-[문제153] 10,20,30,40,50번 부서 사원들의 급여의 총액을 출력하세요.
+[문제155] 10,20,30,40,50번 부서 사원들의 급여의 총액을 출력하세요.
 
 <화면출력>
 
@@ -2103,7 +2103,7 @@ A=[10,20,30,40,50]
 for i in range(0,len(A)):
     print(A[i],emp[emp['deptno']==A[i]]['sal'].sum())
 
-[문제154] s 변수에 값들 중에 unique한 값만 s_unique변수에 넣어주세요.
+[문제156] s 변수에 값들 중에 unique한 값만 s_unique변수에 넣어주세요.
 
 s=[1,2,3,4,1,2,3,4,5,1,2,3,4,5,6,'']
 s_unique=set(s)
@@ -2155,7 +2155,7 @@ for i in s:
     else:
         s_unique[i]=s_unique[i]+1
 
-[문제155] 부서별로 급여 총액을 출력하세요.
+[문제157] 부서별로 급여 총액을 출력하세요.
 
 <화면 출력>
 
@@ -2179,7 +2179,7 @@ A.sort()
 for i in A:
     print(i,emp[emp['DEPARTMENT_ID']==i]['SALARY'].sum())
 
-[문제156]부서별로 급여 총액을 출력하세요.
+[문제158]부서별로 급여 총액을 출력하세요.
 
 <화면 출력>
 
@@ -2210,7 +2210,7 @@ for i in dept:
     else:
         print(int(i),emp[emp['DEPARTMENT_ID']==i]['SALARY'].sum(skipna=False))
 
-[문제157] 년도별로 입사한 인원수 결과를 출력해주세요.
+[문제159] 년도별로 입사한 인원수 결과를 출력해주세요.
 
 year=[]
 for i in list(emp['hire_date']):
@@ -2219,7 +2219,7 @@ for i in list(emp['hire_date']):
 emp['year']=year
 emp['empid'].groupby(emp['year']).count()
 
-[문제158] emp_new.csv 를 emp리스트 변수안에 아래 모양과 같은 딕셔너리 데이터 유형에 데이트를 입력한 후 출력하세요.
+[문제160] emp_new.csv 를 emp리스트 변수안에 아래 모양과 같은 딕셔너리 데이터 유형에 데이트를 입력한 후 출력하세요.
 
 
 {'empno': 100, 'ename': King, 'job': AD_PRES, 'mgr': '', 'hiredate': 2003-06-17, 'sal': 24000, 'comm': '', 'deptno': 90}
@@ -2243,7 +2243,7 @@ for dic in emp:
 
 file.close()
 
-[문제159] emp_new.csv, dept_new.csv 파일을 읽어서 사원의 이름, 부서 이름을 출력하세요.
+[문제161] emp_new.csv, dept_new.csv 파일을 읽어서 사원의 이름, 부서 이름을 출력하세요.
 
 import csv
 
@@ -2272,7 +2272,7 @@ for i in range(0,len(emp)):
             print(emp[i][1],dept[j][1])
 len(total)
 
-[문제160] 사원들의 이름, 부서 이름을 출력하면서 소속부서가 없는 사원도 출력해주세요. 마지막에는 총건수도 출력하세요. 
+[문제162] 사원들의 이름, 부서 이름을 출력하면서 소속부서가 없는 사원도 출력해주세요. 마지막에는 총건수도 출력하세요. 
 
 file=open('c:/data/emp_new.csv')
 file1=open('c:/data/dept_new.csv')
@@ -2312,7 +2312,7 @@ select e.last_name, d.department_name
 from employees e left outer join departments d
 on e.department_id=d.department_id
 
-[문제161] emp_new.csv, dept_new.csv 파일 데이터에서 50번 부서 사원의 중에 급여가 5000 이상인 사원의 이름, 부서 이름을 출력하세요.
+[문제163] emp_new.csv, dept_new.csv 파일 데이터에서 50번 부서 사원의 중에 급여가 5000 이상인 사원의 이름, 부서 이름을 출력하세요.
 
 import pandas as pd
 
@@ -2322,7 +2322,7 @@ emp=pd.read_csv("c:\data\emp_new.csv",names=['empid','name','job','mgr','hire_da
 A=pd.merge(emp[['name','deptno','sal']],dept[['deptno','dname']],on='deptno')
 A[(A['sal']>=5000) & (A['deptno']==50)]
 
-[문제162] 2002년도에 근무한 사원들의 이름, 급여, 입사일, 부서코드,부서이름을 출력하세요.
+[문제164] 2002년도에 근무한 사원들의 이름, 급여, 입사일, 부서코드,부서이름을 출력하세요.
 
 import pandas as pd
 
@@ -2335,7 +2335,7 @@ B[pd.to_datetime(emp['hire_date']).dt.year==2002][['name','sal','hire_date','dep
 B[B['hire_date'].str.slice(0,4)=='2002'][['name','sal','hire_date','deptno','dname']]
 
 
-[문제163] 직업이 AD_VP, AD_PRES 인 사원들의 이름, 급여, 직업, 부서코드, 부서이름 을 출력하세요.
+[문제165] 직업이 AD_VP, AD_PRES 인 사원들의 이름, 급여, 직업, 부서코드, 부서이름 을 출력하세요.
 
 import pandas as pd
 
@@ -2345,7 +2345,7 @@ emp=pd.read_csv("c:\data\emp_new.csv",names=['empid','name','job','mgr','hire_da
 C=pd.merge(emp[['deptno','name','sal','job']],dept[['deptno','dname']])
 C[C['job'].isin(['AD_VP','AD_PRES'])]
 
-[문제164] 부서이름별 총액 급여를 출력하세요.  
+[문제166] 부서이름별 총액 급여를 출력하세요.  
 
 import pandas as pd
 
@@ -2355,7 +2355,7 @@ emp=pd.read_csv("c:\data\emp_new.csv",names=['empid','name','job','mgr','hire_da
 D=pd.merge(emp[['deptno','sal']],dept[['dname','deptno']],on='deptno')
 D['sal'].groupby(D['dname']).sum()
 
-[문제164] 부서이름별 총액 급여를 출력하세요.  
+[문제167] 부서이름별 총액 급여를 출력하세요.  
 
 import pandas as pd
 
@@ -2375,7 +2375,7 @@ dept=DataFrame({'dname':['관리팀','마케팅팀','구매팀','인사팀','경영지원팀','기�
 E=pd.merge(emp[['deptno','sal']],dept,left_on='deptno',right_index=True)
 E['sal'].groupby(E['dname']).sum()
 
-[문제165] emp_new.csv 파일  데이터에 커미션 정보를 분석하려 합니다.
+[문제168] emp_new.csv 파일  데이터에 커미션 정보를 분석하려 합니다.
 커미션에 null값들의 수, null이 아닌값들의 수를 구하세요.
 
 1. 일반적으로 csv file을 읽어서 해결
@@ -2408,7 +2408,7 @@ emp=pd.read_csv('c:/data/emp_new.csv',names=['empid','name','job','mgr','hiredat
 print('커미션이 null인 값의 수:',emp[emp['com'].isnull()]['empid'].count())
 print('커미션이 null이 아닌 값의 수:',emp[emp['com'].notnull()]['empid'].count())
 
-[문제166] emp_new.csv, dept_new.csv 파일 데이터를 이용해서  조인된 결과를 보려고 합니다.
+[문제169] emp_new.csv, dept_new.csv 파일 데이터를 이용해서  조인된 결과를 보려고 합니다.
 조인 함수를 생성하세요.
  
 join(emp,'deptno','ename', dept,'deptno','dname')
@@ -2431,13 +2431,13 @@ def join(x,x1,x2,y,y1,y2):
     except:
         return T[x2+'_'+'x'],T[y2+'_'+'y']
 
-[문제167] x변수에는 1,2,3,4,5  y변수에는 6,7,8,9,10 들어 있다. f(x,y) = x2 + y 를 구하세요.(lambda, map 함수를 이용하세요)
+[문제170] x변수에는 1,2,3,4,5  y변수에는 6,7,8,9,10 들어 있다. f(x,y) = x2 + y 를 구하세요.(lambda, map 함수를 이용하세요)
 
 x=[1,2,3,4,5]
 y=[6,7,8,9,10]
 list(map(lambda x,y:x*2+y,x,y)) # map은 2개이상의 변수만 받아내면 가능 함수,변수,변수 
 
-[문제168] emp_new.csv는 pandas로 읽고  dept_new.csv는 일반 csv로 읽어 들인 후 조인을 수행하세요.
+[문제171] emp_new.csv는 pandas로 읽고  dept_new.csv는 일반 csv로 읽어 들인 후 조인을 수행하세요.
 
 import csv
 import pandas as pd
@@ -2456,7 +2456,7 @@ emp['dname']=emp['deptno'].map(dept) # dict형은 map에서 가능하다. Series.map(dic
 
 emp[['empno','deptno','dname']]
 
-[문제169] happiness 변수에 문장이 있습니다. 행복이란 단어가 몇개 나오는지 분석하시고, 위치정보도 출력해주세요.
+[문제172] happiness 변수에 문장이 있습니다. 행복이란 단어가 몇개 나오는지 분석하시고, 위치정보도 출력해주세요.
 
 happiness = '우리나라 「헌법」 제10조는 “모든 국민은 인간으로서의 존엄과 가치를 가지며, 행복을 추구할 권리를 가진다”라고 규정하고 있다.행복추구권은 근대 입헌민주주의의 핵심인 개인주의·자유주의를 그 사상적 기반으로 하고 있다. 행복추구권에 있어서 행복은 다의적인 개념으로, 각자의 생활조건이나 가치관에 따라 다르게 이해될 수 있으나, 최소한 인간적인 고통이 없는 상태 내지 만족감을 느낄 수 있는 행복한 상태를 의미한다.'
 happy=set()
@@ -2474,7 +2474,7 @@ while happiness.find('행복',a)!=-1:
     print('단어의 위치:',a)
     a=a+1
 
-[문제170] emp1.csv, emp2.csv파일을 읽어서 부서별 총액급여를 구하세요.
+[문제173] emp1.csv, emp2.csv파일을 읽어서 부서별 총액급여를 구하세요.
                
 emp1=pd.read_csv('c:/data/emp1.csv',names=['empno','name','hiredate','salary','deptno'])
 emp2=pd.read_csv('c:/data/emp2.csv',names=['empno','name','hiredate','salary','deptno'])
@@ -2493,7 +2493,7 @@ for i in range(1,3):
     
 emp['salary'].groupby(emp['deptno']).sum()    
 
-[문제171] 2016년도에 태어난 아이들의 정보가 들어 있는 year2016파일을 분석해야 합니다. 총 출생수를 출력해주세요.
+[문제174] 2016년도에 태어난 아이들의 정보가 들어 있는 year2016파일을 분석해야 합니다. 총 출생수를 출력해주세요.
 
 yob=pd.read_csv('c:/data/yob2016.txt',names=('name','sex','count'))
 yob['count'].sum()
@@ -2506,7 +2506,7 @@ for i in yob_csv:
     cm+=int(i[-1])
 cm    
 
-[문제172] 2016년도에 태어난 아이 이름 상위 10까지 보여주세요. 성별 상위 5까지 보여주세요.
+[문제175] 2016년도에 태어난 아이 이름 상위 10까지 보여주세요. 성별 상위 5까지 보여주세요.
 
 yob[yob['count'].rank(ascending=False)<=10]
 yob.sort_values(by='count',ascending=False,axis=0)[0:10]
@@ -2520,7 +2520,7 @@ F[F['count'].rank(ascending=False)<=5]
 yob[yob['sex']=='M'].sort_values(by='count',ascending=False)[0:5]
 yob[yob['sex']=='F'].sort_values(by='count',ascending=False)[0:5]
 
-[문제173] emp1.csv 데이터를 이용해서 급여를 많이 받는 순으로 10위까지 구하세요.
+[문제176] emp1.csv 데이터를 이용해서 급여를 많이 받는 순으로 10위까지 구하세요.
 
 import pandas as pd
 from pandas import DataFrame,Series
@@ -2537,7 +2537,7 @@ A.sort_values(by='rank',ascending=True)
 
 sorted(sort,reverse=False,key=itemgetter(5))
 
-[문제174] emp1.csv 데이터를 이용해서 부서별로 급여를 많이 받는 순으로 5위까지 구하세요.
+[문제177] emp1.csv 데이터를 이용해서 부서별로 급여를 많이 받는 순으로 5위까지 구하세요.
 
 import pandas as pd
 emp1=pd.read_csv('c:/data/emp1.csv',names=['empno','name','hiredate','salary','deptno'])
@@ -2551,13 +2551,13 @@ total=group[group['rank'].sort_values(ascending=True)<=5]
 B=group[group['rank']<=5]
 B.sort_values(by='rank',ascending=True)
 
-[문제175] yob2016.txt 데이터를 이용해서 아기 이름 순위 10위까지 구하세요.
+[문제178] yob2016.txt 데이터를 이용해서 아기 이름 순위 10위까지 구하세요.
 
 yob=pd.read_csv('c:/data/yob2016.txt',names=['name','sex','count'])
 yob['rank']=yob['count'].rank(ascending=False,method='dense')
 yob[yob['rank']<=10].sort_values(by='rank',ascending=True)
 
-[문제176] yob2016.txt 데이터를 이용해서 성별 아기 이름 순위 5위까지 구하세요.
+[문제179] yob2016.txt 데이터를 이용해서 성별 아기 이름 순위 5위까지 구하세요.
 
 yob=pd.read_csv('c:/data/yob2016.txt',names=['name','sex','count'])
 
@@ -2570,7 +2570,7 @@ def top(yob,n=5,column='count'):
 yob['rank'] = yob['count'].groupby(yob['sex']).rank(ascending=False, method='dense')
 yob[yob['rank'] <= 5].sort_values(['sex','rank'])
 
-[문제177] 2000 ~ 2016년도 년도별 출생수
+[문제180] 2000 ~ 2016년도 년도별 출생수
 
 
 2000 3777666
@@ -2621,7 +2621,7 @@ for i in range(2000,2017):
             cn+=int(count)
     year_c[i]=cn
        
-[문제178]  2000 ~ 2016년도 년도별 출생수 결과를 year.txt 파일에 저장하세요.
+[문제181]  2000 ~ 2016년도 년도별 출생수 결과를 year.txt 파일에 저장하세요.
 
 f = open("c:/data/year.txt","w")
 
@@ -2631,7 +2631,7 @@ for k,n in year_count.items():
 
 f.close() 
 
-[문제179] 2010 ~ 2016  년도까지 성별 출생 현황을
+[문제182] 2010 ~ 2016  년도까지 성별 출생 현황을
 year_gender_total.csv 파일로 생성해주세요.
 
 m={}
@@ -2647,7 +2647,7 @@ with open('c:/data/year_gender_total.csv','w') as f:
         txt = '%s,%s\n' %(n,k)
         f.write(txt)
 
-[문제180] 2010 ~ 2016  년도까지 성별 출생 현황을 그래프를 그리세요.
+[문제183] 2010 ~ 2016  년도까지 성별 출생 현황을 그래프를 그리세요.
 
 import csv
 from pandas import Series,DataFrame
@@ -2695,7 +2695,7 @@ plt.legend()
 plt.grid()
 
 
-[문제181] 이 주소로 접속하셔서 게시글을 출력하세요.
+[문제184] 이 주소로 접속하셔서 게시글을 출력하세요.
 
 import urllib.request as req
 
@@ -2712,7 +2712,7 @@ for i in soup.findAll(class_='con'):
 
 soup.findAll('p',{'class':'con'})
 
-[문제182] 게시글 뿐만 아니라 게시날짜 정보도 같이 출력하시오 !
+[문제185] 게시글 뿐만 아니라 게시날짜 정보도 같이 출력하시오 !
 
 2017.04.12 19:48 레이디버그 3기나오면 좋은사람 손~~
 
@@ -2736,7 +2736,7 @@ for i in range(0,len(a)):
     h=''.join(g)
     print(a[i],h)
 
-[문제183] 게시판에 게시글 전부를 수집해주세요.
+[문제186] 게시판에 게시글 전부를 수집해주세요.
 
 from bs4 import BeautifulSoup
 import urllib.request as req
@@ -2759,7 +2759,7 @@ for i in range(0,len(url)):
 
 total
 
-[문제 184] 동아일보 기사를 크롤링하시오.
+[문제 187] 동아일보 기사를 크롤링하시오.
 
 from bs4 import BeautifulSoup
 import urllib.request as req
@@ -2809,7 +2809,7 @@ for i in range(0,len(end)):
     A=end[i].split('Copy')
     end[i]=A[0]
 
-[문제185] 동아일보에서 인공지능에 기사 스크롤링 하셔서 단어의 빈도수를 체크하시고
+[문제188] 동아일보에서 인공지능에 기사 스크롤링 하셔서 단어의 빈도수를 체크하시고
 	  워드클라우드를 그리세요.
 
 from bs4 import BeautifulSoup
@@ -2866,7 +2866,7 @@ plt.imshow(wordcloud)
 plt.axis('off')
 plt.show()
 
-[문제186] http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp
+[문제189] http://www.skwyverns.com/Wyverns/Players/picther/picther_list.asp
 이미지를 다운로드하세요.
 
 from bs4 import BeautifulSoup
@@ -2883,7 +2883,7 @@ for i in range(0,len(link)):
     B=i['alt']
     request.urlretrieve(A,'c:/data/sk_{}.jpg' .format(B))    
 
-[문제 187] 생성자에 이름, 핸드폰번호, 메일, 주소 변수를 생성합니다. 
+[문제 190] 생성자에 이름, 핸드폰번호, 메일, 주소 변수를 생성합니다. 
 print_info 메소드를 생성한 후  출력하는 Contact 클래스를 생성하세요.
 인스턴스는 set_contact 함수를 이용해서 만드시고 이름, 핸드폰번호,메일, 주소는 입력값으로 받아서 출력하세요.
 
@@ -2946,7 +2946,7 @@ def set_contact():
 
 set_contact()
 
-[문제188] Contact 클래스 이용해서 입력 들어 온 값들을 c:/data/contact.db 에
+[문제191] Contact 클래스 이용해서 입력 들어 온 값들을 c:/data/contact.db 에
 	저장해서 관리하세요.
 
 class Contact:
@@ -3005,7 +3005,7 @@ import contact
 
 #★★ self.c.excute('create table if not exists contact(name text, pn text, mail text, addr text)) : 존재하지 않으면 생성
 
-[문제 189] 초기 생성자에는 이름, 주소, 급여를 입력값으로 받고 아래와 같이 출력되는 클래스를 생성하세요. 
+[문제 192] 초기 생성자에는 이름, 주소, 급여를 입력값으로 받고 아래와 같이 출력되는 클래스를 생성하세요. 
 인스턴스 생성될때 마다 건수를 출력해주세요.
 
 
@@ -3035,7 +3035,7 @@ p1.emp_print()
 p2=employee('홍아들','노르웨이',2000)
 p2.emp_print()
 
-[문제190]
+[문제193]
 
 id_number1 = "010101-3234567"
 id_number2 = "990202-2123456"
@@ -3087,7 +3087,7 @@ id_process(id_number1)
 id_number2 = "010101-3234567"                
 id_process(id_number2)
 
-[문제191] Person 클래스를 생성하세요. 생성자는 이름, 나이, 성별을 만드세요.
+[문제194] Person 클래스를 생성하세요. 생성자는 이름, 나이, 성별을 만드세요.
 Person 클래스 에는 printMe 메소드를 생성하셔서 이름, 나이 성별을 출력합니다.
 
 
@@ -3135,7 +3135,7 @@ myPerson.printMe()
 myEmployee = Employee("송준기", "2", "남", "서울", "2016년 01월 01일")
 myEmployee.printMe()
 
-[문제192] Add 클래스에 두수를 더하는 값을 리턴하는 add 메소드 생성
+[문제195] Add 클래스에 두수를 더하는 값을 리턴하는 add 메소드 생성
 Multiply 클래스에 두수를 곱한값을 리턴하는 multiply 메소드 생성
 Divide 클래스에 두수를 나눈값을 리턴하는 divide메소드 생성
 Calculator클래스에는 Add, Multiply, Divide 상속받고 두수를 뺀값을 리턴하는 sub 메소드 생성하세요.
@@ -3223,7 +3223,7 @@ class Calculator:
     def sub(x,y):
         return x-y
 
-[문제193] 양의 정수값만 입력 받아서 나누기를 수행하는 positive_divide 함수를 생성하세요.
+[문제196] 양의 정수값만 입력 받아서 나누기를 수행하는 positive_divide 함수를 생성하세요.
 
 
 print(positive_divide())
@@ -3266,7 +3266,7 @@ def positive_divide():
 positive_divide()
     
 """
-[문제193] 양의 정수값만 입력 받아서 나누기를 수행하는 positive_divide 함수를 생성하세요.
+[문제197] 양의 정수값만 입력 받아서 나누기를 수행하는 positive_divide 함수를 생성하세요.
 
 [참조 : https://docs.python.org/ko/3/library/exceptions.html]
 
@@ -3344,7 +3344,7 @@ def  positive_divide():
         print('오류 -  0으로 나눌수 없습니다.',error)
 """
 
-[문제194] 한주간동안 걸음수를 요일별로 그래프를 그리세요.
+[문제198] 한주간동안 걸음수를 요일별로 그래프를 그리세요.
          단 막대그래프 함수를 생성해서 인수값으로 걸음수, 요일을 입력하면 그래프가 그려지도록하세요.
 
 def walking(num,day):
@@ -3370,7 +3370,7 @@ if __name__=='__main__':
     walking(step,day)   
  
 """
-[문제194] 한주간동안 걸음수를 요일별로 그래프를 그리세요.
+[문제199] 한주간동안 걸음수를 요일별로 그래프를 그리세요.
          단 막대그래프 함수를 생성해서 인수값으로 걸음수, 요일을 입력하면 그래프가 그려지도록하세요.
 
 import matplotlib.pyplot as plt
@@ -3408,7 +3408,7 @@ if __name__=='__main__':
 
 # 클래스로 만들기
 
-[문제195] 문제 194번을 클래스화 하시요.
+[문제200] 문제 194번을 클래스화 하시요.
 
 class walking:
     
@@ -3433,7 +3433,7 @@ d1=walking(step,day)
 d1.graph()         
         
 """
-[문제195]
+[문제201]
 
 import matplotlib.pylab as plt
 from matplotlib import font_manager, rc
@@ -3475,7 +3475,7 @@ if __name__=='__main__':
     cbc.create_bar_chart()
 """
 
-[문제196] knn 프로그램을 작성하세요.
+[문제202] knn 프로그램을 작성하세요.
         
       pointlist[(1,1),(1,0),(2,0),(0,1),(2,2),(1,5),(2,3)]
        
@@ -3555,7 +3555,7 @@ def knn1(point,pointlist,k):
     
 knn1(point,pointlist,k)         
 
-[문제197] 키, 몸무게에 따른 성별을 분류해주세요.
+[문제203] 키, 몸무게에 따른 성별을 분류해주세요.
 
 키, 몸무게 데이터
 [[158, 64],
@@ -3597,7 +3597,7 @@ clf.fit(x_train,label)
 clf.predict(np.array([155,70]).reshape(1,-1))[0] # reshape(1,2) 2차원 배열로 만들어야 하므로 -1이 이미 2랑 같다.
 clf.predict(np.array([[155,70]]))[0] # 2차원 배열이니까 값을 집어넣어야 하므로 [[]] 로 해야한다.
 
-[문제198] 상품구매여부를 knn으로 분류해주세요
+[문제204] 상품구매여부를 knn으로 분류해주세요
 
 import csv
 import numpy as np
@@ -3659,7 +3659,7 @@ freq=C.most_common(1)
 freq[0][0]
 
 """
-[문제198] 상품구매여부를 knn으로 분류해주세요. 
+[문제205] 상품구매여부를 knn으로 분류해주세요. 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import scale # 표준정규화 method
 import pandas  as  pd
@@ -3683,7 +3683,7 @@ prediction_label = clf.predict(np.array([[(40-age_mean)/age_std, (500-pay_mean)/
 prediction_label
 """
 
-[문제199] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
+[문제206] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
 
 import pandas as pd
 
@@ -3742,7 +3742,7 @@ print(lm.params)
 
 
 '''
-[문제199] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
+[문제207] 보험데이터를 이용해서 보험료에 가장 영향을 주는 독립변수가 무엇인지 확인하세요.
 
 ins<-read.csv('c:/data/insurance.csv',header=T)
 ins
@@ -3778,7 +3778,7 @@ ins$bmi30 <- ifelse(ins$bmi>=30,1,0)
 ins_model2 = lm(charges~age+children+bmi+sex+smoker+region+bmi30,data=ins)
 ins_model2
 '''
-[문제200] tensorflow 상수를 이용해서 아래와 같이 결과를 출력하는 프로그램을 만드세요   
+[문제208] tensorflow 상수를 이용해서 아래와 같이 결과를 출력하는 프로그램을 만드세요   
 a+b = 6
 a*b = 8
 
@@ -3794,7 +3794,7 @@ print('a*b =',sess.run(x))
 sess.close()
 
 
-[문제201] tensorflow 상수를 이용해서 아래와 같이 결과를 출력하는 프로그램을 만드세요
+[문제209] tensorflow 상수를 이용해서 아래와 같이 결과를 출력하는 프로그램을 만드세요
 단 두 변수의 입력값을 실행시에 넣도록 하는 변수를 이용하세요.
 
 Add=6
@@ -3812,3 +3812,502 @@ sess.run(y)
 
 print('Add={}' .format(sess.run(x)))
 print('Multiply={}' .format(sess.run(y)))
+
+[문제 210]
+x 변수는 1행 3열 모양의 1,2,3
+w 변수는 3행 1열 모양의 2,2,2
+y 변수는 x와 w 행렬의 곱을 이용한 결과를 수행하는 프로그램을 작성하세요.
+
+x = tf.constant(np.array([[1.,2.,3.]]))
+y = tf.constant(np.array([[2.],[2.],[2.]]))    
+z = tf.matmul(x,y)
+
+with tf.Session() as sess:
+    print(sess.run(z))
+
+
+x = tf.placeholder(tf.float32,shape=(1,3))   
+y = tf.placeholder(tf.float32,shape=(3,1))   
+z = tf.matmul(x,y)
+with tf.Session() as sess:
+    print(sess.run(z,feed_dict={x:[[1,2,3]],y:[[2],[2],[2]]}))
+
+#######
+
+x = tf.constant([[1.0,2.0,3.0]])
+print(x.get_shape())
+w = tf.constant([[2.0],[2.0],[2.0]])
+print(w.get_shape())
+y = tf.matmul(x,w)
+sess = tf.Session()
+print(sess.run(x))
+print(sess.run(w))
+print(sess.run(y))
+
+
+x = tf.Variable([[1.0,2.0,3.0]])
+w = tf.Variable([[2.0],[2.0],[2.0]])
+y = tf.matmul(x,w)
+init_op = tf.global_variables_initializer()
+with tf.Session() as sess:
+    sess.run(init_op)
+    print(sess.run(y))
+
+[문제 211] linear regression 학습을 통해서 입력값에 대한 예측값을 출력하세요
+
+x1 x2 x3   y
+-------------
+73 80 75  152
+93 88 93  185
+89 91 90  180
+96 98 100 196
+73 66 70  142
+
+
+x1_data=[73, 93, 89, 96, 73]
+x2_data=[80, 88, 91, 98, 66]
+x3_data=[75,93,90,100,70]
+
+
+x1 = tf.placeholder(tf.float32)
+x2 = tf.placeholder(tf.float32)
+x3 = tf.placeholder(tf.float32)
+y = tf.placeholder(tf.float32)
+w1 = tf.Variable(tf.random_normal([1],seed=0), name='weight1')
+w2 = tf.Variable(tf.random_normal([1],seed=0), name='weight2')
+w3 = tf.Variable(tf.random_normal([1],seed=0), name='weight3')
+b = tf.Variable(tf.random_normal([1],seed=0), name='bias') 
+
+hypothesis = w1*x1 + w2*x2 + w3*x3 + b
+
+cost = tf.reduce_mean(tf.square(hypothesis - y)) # 평균제곱오차
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.00001) # 경사하강법
+train = optimizer.minimize(cost) # 가장 작은값 추출
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+
+for step in range(10001):
+    cost_v,w_1,w_2,w_3,b_v,train_v= sess.run([cost,w1,w2,w3,b,train],feed_dict={x1:x1_data,x2:x2_data,x3:x3_data,y:y_data})
+    if step % 100 == 0 : 
+        print(cost_v,w_1,w_2,w_3,b_v)
+
+w_1
+w_2
+w_3
+print('당신의 점수는 ',sess.run(hypothesis , feed_dict={x1:100,x2:70,x3:60}))
+
+# 변수가 많을 때 잘 활용하는 방법
+
+x_data = [[73,80,75],[93,88,93],[89,91,90],[96,98,100],[73,66,70]]
+y_data = [[152],[185],[180],[196],[142]]
+
+x = tf.placeholder(tf.float32,shape=[None,3]) # None 은 몇개가 들어올지 모르기 때문에 None으로 진행한다.
+y = tf.placeholder(tf.float32,shape=[None,1]) # y는 실질적 결과이므로 1로 둔다.
+
+w = tf.Variable(tf.random_normal([3,1],seed=0),name='weight') # x와 값을 맞춰야 한다.
+b = tf.Variable(tf.random_normal([1],seed=0),name='bias')
+# [3,1] 3: x의(열값) 들어오는 값, 1은 y로 나가는 값이다.
+# 1: bias 1은 y로 나가는 값을 의미 한다.
+
+hypothesis = tf.matmul(x,w)+b # 행렬이기 때문에 matmul을 통해 값을 집어 넣는다.
+
+cost = tf.reduce_mean(tf.square(hypothesis - y)) # 평균제곱오차
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.00001) # 경사하강법
+train = optimizer.minimize(cost) # 가장 작은값 추출
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+for step in range(10001):
+    cost_val,hy_val,train_v= sess.run([cost,hypothesis,train],feed_dict={x:x_data,y:y_data})
+    if step % 100 == 0 : 
+        print(step,cost_val,hy_val)
+        
+#### 값이 파일로 있을 때 불러와서 해결하는 방법 #파일은 모든파일로 형식을 바꾸고 csv , ANSI 파일로 저장
+
+import tensorflow as tf
+import numpy as np
+
+# loadtxt : 파일을 불러온다 (delimiter - 구분자, dtype - file type) 
+
+xy = np.loadtxt('c:/data/ex.csv',delimiter=',',dtype=np.float32) 
+
+x_data=xy[:,0:-1]
+y_data=xy[:,[-1]] # xy[:,-1] 로 뽑지 않은 이유 : 1행 5열로 만들어지기 때문에 x와 방향을 맞게 해야 하기 때문이다.
+x_data.shape
+y_data.shape
+
+x = tf.placeholder(tf.float32,shape=[None,3]) # None 은 몇개가 들어올지 모르기 때문에 None으로 진행한다.
+y = tf.placeholder(tf.float32,shape=[None,1]) # y는 실질적 결과이므로 1로 둔다.
+
+w = tf.Variable(tf.random_normal([3,1],seed=0),name='weight')
+b = tf.Variable(tf.random_normal([1],seed=0),name='bias')
+        
+hypothesis = tf.matmul(x,w)+b # 행렬이기 때문에 matmul을 통해 값을 집어 넣는다.
+
+cost = tf.reduce_mean(tf.square(hypothesis - y)) # 평균제곱오차
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.00001) # 경사하강법
+train = optimizer.minimize(cost) # 가장 작은값 추출
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+for step in range(10001):
+    cost_val,hy_val,train_v= sess.run([cost,hypothesis,train],feed_dict={x:x_data,y:y_data})
+    if step % 100 == 0 : 
+        print(step,cost_val,hy_val)
+
+print('당신의 점수는' , sess.run(hypothesis, feed_dict={x:[[100,70,60]]}))
+print('당신의 점수는' , sess.run(hypothesis, feed_dict={x:[[100,70,60],[90,100,80]]}))
+
+[문제 212] xor를 logistic regression classifier를 이용해서 프로그램을 생성하세요.
+
+0 0 0
+0 1 1
+1 0 1
+1 1 0
+
+x_data=[[0,0],[0,1],[1,0],[1,1]]
+y_data=[[0],[1],[1],[0]]
+x_data=np.array(x_data,dtype=np.float32)
+y_data=np.array(y_data,dtype=np.float32)
+
+x = tf.placeholder(tf.float32,[None,2])
+y = tf.placeholder(tf.float32,[None,1])
+
+# input layer
+w1 = tf.Variable(tf.random_normal([2,5],seed=0),name='weight1') # 층을 만들기 위해서 (1,2)로 만들기위해 사용 , 5로 한것은 의도적으로 바꾸기
+b1 = tf.Variable(tf.random_normal([5],seed=0),name='bias1')
+
+L1 = tf.sigmoid(tf.matmul(x,w1) + b1) # 첫번째 은닉층
+
+# hidden layer 2
+
+w2 = tf.Variable(tf.random_normal([5,4],seed=0),name='weight2')
+b2 = tf.Variable(tf.random_normal([4],seed=0),name='bias2')
+L2 = tf.sigmoid(tf.matmul(L1,w2) + b2)
+
+# hidden layer 2
+
+w3 = tf.Variable(tf.random_normal([4,4],seed=0),name='weight3')
+b3 = tf.Variable(tf.random_normal([4],seed=0),name='bias3')
+L3 = tf.sigmoid(tf.matmul(L2,w3) + b3)
+
+# output layer
+
+w4 = tf.Variable(tf.random_normal([4,1],seed=0),name='weight4')
+b4 = tf.Variable(tf.random_normal([1],seed=0),name='bias4')
+
+hypothesis = tf.sigmoid(tf.matmul(L3,w4) + b4)
+
+cost = -tf.reduce_mean(y*tf.log(hypothesis)+(1-y)*tf.log(1-hypothesis)) # cross entropy cost function
+train = tf.train.GradientDescentOptimizer(learning_rate=0.2).minimize(cost)
+
+sess=tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(10001):
+    sess.run(train,feed_dict={x:x_data,y:y_data})
+    if step%1000==0:
+        print(step,sess.run(cost,feed_dict={x:x_data,y:y_data}),sess.run([w,w2]))
+    h=sess.run(hypothesis,feed_dict={x:x_data,y:y_data})
+    print(h)
+    
+a=sess.run(hypothesis,feed_dict={x:[[0,0],[0,1],[1,0],[1,1]]})
+print(sess.run(tf.cast(a>0.5,dtype=tf.int32))) 
+
+# 제대로 해도 나오지 않는다 그렇기 때문에 은닉층을 계속 만들어야한다.
+    
+################################
+    
+import tensorflow as tf
+import numpy as np
+
+x_data=[[0,0],[0,1],[1,0],[1,1]]
+y_data=[[0],[1],[1],[0]]
+
+x_data=np.array(x_data,dtype=np.float32)
+y_data=np.array(y_data,dtype=np.float32)
+x=tf.placeholder(tf.float32,[None,2])
+y=tf.placeholder(tf.float32,[None,1])
+
+# input
+w1=tf.Variable(tf.random_normal([2,5],seed=0),name="weight1") # 원래 [2,2] 인데 나가는거 5로 수정
+b1=tf.Variable(tf.random_normal([5],seed=0),name="bias1")
+layer1=tf.sigmoid(tf.matmul(x,w1)+b1)
+
+# hidden layer2
+w2=tf.Variable(tf.random_normal([5,4],seed=0),name="weight2") # 위에서 5개로 나갔으니가 5개로 받아줌
+b2=tf.Variable(tf.random_normal([4],seed=0),name="bias2")
+layer2=tf.sigmoid(tf.matmul(layer1,w2)+b2)
+
+# hidden layer3
+w3=tf.Variable(tf.random_normal([4,4],seed=0),name="weight3")
+b3=tf.Variable(tf.random_normal([4],seed=0),name="bias3")
+layer3=tf.sigmoid(tf.matmul(layer2,w3)+b3)
+
+# output layer 
+w4=tf.Variable(tf.random_normal([4,1],seed=0),name='weight4')
+b4=tf.Variable(tf.random_normal([1],seed=0),name='bias4')
+hypothesis=tf.sigmoid(tf.matmul(layer3,w4)+b4)
+
+cost=-tf.reduce_mean(y*tf.log(hypothesis)+(1-y)*tf.log(1-hypothesis)) # cross entropy cost function
+train=tf.train.GradientDescentOptimizer(learning_rate=0.2).minimize(cost)
+
+sess=tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(10001):
+    sess.run(train,feed_dict={x:x_data,y:y_data})
+    if step%1000==0:
+        print(step,sess.run(cost,feed_dict={x:x_data,y:y_data}),sess.run([w,w2]))
+    h=sess.run(hypothesis,feed_dict={x:x_data,y:y_data})
+    print(h)
+
+a=sess.run(hypothesis,feed_dict={x:[[0,0],[0,1],[1,0],[1,1]]})
+print(sess.run(tf.cast(a>0.5,dtype=tf.int32))) 
+
+[문제 213] zoo data set을 이용해서 분류프로그램을 만드세요.
+
+# http://archive.ics.uci.edu/ml/datasets/zoo
+#   1. animal name:     (deleted)
+#   2. hair     Boolean"
+#   3. feathers     Boolean"
+#   4. eggs     Boolean"
+#   5. milk     Boolean"
+#   6. airborne     Boolean"
+#   7. aquatic      Boolean"
+#   8. predator     Boolean"
+#   9. toothed      Boolean"
+#  10. backbone     Boolean"
+#  11. breathes     Boolean"
+#  12. venomous     Boolean"
+#  13. fins     Boolean"
+#  14. legs     Numeric (set of values: {0",2,4,5,6,8})
+#  15. tail     Boolean"
+#  16. domestic     Boolean"
+#  17. catsize      Boolean"
+#  18. type     Numeric (integer values in range [0",6])
+#      1 : 포유류, 2 : 조류, 3 : 파충류, 4 : 어류, 5 : 양서류, 6 : 곤충/거미류, 7 : 무척추동물
+
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+
+zoo = pd.read_csv('c:/data/zoo_data.txt',delimiter=',',header=None)
+
+zoo_data = zoo.ix[:,1:]
+test = np.array(zoo_data)
+
+x_data = test[:,0:-1]
+y_data = test[:,[-1]]
+
+# multi classfication (softmax classifier)  # 확률값으로 표현 ★★
+
+x = tf.placeholder(tf.float32,[None,16])
+y = tf.placeholder(tf.int32,[None,1]) 
+
+y_one_hot = tf.one_hot(y,7)
+y_one_hot = tf.reshape(y_one_hot,[-1,7])
+
+w = tf.Variable(tf.random_normal([16,7]),name='weight') 
+b = tf.Variable(tf.random_normal([7]),name='bias')
+
+logits = tf.matmul(x,w) + b 
+hypothesis = tf.nn.softmax(logits) # 확률로 만들어준다. 높은값에 해당하는 값을 뽑아주기 위해서
+
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels = y_one_hot)) # 확률값 만들어주기
+train = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost) 
+
+prediction = tf.argmax(hypothesis,1) 
+
+correct_prediction = tf.equal(prediction,tf.argmax(y_one_hot,1)) 
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(2001):
+    sess.run(train,feed_dict={x:x_data,y:y_data})
+    if step % 100 == 0 : 
+        loss,acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('step:',step)
+        print('loss:',loss) # count
+        print('Acc:', acc) # 예측값 평균
+
+a = sess.run(hypothesis,feed_dict={x:[[0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0]]})
+print(a,sess.run(tf.argmax(a,1)))
+
+########### #####
+
+import tensorflow as tf
+import numpy as np
+
+# usecols : 필요한 column만 불러오게 하는 method
+xy=np.loadtxt('c:/data/zoo_data.txt',delimiter=',',usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17),dtype=np.float32)
+
+x_data = xy[:,0:-1]
+y_data = xy[:,[-1]]
+
+# 인덱스가 0부터 시작하기 떄문에 값을 헷갈리지 않게 하기 위해 1을 뺀다
+#      0 : 포유류, 1 : 조류, 2 : 파충류, 3 : 어류, 4 : 양서류, 5 : 곤충/거미류, 6 : 무척추동물
+y_data = y_data -1
+
+print(x_data.shape,y_data.shape)
+
+nb_classes = 7 # 클래스의 갯수 설정
+
+x = tf.placeholder(tf.float32,[None,16])
+y = tf.placeholder(tf.int32,[None,1])
+
+y_one_hot = tf.one_hot(y,nb_classes)
+y_one_hot = tf.reshape(y_one_hot,[-1,nb_classes]) # 전체중 별도의 7개 열 생성
+
+w = tf.Variable(tf.random_normal([16,nb_classes],seed=0),name='weight')
+b= tf.Variable(tf.random_normal([nb_classes],seed=0),name='bias')
+
+logits = tf.matmul(x,w)+b
+
+hypothesis = tf.nn.softmax(logits)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits,labels = y_one_hot))
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
+
+prediction = tf.argmax(hypothesis,1)
+correct_prediction = tf.equal(prediction, tf.argmax(y_one_hot,1))
+
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(2001):
+    sess.run(optimizer,feed_dict={x:x_data,y:y_data})
+    if step % 100 ==0:
+        loss, acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('Step:{:5}\t Loss:{:.3f}\nAcc:{:.2%}'.format(step,loss,acc))
+        
+# Step:{:5} 5칸을 만들어서 오른쪽을 기준으로 칸을 만든다. .3f 소수 3자리까지, 2% .00퍼센트까지
+        
+pred = sess.run(prediction,feed_dict={x:x_data})
+
+#  예측값과 값이 맞는지 확인 하는 방법
+# y_data.flatten() : 값을 1행 값으로 바꿔준다.
+# zip : for문에서 뒤에 값을 묶어서 다른값을 추출하려고 할 때 사용
+
+for p,y in zip(pred,y_data.flatten()):
+    print("[{}] Prediction : {} True Y:{}" .format(p==int(y),p,int(y)))
+
+# 값 비교해보기 
+# 0 : 포유류, 1 : 조류, 2 : 파충류, 3 : 어류, 4 : 양서류, 5 : 곤충/거미류, 6 : 무척추동물    
+worm=[0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0]
+wren=[0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0]
+
+zoo_hypothesis = sess.run(hypothesis,feed_dict={x:[worm]})
+print(zoo_hypothesis,sess.run(tf.argmax(zoo_hypothesis,1)))
+
+zoo_hypothesis = sess.run(hypothesis,feed_dict={x:[wren]})
+print(zoo_hypothesis,sess.run(tf.argmax(zoo_hypothesis,1)))
+
+[문제 214] bmi.csv 내용을 신경망을 이용해서 분류해 보세요.
+
+#BMI
+# BMI = 몸무게 / (키(m)*키(m))
+# 18.5 이상 25미만이면 표준
+#label : thin(저체중), normal(정상), fat(비만)
+
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+
+bmi = pd.read_csv('c:/data/bmi.csv')
+test=np.array(bmi)
+
+
+x_data=test[:,0:-1]
+y_data=test[:,[-1]]
+
+y_data[y_data=='fat']=0
+y_data[y_data=='normal']=1
+y_data[y_data=='thin']=2
+
+# 정규화
+
+x_data[:,[0]]=(x_data[:,[0]]-np.mean(x_data[:,0]))/np.std(x_data[:,0])
+x_data[:,[1]]=(x_data[:,[1]]-np.mean(x_data[:,1]))/np.std(x_data[:,1])
+
+
+x = tf.placeholder(tf.float32,[None,2])
+y = tf.placeholder(tf.int32,[None,1])
+
+y_one_hot = tf.one_hot(y,3)
+y_one_hot = tf.reshape(y_one_hot,[-1,3]) 
+
+w = tf.Variable(tf.random_normal([2,3],seed=0),name='weight')
+b = tf.Variable(tf.random_normal([3],seed=0),name='bias')
+
+logits = tf.matmul(x,w)+b
+
+hypothesis = tf.nn.softmax(logits)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits,labels = y_one_hot))
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.3).minimize(cost)
+
+prediction = tf.argmax(hypothesis,1)
+correct_prediction = tf.equal(prediction, tf.argmax(y_one_hot,1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for step in range(10001):
+    sess.run(optimizer,feed_dict={x:x_data,y:y_data})
+    if step % 1000 ==0:
+        loss, acc = sess.run([cost,accuracy],feed_dict={x:x_data,y:y_data})
+        print('Step:{:5}\t Loss:{:.3f}\nAcc:{:.2%}'.format(step,loss,acc))
+
+pred = sess.run(prediction,feed_dict={x:x_data})
+
+for p,y in zip(pred,y_data.flatten()):
+    print("[{}] Prediction : {} True Y:{}" .format(p==int(y),p,int(y)))
+
+[문제 215] 0부터 143까지의 원소로 이루어진 12x12 행렬을 만들고 4x4필터(단위행렬)를 이용해서 합성곱을 수행하세요. 
+단, 스트라이드는 1입니다.
+
+x_data=np.arange(144).reshape(12,12)
+y_data=np.eye(4,4)
+
+np.cumsum(x_data[0:4,0:4] * y_data)[-1]
+
+f=[]
+a=0
+b=4   
+c=0
+d=4
+
+while 1 :
+    ab=np.cumsum(x_data[a:b,c:d] * y_data)[-1]
+    a=a+1
+    b=b+1
+    f.append(ab)
+    if a>8:
+        a=0
+        b=4
+        c=c+1
+        d=d+1
+    if c>8:
+        break
+    
+total=np.array(f).reshape(9,-1)
+end=total.T    
+
+[문제 216] 0부터 15까지 원소로 이루어진 4x4 행렬을 만들고 0부터 8까지 의 원소로 루어진 3x3 필터를
+      이용 해서 합성곱하는데 제로 패딩을 이용해서 출력결과를 4x4 로 출력하세요.
+      
+a = np.arange(16).reshape(4,4)
+b = np.arange(9).reshape(3,3)
+
+result=[]
+
+for i in range(0,len(a)-2):
+    for j in range(0,len(a)-2):
+        result.append(np.sum(a[i:i+3,j:j+3]*b))
+
+result=np.array(result).reshape(2,2)
+
+end=np.pad(result,pad_width=1,mode='constant',constant_values=0)
+

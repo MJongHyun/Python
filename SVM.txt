@@ -1,0 +1,176 @@
+# SVM (support vector machines)
+
+- 기계학습 분야 중 하나로 패턴 인식, 자료분석을 위한 지도학습 모델이다.
+
+- 지도학습 : 미리 답을 주고 학습을 시킨다.
+- 비지도학습 : 답을 주지 않고 학습을 시킨다.
+- 분류와 회귀분석을 위해 사용된다.
+- 두 카테고리 중 어느 하나에 속한 데이터의 집합이 주어졌을 때, 새로운 데이터는 어느 카테고리에 속할지 판단하는 기준으로 가장 큰 폭을 가진 경계를 찾는 알고리즘
+- ★★ 선형분류 뿐만 아니라 비선형 분류도 가능하다.
+- 모델을 만들 때 고려해야 할 파라미터가 많지 않다.
+- 적은 양의 데이터로 모델을 만들 수 있다.
+- 딥러닝이 나오기 이전에 분류 모형 중 기술적으로 가장 진보된 모형으로 평가되었다.
+
+#예시 iris data 
+
+import pandas as pd
+from sklearn import svm, metrics
+from sklearn.model_selection import train_test_split
+
+iris = pd.read_csv('c:/data/iris.csv')
+
+iris_data = iris[['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth']] # 필요한 값들만 독립변수로 지정
+iris_label = iris['Name'] # 종속변수
+train_data, test_data, train_label, test_label=train_test_split(iris_data,iris_label,test_size = 0.2) #sklearn에서 제공
+
+
+iris_model = svm.SVC(kernel='linear')
+iris_model.fit(train_data,train_label) # SVM training
+iris_pred = iris_model.predict(test_data) # 예측값
+
+ac_score = metrics.accuracy_score(test_label,iris_pred) # 예측값 test값 확인
+print("정답률 : " , ac_score)
+
+# data 직접 넣기
+
+iris_model.predict([[6.0,2.9,4.5,1.5]])
+iris_model.predict([[3.0,1.9,2.5,0.5]])[0]
+
+##### 다른방법 ######## : LinearSVC 사용하기
+import pandas as pd
+from sklearn.svm import LinearSVC
+from sklearn import svm, metrics
+from sklearn.model_selection import train_test_split
+
+iris = pd.read_csv('c:/data/iris.csv')
+iris_data = iris[['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth']] # 필요한 값들만 독립변수로 지정
+iris_label = iris['Name'] # 종속변수
+train_data, test_data, train_label, test_label=train_test_split(iris_data,iris_label,test_size = 0.2) #sklearn에서 제공
+
+iris_model = LinearSVC()
+iris_model.fit(train_data,train_label) # SVM training
+iris_pred = iris_model.predict(test_data) # 예측값
+
+ac_score = metrics.accuracy_score(test_label,iris_pred) # 예측값 test값 확인
+print("정답률 : " , ac_score)
+
+# bmi 연습
+
+bmi = pd.read_csv('c:/data/bmi.csv')
+bmi_data = bmi[['height','weight']]
+bmi_label = bmi['label']
+
+train_data, test_data, train_label, test_label = train_test_split(bmi_data,bmi_label,test_size = 0.2)
+
+bmi_model = svm.SVC(kernel='linear')
+bmi_model.fit(train_data,train_label)
+bmi_pred=bmi_model.predict(test_data)
+
+bmi_score = metrics.accuracy_score(test_label,bmi_pred)
+print(bmi_score)
+
+# 표준화 해보기
+
+import numpy as np
+bmi_label = bmi['label']
+
+we=bmi_data['weight']-np.mean(bmi_data['weight'])/(max(bmi_data['weight'])-min(bmi_data['weight']))
+he=bmi_data['height']-np.mean(bmi_data['height'])/(max(bmi_data['height'])-min(bmi_data['height']))
+
+wehe = pd.concat([we,he],axis=1)
+train_data, test_data, train_label, test_label = train_test_split(wehe,bmi_label,test_size = 0.2)
+bmi_model = svm.SVC(kernel='linear')
+bmi_model.fit(train_data,train_label)
+bmi_pred=bmi_model.predict(test_data)
+
+bmi_score = metrics.accuracy_score(test_label,bmi_pred)
+print(bmi_score)
+
+
+
+# 다른 방법 : 최대 나올 값을 정하고 진행하기
+
+df = pd.read_csv('c:/data/bmi.csv')
+label = df['label']
+w = df['weight'] / 100
+h = df['height'] / 200
+
+wh = pd.concat([w,h],axis=1)
+train_data, test_data, train_label, test_label = train_test_split(wh,label,test_size = 0.2)
+bmi_model = svm.SVC(kernel='linear')
+bmi_model.fit(train_data,train_label)
+bmi_pred=bmi_model.predict(test_data)
+
+bmi_score = metrics.accuracy_score(test_label,bmi_pred)
+print(bmi_score)
+
+bmi_pred = bmi_model.predict([[58/100,168/200]])
+bmi_pred
+
+# 그래프 화 하기
+help(scratch)
+
+
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('c:/data/bmi.csv', index_col=2) # index이름을 컬럼에 해당하는 값으로 추출
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1) # 축선정
+
+def scatter(lbl,color):
+    b = df.loc[lbl]
+    ax.scatter(b['weight'],b['height'], c=color,label=lbl)
+    
+scatter('fat','red')
+scatter('normal','yellow')
+scatter('thin','purple')
+ax.legend(loc=1)
+plt.savefig('c:/data/bmi.jpg') # 파일저장
+
+#### 시각화 #### 
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+#%matplotlib inline
+csv = pd.read_csv('c:/data/iris.csv')
+X =  csv[["SepalLength","SepalWidth"]]
+y = csv["Name"]
+X = np.array(X)
+bclass = {"Iris-setosa": 0, "Iris-virginica": 1, "Iris-versicolor":2}
+y = y.apply(lambda x : bclass[x]) # 문자를 숫자로 바꾸기
+y = np.array(y)
+
+
+def plotSVC(title):
+    x_min, x_max = X[:, 0].min()- 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min()- 1, X[:, 1].max() + 1
+    h = (x_max / x_min)/100
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+    np.arange(y_min, y_max, h))
+    plt.subplot(1, 1, 1)
+    Z = svc.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Paired, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Paired)
+    plt.xlabel('Sepal length')
+    plt.ylabel('Sepal width')
+    plt.xlim(xx.min(), xx.max())
+    plt.title(title)
+    plt.show()
+ 
+kernels = ['linear', 'rbf'] # rbf 비선형 구분
+for kernel in kernels:
+    svc = svm.SVC(kernel=kernel).fit(X, y)
+    plotSVC('kernel=' + str(kernel))
+
+# 데이터 포인트 사이의 거리는 가우시안 커널에 의해 계산된다
+# gamma는 가우시안 커널의 폭을 제어하는 매개변수 
+
+gammas = [0.1, 1, 10, 100] # 가중치 부여 , 유클리드 값에 가중치값을 추가 
+for gamma in gammas:
+   svc = svm.SVC(kernel='rbf', gamma=gamma).fit(X, y)
+   plotSVC('gamma=' + str(gamma))
