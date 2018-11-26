@@ -1,0 +1,360 @@
+# 권한부여
+
+su - # root 계정으로 이동
+su - 계정이름 # 계정이동을 의미
+
+[root@dataserver ~]# ls -al nice.txt # -al : 모든부분 생성
+-rw-r--r--. 1 root root 16 11월 26 10:16 nice.txt
+ 6  4   4	    유저이름 , 속한그룹이름
+-
+디렉토리,파일
+rw-
+소유자(read, write)  # 420(rw-) 6 
+r-- # 400
+그룹
+r-- # 400
+그외 사용자
+
+# 모든 권한을 주고 싶다면 7 (421)
+
+chmod 700 nice.txt
+ls -al nice.txt
+[root@dataserver ~]# ls -al nice.txt
+-rwx------. 1 root root 16 11월 26 10:16 nice.txt
+
+[root@dataserver ~]# chmod 777 nice.txt
+[root@dataserver ~]# ls -al nice.txt
+-rwxrwxrwx. 1 root root 16 11월 26 10:16 nice.txt
+
+[root@dataserver ~]# chmod 600 nice.txt
+[root@dataserver ~]# ls -al nice.txt
+-rw-------. 1 root root 16 11월 26 10:16 nice.txt
+
+cp nice.txt /home/hadoop
+ls -al /home/hadoop/nice*
+
+[hadoop@dataserver ~]$ id # 내정보 보기
+uid=1001(hadoop) gid=1001(hadoop) groups=1001(hadoop),983(vboxsf) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+# 소유자, 그룹, 그외사용자에게 모든 권한이 없기 때문에 사용할 수 가 없다.
+[hadoop@dataserver ~]$ cat nice.txt 
+cat: nice.txt: 허가 거부
+
+# 값을 바꾸는 것은 불가능하다.
+[hadoop@dataserver ~]$ chmod 777 nice.txt
+chmod: changing permissions of `nice.txt': 명령을 허용하지 않음
+
+# 권한을 바꾸려면 root로 가야한다.
+[root@dataserver ~]# chmod 640 /home/hadoop/nice.txt
+[hadoop@dataserver ~]$ ls -al nice.txt # 그룹은 되있지만 그외 사용자 이므로 읽는 것이 불가능 하다.
+-rw-r-----. 1 root root 16 11월 26 10:32 nice.txt
+[hadoop@dataserver ~]$ cat nice.txt
+cat: nice.txt: 허가 거부
+
+[root@dataserver ~]# chmod 644 /home/hadoop/nice.txt
+[hadoop@dataserver ~]$ cat nice.txt
+have a nice day
+
+vi 로 들어가면
+
+have a nice day
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+"nice.txt" [읽기 전용] 1L, 16C    
+
+#  수정이 불가능하다.
+
+su - # root로 이동 
+chmod 666 /home/hadoop/nice.txt # u - user, o - other , g - group, +는 권한 추가, -는 권한 제거, 소유자는 반드시 가능하다.
+[root@dataserver ~]# chmod o+w /home/hadoop/nice.txt # 
+[root@dataserver ~]# chmod o-r /home/hadoop/nice.txt
+[root@dataserver ~]# chmod o-w /home/hadoop/nice.txt
+[root@dataserver ~]# chmod u+x /home/hadoop/nice.txt
+[root@dataserver ~]# chmod g+x /home/hadoop/nice.txt
+
+# 소유권을 주는 방법 - root에 가서 사용
+[root@dataserver ~]# chown hadoop /home/hadoop/nice.txt
+
+# 그룹도 바꾸는 방법 
+[root@dataserver ~]# chown hadoop.hadoop /home/hadoop/nice.txt
+
+# 하둡에서도 chmod가 가능해진다 (모든 권한을 주었기 때문)
+
+## hive 설치
+[hadoop@dataserver ~]$ cd /media/sf_centos
+[hadoop@centos ~]$ cp /media/sf_centos/apache-hive-2.0.0-bin.tar.gz /home/hadoop/
+[hadoop@centos ~]$ ll
+합계 343152
+-rwxrwx---.  1 hadoop hadoop 139168168 11월 17 13:43 apache-hive-2.0.0-bin.tar.gz
+
+
+[hadoop@centos ~]$ tar xvzf apache-hive-2.0.0-bin.tar.gz #hadoop home에 설치
+
+
+[hadoop@centos ~]$ ll
+합계 343152
+drwxrwxr-x.  8 hadoop hadoop       159 11월 17 13:44 apache-hive-2.0.0-bin
+
+[hadoop@centos ~]$ vi .bashrc
+
+export JAVA_HOME=/usr/jdk1.7.0_80
+export HADOOP_HOME=/home/hadoop/hadoop-2.7.2
+export HIVE_HOME=/home/hadoop/apache-hive-2.0.0-bin
+export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/bin:$PATH
+
+~                                                                                                                 
+[hadoop@centos ~]$ source .bashrc
+[hadoop@centos ~]$ cd apache-hive-2.0.0-bin/conf
+[hadoop@centos conf]$ ll
+합계 228
+-rw-r--r--. 1 hadoop hadoop   1596  1월 22  2016 beeline-log4j2.properties.template
+-rw-r--r--. 1 hadoop hadoop 207525  2월 10  2016 hive-default.xml.template
+-rw-r--r--. 1 hadoop hadoop   2378  4월 23  2015 hive-env.sh.template
+-rw-r--r--. 1 hadoop hadoop   2287  1월 22  2016 hive-exec-log4j2.properties.template
+-rw-r--r--. 1 hadoop hadoop   2758  1월 22  2016 hive-log4j2.properties.template
+-rw-r--r--. 1 hadoop hadoop   2049  1월 22  2016 ivysettings.xml
+-rw-r--r--. 1 hadoop hadoop   3885  1월 22  2016 llap-daemon-log4j2.properties.template
+         
+[hadoop@centos conf]$ cp hive-env.sh.template hive-env.sh
+[hadoop@centos conf]$ vi hive-env.sh
+
+
+HADOOP_HOME=/home/hadoop/hadoop-2.7.2
+
+cd 
+[hadoop@centos conf]$ vi hive-site.xml
+
+
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+  <property>
+       <name>hive.metastore.warehouse.dir</name>
+       <value>/user/hive/warehouse</value>
+  </property>
+  <property>
+       <name>hive.cli.print.header</name>
+       <value>true</value>
+  </property>
+</configuration>
+~                 
+# 환경 확인방법
+[hadoop@dataserver ~]$ cd $JAVA_HOME
+[hadoop@dataserver jdk1.7.0_80]$ pwd
+/usr/jdk1.7.0_80
+[hadoop@dataserver jdk1.7.0_80]$ cd $HIVE_HOME
+[hadoop@dataserver apache-hive-2.0.0-bin]$ 
+
+# 접속
+hdfs dfs -ls -R /
+
+[hadoop@dataserver bin]$ hdfs dfs -ls /
+Found 2 items
+drwx------   - hadoop supergroup          0 2018-11-21 16:19 /tmp
+drwxr-xr-x   - hadoop supergroup          0 2018-11-21 16:16 /user # user라는 directory가 있으면 사용가능
+
+hdfs dfs -mkdir /tmp/hive
+hdfs dfs -mkdir /user/hive
+hdfs dfs -mkdir /user/hive/warehouse
+hdfs dfs -ls /user/hive/warehouse
+
+hdfs dfs -ls -R /user/hive
+drwxr-xr-x   - hadoop supergroup          0 2018-11-26 11:42 /user/hive/warehouse
+hdfs dfs -ls -R /user/hive/warehouse
+
+hdfs dfs -chmod g+w /tmp
+hdfs dfs -chmod 777 /tmp/hive
+hdfs dfs -chmod g+w /user/hive/warehouse
+# 메타정보 만들기
+schematool -dbType derby -initSchema
+hive # 하이브 접속
+show databases;
+show tables;
+
+# 테이블 만들기 : 컬럼구성은 값과 맞게 구성
+create table emp          
+(empno int,  
+ename string,
+phone string,
+hiredate string,
+job string,
+sal int,
+comm int,
+mgr int,
+deptno int)
+ ROW FORMAT DELIMITED 
+ FIELDS TERMINATED BY ','
+ LINES TERMINATED BY '\n'
+ STORED AS TEXTFILE ;
+# emp 확인
+desc emp;
+
+# data 불러오기
+
+load data local inpath '/media/sf_centos/emp.csv' overwrite into table emp;
+
+# selcet 문
+select * from emp;
+
+select count(*) from emp;  # mapreduce가 뜬다.
+
+#HIVE는 JAVABASE기 때문에 그 값을 바꿔주는 것이 HIVE 이다
+
+select * from emp where empno=100;
+select * from emp where empno=100 or empno=200;
+select * from emp where empno in (100,102,102);
+select * from emp where sal >=10000 and sal<=11000;
+select * from emp where sal between 10000 and 11000;
+select * from emp where ename like 'K%';
+select * from emp where ename like 'K___';
+select * from emp where ename like '%in%' or ename like '%in%';
+select * from emp where deptno is null;
+select * from emp where deptno is not null;
+select * from emp where job not like '%CLERK';
+select sal,sal+1000,sal-1000,sal*1000, sal/1000 from emp;
+select 3/2; # from dual 에 상관없이 (더미테이블) 가능하다.
+select 3/2, 3%2;
+ 
+# COMM에 NULL 이 있을 경우 불가
+hive> select sal*12+comm from emp where empno=100;
+OK
+c0
+NULL
+select sal*12+nvl(comm,0) from emp where empno=100; 
+select concat(empno,ename) from emp where deptno=20; # concat으로 묶는 것도 가능
+select ename, substr(ename,1,2) from emp where deptno=20;
+select ename, substr(ename,-2,2) from emp where deptno=20;
+select * from emp where ename='king'; # 대소문자 를 구분해서 나오지 않는다.
+select * from emp where lower(ename)='king'; 
+select * from emp where lcase(ename)='king'; # SQL에는 없고 HIVE전용이다.
+select * from emp where upper(ename)='KING';
+select * from emp where ucase(ename)=''KING'; # HIVE 전용 upper
+select phone, translate(phone,'.','-') from emp; # translate(변수,바꿀값,넣어줄 값)
+select length(ename) from emp; # length 이름 길이
+select trim(' hive ') as trim, ltrim(' hive') as ltrim, rtrim('hive ') as rtrim; 
+select sal/12, round(sal/12), round(sal/12,2), round(sal/12,-1) from emp;
+select floor(1.6) , ceil(1.1), ceil(1.3); # 반올림, 올림 ceil : 무조건 올림, floor: 내림
+select distinct deptno from emp;
+select count(distinct deptno) from emp;
+select sum(sal), avg(sal), max(sal), min(sal), stddev_pop(sal), variance(sal) from emp;
+select  deptno, count(*) from emp group by deptno;
+select deptno, count(*) from emp group by deptno having count(*) > 30;
+select deptno, sum(sal) as sum_sal from emp group by deptno order by sum_sal desc;
+select * from emp where hiredate like '2003%'; # string이라서 바로 나온거다.
+select * from emp where to_date(hiredate) between to_date('2003-01-01') and to_date('2003-12-31'); # 날짜형 변환
+select hiredate,year(to_date(hiredate)), month(to_date(hiredate)), day(to_date(hiredate)) from emp;
+select * from emp where year(to_date(hiredate))=2003;
+select year(to_date(hiredate)),count(*) from emp group by year(to_date(hiredate));
+select '100'+100; # 형변환
+select cast('100' as int) + 100;
+select cast('100' as double) + 100;
+select concat(cast(100 as string), 100);
+
+# table 만들기
+
+
+create table dept
+(deptno int,
+dname string,
+mgr int,
+loc int)
+ ROW FORMAT DELIMITED 
+ FIELDS TERMINATED BY ','
+ LINES TERMINATED BY '\n'
+ STORED AS TEXTFILE ;
+
+load data local inpath '/media/sf_centos/dept.csv' overwrite into table dept;
+
+select e.empno, e.ename, d.deptno, d.dname from emp e, dept d where e.deptno = d.deptno;
+select e.empno, e.ename, d.deptno, d.dname from emp e join dept d on e.deptno=d.deptno;
+select e.empno, e.ename, d.deptno, d.dname from emp e join dept d on e.deptno=d.deptno where e.deptno = 20;
+select e.empno, e.ename, d.deptno, d.dname from emp e, dept d where e.deptno = d.deptno(+); #outer join (+)는 없다
+select e.empno, e.ename, d.deptno, d.dname from emp e left outer join dept d on e.deptno=d.deptno;
+select e.empno, e.ename, d.deptno, d.dname from emp e, dept d where e.deptno(+) = d.deptno; 
+select e.empno, e.ename, d.deptno, d.dname from emp e right outer join dept d on e.deptno=d.deptno;
+select e.empno, e.ename, d.deptno, d.dname from emp e full outer join dept d on e.deptno=d.deptno;
+
+[문제] 직업, 이름, 급여, 순위를 출력하는데, 순위가 각각 직업별로  높은 사원으로 순위를 출력하세요.
+
+select e.job,e.ename,e.sal from emp e where e.sal = (select max(sal) from emp where e.empno=empno group by job);
+
+select job,ename,sal,dense_rank() over(partition by job order by sal desc) rnk from emp;
+
+[문제] 10,20,30 부서의 총액 급여를 출력하세요.
+
+select sum(decode(deptno,10,sal)) as deptno10, sum(decode(deptno,20,sal)) as deptno20, sum(decode(deptno,30,sal))  as deptno30
+from emp;
+
+select sum(case when deptno=10 thean sal end) dept10,
+        sum(case when deptno=20 thean sal end) dept20,
+        sum(case when deptno=30 thean sal end) dept30
+from emp;
+
+# inlineview는 되지만, 서브쿼리는 잘해야한다.
+
+[문제] 이름, 급여, 급여의 등급이 출력되게 하는데 하는데 등급은 4등급으로 나눠서 출력하게 하세요.
+# ntile : 등급을 나눌 때 사용하는 함수 
+0% ~ 25% 1등급
+25% ~ 50% 2등급
+50% ~ 75% 3등급
+75%~ 100% 4등급
+
+select ename, sal, ntile(4) over (order by sal desc) rnk from emp;
+
+select employee_id, salary, ntile(4) over (order by salary desc) rnk 
+from employees;
+
+where sal >all (100,200,300)
+
+where sal >100 
+and sal > 200
+and sal > 300
+
+where sal > any (100,200,300)
+
+where sal >100 
+or sal > 200
+or sal > 300
+
+
+# 서브쿼리절은 null 절대 들어가면 안된다.
+where sal not in (100,200,300)
+
+where sal <> 100
+and sal <> 200
+and sal <> null
+
+where exists
+where not exists
+
+select *
+from employees e
+where exsits (select x from employees 
+	     where manager_id = e.employee_id);
+
+
+select *
+from employees e
+where not exsits (select x from employees 
+	          where manager_id = e.employee_id);

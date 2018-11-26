@@ -1,0 +1,169 @@
+mr-jobhistory-daemon.sh stop historyserver
+
+BigData - 서버 한대로 처리할 수 없는 규모의 데이터 (2012 john rauser, 아마존 수석 엔지니어)
+          - 기존 소프트웨러로 처리 할 수 없는 규모의 데이터
+          - scale up : 하드웨어 증설
+          - scale out : 비슷한 사양의 서버로 분산처리
+
+하둡 분산형 파일시스템 (HDFS(Hadoop Distributed File System))
+
+하둡은 대용량 데이터를 분산처리 할 수 있는 자바기반의 오픈소스 프레임워크이다.
+
+구글이 쌓여지는 수많은 빅데이터 (웹페이지,데이터..) 들을 구글에서도 처음에는 RDBMS(ORACLE)에 입력하고 데이터를 저장하고 처리하려는 시도를 
+했으나 너무 데이터가 많아서 실패를 하고 자체적으로 빅데이터를 처리할 기술을 개발하고 대외적으로 논물을 발표했다.
+
+이 논문을 더그커팅이 읽고 자바로 구현을 했다.
+
+RDMS ----------------------------------------------------- hadoop
+(ORACLE) 
+실시간 데이터 처리			      배치처리(READ) / 조회성 / 무료 / 분산처리 가능
+# 데이터의 품질 좋다. (제약조건등 여러가지)
+
+분산처리 : 여러대의 노드를 묶어서 마치 하나의 서버처럼 보이게 하고 여러 노드의 자원을 이용해서 데이터를 처리하기 때문에 처리하는 속도가 빠르다.
+
+실사례 : 2008년 뉴욕타임즈의 130년 분량의 신문기사 1100만 페이지를 하둡을 이용해서 하루만에 PDF로 변환했고 비용은 200만원 밖에 안들었다.
+하둡이 아닌 일반 서류로 처리했다면 14년이 걸린다.
+
+[hadoop@dataserver ~]$ jps
+24141 Jps
+23838 NodeManager
+21487 SecondaryNameNode
+23678 ResourceManager
+24110 WebAppProxyServer
+24025 JobHistoryServer
+16766 DataNode
+16544 NameNode # 하둡이름, 집어넣어야 할 데이터를 지정
+
+[hadoop@dataserver ~]$ hdfs dfs -ls /
+Found 1 items
+drwxrwx---   - hadoop supergroup          0 2018-11-21 11:53 /tmp
+[hadoop@dataserver ~]$ hdfs dfs -mkdir /user # 디렉토리 생성 : hdfs dfs -명령어 /디렉토리
+[hadoop@dataserver ~]$ hdfs dfs -mkdir /user/hadoop # user 안에 hadoop 디렉토리 생성
+[hadoop@dataserver ~]$ hdfs dfs -ls -R / # 안에있는 디렉토리 정보까지 나온다.
+
+hdfs dfs -mkdir /user/hadoop/conf
+hdfs dfs -ls -R /
+
+
+# put : os 에 있는 파일을 하둡파일 시스템에 올리는 명령어 
+hdfs dfs -put  /home/hadoop/hadoop-2.7.2/etc/hadoop/hadoop-env.sh conf/
+hdfs dfs -ls conf/ : 파일 확인
+hdfs dfs -cat conf/hadoop-env.sh
+
+cd /home/hadoop/hadoop-2.7.2/share/hadoop/mapreduce # map: 흩어버리다 , reduce 줄이다 합치다.
+ls
+[hadoop@dataserver mapreduce]$ ls
+hadoop-mapreduce-client-app-2.7.2.jar
+hadoop-mapreduce-client-common-2.7.2.jar
+hadoop-mapreduce-client-core-2.7.2.jar
+hadoop-mapreduce-client-hs-2.7.2.jar
+hadoop-mapreduce-client-hs-plugins-2.7.2.jar
+hadoop-mapreduce-client-jobclient-2.7.2-tests.jar
+hadoop-mapreduce-client-jobclient-2.7.2.jar
+hadoop-mapreduce-client-shuffle-2.7.2.jar
+hadoop-mapreduce-examples-2.7.2.jar # 워드 카운트를 사용하는 프로그램
+
+# hadoop-mapreduce-examples-2.7.2.jar를 통해 워드카운트하여 추출
+yarn jar hadoop-mapreduce-examples-2.7.2.jar wordcount conf output
+
+[hadoop@dataserver mapreduce]$ yarn jar hadoop-mapreduce-examples-2.7.2.jar wordcount conf output
+18/11/21 14:54:14 INFO client.RMProxy: Connecting to ResourceManager at dataserver/10.0.2.15:8032
+18/11/21 14:54:21 INFO input.FileInputFormat: Total input paths to process : 1
+18/11/21 14:54:21 INFO mapreduce.JobSubmitter: number of splits:1
+18/11/21 14:54:24 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1542768788819_0001
+18/11/21 14:54:28 INFO impl.YarnClientImpl: Submitted application application_1542768788819_0001
+18/11/21 14:54:29 INFO mapreduce.Job: The url to track the job: http://0.0.0.0:8089/proxy/application_1542768788819_0001/
+18/11/21 14:54:29 INFO mapreduce.Job: Running job: job_1542768788819_0001
+18/11/21 14:56:00 INFO mapreduce.Job: Job job_1542768788819_0001 running in uber mode : false
+18/11/21 14:56:00 INFO mapreduce.Job:  map 0% reduce 0%
+18/11/21 14:57:13 INFO mapreduce.Job:  map 100% reduce 0%
+18/11/21 14:58:23 INFO mapreduce.Job:  map 100% reduce 100%
+18/11/21 14:58:29 INFO mapreduce.Job: Job job_1542768788819_0001 completed successfully
+18/11/21 14:58:30 INFO mapreduce.Job: Counters: 49
+	File System Counters
+		FILE: Number of bytes read=4532
+		FILE: Number of bytes written=244587
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=4356
+		HDFS: Number of bytes written=3459
+		HDFS: Number of read operations=6
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Data-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=66444
+		Total time spent by all reduces in occupied slots (ms)=69303
+		Total time spent by all map tasks (ms)=66444
+		Total time spent by all reduce tasks (ms)=69303
+		Total vcore-milliseconds taken by all map tasks=66444
+		Total vcore-milliseconds taken by all reduce tasks=69303
+		Total megabyte-milliseconds taken by all map tasks=68038656
+		Total megabyte-milliseconds taken by all reduce tasks=70966272
+	Map-Reduce Framework
+		Map input records=98
+		Map output records=519
+		Map output bytes=6253
+		Map output materialized bytes=4532
+		Input split bytes=118
+		Combine input records=519
+		Combine output records=268
+		Reduce input groups=268
+		Reduce shuffle bytes=4532
+		Reduce input records=268
+		Reduce output records=268
+		Spilled Records=536
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=1067
+		CPU time spent (ms)=9170
+		Physical memory (bytes) snapshot=300761088
+		Virtual memory (bytes) snapshot=1757741056
+		Total committed heap usage (bytes)=168497152
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=4238
+	File Output Format Counters 
+		Bytes Written=3459
+
+[hadoop@dataserver mapreduce]$ hdfs dfs -ls output
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2018-11-21 14:58 output/_SUCCESS
+-rw-r--r--   1 hadoop supergroup       3459 2018-11-21 14:58 output/part-r-00000
+[hadoop@dataserver mapreduce]$ 
+
+하둡 데몬 종료
+stop-yarn.sh
+stop-dfs.sh
+mr-jobhistory-daemon.sh stop history
+
+# datanode가 뜨지않을경우 값을 지우고 해야한다.
+rm -rf data
+hdfs namenode -format
+
+하둡시작
+start-dfs.sh
+start-yarn.s
+mr-jobhistory-daemon.sh start history
+yarn-daemon.sh start proxyserver
+jps
+
+다시 디렉토리 실행 후 
+hdfs dfs -cat output/part-r-00000 | tail -10
+
+# get : 하둡데이터 os로 내리기
+hdfs dfs -get output/part-r-00000 /home/hadoop/wc_output
+cat /home/hadoop/wc_output
+
+hdfs dfs -put  /home/hadoop/hadoop-2.7.2/etc/hadoop/hadoop-env.sh conf/
+cd /media/sf_sentos/
